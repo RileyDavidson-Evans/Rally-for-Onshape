@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  if (window.__onshapePenSidebarLoaded) return;
-  window.__onshapePenSidebarLoaded = true;
+  if (window.__onshapePenSidebarRegistered) return;
+  window.__onshapePenSidebarRegistered = true;
 
   const STORAGE_KEY = 'onshapePenSidebarPosition';
   const LABEL_MODE_KEY = 'onshapePenSidebarLabelsAlwaysVisible';
@@ -13,6 +13,15 @@
   }
 
   ready(() => {
+    window.OnshapeTablet.runWhenDocumentPage(
+      () => initPenSidebar(),
+      () => destroyPenSidebar(),
+    );
+  });
+
+  function initPenSidebar() {
+    if (document.querySelector('#os-pen-shortcut-sidebar')) return;
+
     const { pressKey, icon } = window.OnshapeTablet;
 
     function makeButton(iconName, title, action) {
@@ -28,6 +37,7 @@
       btn.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
+
         setTimeout(() => {
           action?.();
         }, 100);
@@ -37,9 +47,11 @@
     }
 
     function toggleFullscreen() {
-      if (!document.fullscreenElement)
+      if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen?.();
-      else document.exitFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
     }
 
     function showKeyboard() {
@@ -59,36 +71,34 @@
         which: 13,
       });
 
-      console.log('in here hello');
-
       setTimeout(() => {
-        document
-          .querySelector('.ns-dialog-button-ok.button-ok')
-          ?.dispatchEvent(
-            new MouseEvent('mousedown', {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-            }),
-          );
-        document
-          .querySelector('.ns-dialog-button-ok.button-ok')
-          ?.dispatchEvent(
-            new MouseEvent('mouseup', {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-            }),
-          );
-        document
-          .querySelector('.ns-dialog-button-ok.button-ok')
-          ?.dispatchEvent(
-            new MouseEvent('click', {
-              bubbles: true,
-              cancelable: true,
-              view: window,
-            }),
-          );
+        const okButton = document.querySelector(
+          '.ns-dialog-button-ok.button-ok',
+        );
+
+        okButton?.dispatchEvent(
+          new MouseEvent('mousedown', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
+
+        okButton?.dispatchEvent(
+          new MouseEvent('mouseup', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
+
+        okButton?.dispatchEvent(
+          new MouseEvent('click', {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+          }),
+        );
       }, 40);
     }
 
@@ -122,49 +132,91 @@
     buttons.appendChild(
       makeButton('fullscreen', 'Fullscreen', toggleFullscreen),
     );
+
     buttons.appendChild(
       makeButton('home', 'Home', () => {
         window.location.href = 'https://cad.onshape.com/documents';
       }),
     );
+
     buttons.appendChild(
-      makeButton('space', 'Clear', () =>
-        pressKey(' ', { code: 'Space', keyCode: 32, which: 32 }),
-      ),
+      makeButton('space', 'Clear', () => {
+        pressKey(' ', {
+          code: 'Space',
+          keyCode: 32,
+          which: 32,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('esc', 'Cancel', () =>
-        pressKey('Escape', { code: 'Escape', keyCode: 27, which: 27 }),
-      ),
+      makeButton('esc', 'Cancel', () => {
+        pressKey('Escape', {
+          code: 'Escape',
+          keyCode: 27,
+          which: 27,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('check', 'Confirm', () => setTimeout(confirmAction, 100)),
+      makeButton('check', 'Confirm', () => {
+        setTimeout(confirmAction, 100);
+      }),
     );
+
     buttons.appendChild(
-      makeButton('search', 'Shortcut Menu', () =>
-        pressKey('s', { code: 'KeyS', keyCode: 83, which: 83 }),
-      ),
+      makeButton('search', 'Shortcut Menu', () => {
+        pressKey('s', {
+          code: 'KeyS',
+          keyCode: 83,
+          which: 83,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('normal', 'Normal To', () =>
-        pressKey('n', { code: 'KeyN', keyCode: 78, which: 78 }),
-      ),
+      makeButton('normal', 'Normal To', () => {
+        pressKey('n', {
+          code: 'KeyN',
+          keyCode: 78,
+          which: 78,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('undo', 'Undo', () =>
-        pressKey('z', { code: 'KeyZ', keyCode: 90, which: 90, ctrlKey: true }),
-      ),
+      makeButton('undo', 'Undo', () => {
+        pressKey('z', {
+          code: 'KeyZ',
+          keyCode: 90,
+          which: 90,
+          ctrlKey: true,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('redo', 'Redo', () =>
-        pressKey('y', { code: 'KeyY', keyCode: 89, which: 89, ctrlKey: true }),
-      ),
+      makeButton('redo', 'Redo', () => {
+        pressKey('y', {
+          code: 'KeyY',
+          keyCode: 89,
+          which: 89,
+          ctrlKey: true,
+        });
+      }),
     );
+
     buttons.appendChild(
-      makeButton('delete', 'Delete', () =>
-        pressKey('Delete', { code: 'Delete', keyCode: 46, which: 46 }),
-      ),
+      makeButton('delete', 'Delete', () => {
+        pressKey('Delete', {
+          code: 'Delete',
+          keyCode: 46,
+          which: 46,
+        });
+      }),
     );
+
     document.body.appendChild(sidebar);
 
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
@@ -238,5 +290,9 @@
         sidebar.releasePointerCapture(e.pointerId);
       } catch {}
     });
-  });
+  }
+
+  function destroyPenSidebar() {
+    document.querySelector('#os-pen-shortcut-sidebar')?.remove();
+  }
 })();
