@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": ["https://cad.onshape.com/*"],
-      "js": ["src/utils/core.js", "src/utils/floatingNumberPad.js", "src/utils/penSidebar.js"],
+      "js": ["src/utils/core.js", "src/utils/floatingNumberPad.js", "src/utils/penSidebar.js", "src/utils/touchPolish.js"],
       "css": ["src/styles.css"],
       "run_at": "document_idle"
     }
