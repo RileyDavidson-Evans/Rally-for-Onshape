@@ -28,6 +28,9 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { actions } from "@/features/actions";
+import { featureDefinitions } from "@/features/definitions";
+import type { IconName, ToolDefinition } from "@/features/types";
 import { pressKey, subscribeToFeature, subscribeToRoute } from "../core/utils";
 
 const STORAGE_KEY = "onshapePenSidebarPosition";
@@ -53,8 +56,6 @@ const ICONS = {
 	trim: Scissors,
 	undo: Undo2,
 };
-
-type IconName = keyof typeof ICONS;
 
 type ToolItem = {
 	type: "button";
@@ -341,7 +342,7 @@ export function PenSidebar() {
 		const featureCommonItems: MenuItem[] = [
 			label(
 				"feature-label",
-				featureType === "newSketch" ? "Sketch" : "Feature",
+				featureDefinitions[featureType ?? ""]?.label ?? "Feature",
 			),
 			button("cancel", "esc", "Cancel", cancelAction, "danger"),
 			button(
@@ -361,50 +362,17 @@ export function PenSidebar() {
 			button("delete", "delete", "Delete", deleteAction, "danger"),
 		];
 
-		const featureItemsByType: Record<string, MenuItem[]> = {
-			newSketch: [
-				label("sketch-tools-label", "Tools"),
-				button("line", "line", "Line", () => pressKey("l"), "primary"),
-				button("circle", "circle", "Circle", () => pressKey("c")),
-				button("rectangle", "rectangle", "Rectangle", () => pressKey("r")),
-				button(
-					"dimension",
-					"dimension",
-					"Dimension",
-					() => pressKey("d"),
-					"primary",
-				),
-				button("trim", "trim", "Trim", () => pressKey("t")),
-				button("offset", "offset", "Offset", () => pressKey("o")),
-				spacer("sketch-utility-spacer"),
-				label("sketch-utility-label", "Utility"),
-				button("clear", "space", "Clear", clearSelectionAction),
-				button("shortcut-menu", "search", "Shortcut Menu", shortcutMenuAction),
-				button("normal-to", "normal", "Normal To", normalToAction),
-				button("delete", "delete", "Delete", deleteAction, "danger"),
-			],
-
-			extrude: [
-				label("feature-tools-label", "Tools"),
-				button("shortcut-menu", "search", "Shortcut Menu", shortcutMenuAction),
-				button("normal-to", "normal", "Normal To", normalToAction),
-			],
-
-			fillet: [
-				label("feature-tools-label", "Tools"),
-				button("shortcut-menu", "search", "Shortcut Menu", shortcutMenuAction),
-				button("normal-to", "normal", "Normal To", normalToAction),
-			],
-
-			chamfer: [
-				label("feature-tools-label", "Tools"),
-				button("shortcut-menu", "search", "Shortcut Menu", shortcutMenuAction),
-				button("normal-to", "normal", "Normal To", normalToAction),
-			],
-		};
+		const mapFeatureTool = (tool: ToolDefinition): ToolItem => ({
+			type: "button",
+			id: tool.id,
+			iconName: tool.iconName,
+			title: tool.title,
+			onClick: actions[tool.action as keyof typeof actions] ?? (() => {}),
+			tone: tool.tone,
+		});
 
 		const featureSpecificItems = featureType
-			? (featureItemsByType[featureType] ?? [
+			? (featureDefinitions[featureType]?.tools.map(mapFeatureTool) ?? [
 					label("feature-tools-label", "Tools"),
 					button(
 						"shortcut-menu",
