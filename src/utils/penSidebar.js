@@ -1,9 +1,3 @@
-// ==UserScript==
-// @name         Onshape Tablet 02 - Pen Sidebar
-// @match        *://cad.onshape.com/*
-// @grant        none
-// ==/UserScript==
-
 (function () {
     'use strict';
 

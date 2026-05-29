@@ -1,9 +1,3 @@
-// ==UserScript==
-// @name         Onshape Tablet 04 - Touch Polish
-// @match        *://cad.onshape.com/*
-// @grant        none
-// ==/UserScript==
-
 (function () {
   'use strict';
 

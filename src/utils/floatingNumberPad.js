@@ -1,9 +1,3 @@
-// ==UserScript==
-// @name         Onshape Tablet 03 - Floating Numpad
-// @match        *://cad.onshape.com/*
-// @grant        none
-// ==/UserScript==
-
 (function () {
     'use strict';
 

@@ -1,9 +1,3 @@
-// ==UserScript==
-// @name         Onshape Tablet 01 - Core Helpers
-// @match        *://cad.onshape.com/*
-// @grant        none
-// ==/UserScript==
-
 (function () {
     'use strict';
 
