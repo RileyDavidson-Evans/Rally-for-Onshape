@@ -132,6 +132,78 @@
       window.addEventListener('popstate', checkUrl);
     },
 
+    getFeatureDialog() {
+      return document.querySelector('#feature-dialog.feature-dialog');
+    },
+
+    getFeatureType() {
+      return this.getFeatureDialog()?.getAttribute('feature-type') || null;
+    },
+
+    getFeatureState() {
+      const dialog = this.getFeatureDialog();
+
+      return {
+        dialog,
+        isFeatureOpen: !!dialog,
+        featureType: dialog?.getAttribute('feature-type') || null,
+      };
+    },
+
+    onFeatureChange(callback) {
+      const handler = (event) => callback(event.detail);
+
+      window.addEventListener('onshape-tablet:featurechange', handler);
+
+      return () => {
+        window.removeEventListener('onshape-tablet:featurechange', handler);
+      };
+    },
+
+    installFeatureWatcher() {
+      if (window.__onshapeTabletFeatureWatcherInstalled) return;
+      window.__onshapeTabletFeatureWatcherInstalled = true;
+
+      let lastFeatureType = undefined;
+      let lastIsFeatureOpen = undefined;
+      let debounceTimer = null;
+
+      const emitIfChanged = () => {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(() => {
+          const state = this.getFeatureState();
+
+          if (
+            state.featureType === lastFeatureType &&
+            state.isFeatureOpen === lastIsFeatureOpen
+          ) {
+            return;
+          }
+
+          lastFeatureType = state.featureType;
+          lastIsFeatureOpen = state.isFeatureOpen;
+
+          window.dispatchEvent(
+            new CustomEvent('onshape-tablet:featurechange', {
+              detail: state,
+            }),
+          );
+        }, 50);
+      };
+
+      const observer = new MutationObserver(emitIfChanged);
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['feature-type', 'class', 'style'],
+      });
+
+      emitIfChanged();
+    },
+
     icon(name) {
       const icons = {
         check: `
@@ -192,4 +264,5 @@
     },
   };
   window.OnshapeTablet.installUrlWatcher();
+  window.OnshapeTablet.installFeatureWatcher();
 })();
