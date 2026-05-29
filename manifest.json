@@ -9,6 +9,13 @@
     "48": "icons/icon-128.png",
     "128": "icons/icon-128.png"
   },
+   "action": {
+    "default_title": "Onshape Tablet",
+    "default_icon": {
+      "16": "icons/icon-128.png",
+      "32": "icons/icon-128.png"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["https://cad.onshape.com/*"],
