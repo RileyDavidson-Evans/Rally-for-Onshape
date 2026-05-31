@@ -1,23 +1,8 @@
-import {
-	Check,
-	Eye,
-	GripVertical,
-	Home,
-	Keyboard,
-	Maximize,
-	MousePointer2,
-	PanelLeft,
-	Redo2,
-	Search,
-	Trash2,
-	Undo2,
-	X,
-} from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
 	Tooltip,
 	TooltipContent,
@@ -26,16 +11,12 @@ import {
 import { getUserShortcutCommands } from "@/core/userShortcuts";
 import type { ToolDefinition } from "@/features/types";
 import type {
-	OnshapeShortcutCommand,
 	OnshapeShortcutCommandsResponse,
 	OnshapeToolbarMode,
 } from "@/types";
-import {
-	executeOnshapeCommand,
-	executeOnshapeCommandWithNamespace,
-	executeOnshapeShortcutCommand,
-	pressKey,
-} from "../core/utils";
+import { getToolIcon } from "../core/iconMapping";
+import { executeOnshapeShortcutCommand, pressKey } from "../core/utils";
+import { Card, CardContent, CardDescription, CardTitle } from "./ui/card";
 
 const STORAGE_KEY = "onshapePenSidebarPosition";
 const LABEL_MODE_KEY = "onshapePenSidebarLabelsAlwaysVisible";
@@ -62,6 +43,8 @@ type SectionLabelItem = {
 
 type MenuItem = ToolItem | SpacerItem | SectionLabelItem;
 
+const MotionButton = motion.create(Button);
+
 function showKeyboard() {
 	try {
 		const nav = navigator as Navigator & {
@@ -82,28 +65,6 @@ function toggleFullscreen() {
 	} else {
 		document.exitFullscreen?.();
 	}
-}
-
-function getToolIcon(icon?: string) {
-	const map = {
-		"new-sketch-button": MousePointer2,
-		"extrude-button": Eye,
-		"sketch-line-segment-button": MousePointer2,
-		"sketch-rectangle-button": PanelLeft,
-		"sketch-center-rectangle-button": PanelLeft,
-		"sketch-circle-button": Eye,
-		"sketch-arc-button": Redo2,
-		"sketch-spline-button": Search,
-		"sketch-point-button": Check,
-		"sketch-use-button": MousePointer2,
-		"sketch-trim-button": Trash2,
-		"sketch-offset-button": PanelLeft,
-		"sketch-mirror-button": Eye,
-		"sketch-transform-button": Maximize,
-		"sketch-dimension-button": Keyboard,
-	} as const;
-
-	return map[icon as keyof typeof map] ?? MousePointer2;
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -176,6 +137,8 @@ export function PenSidebar() {
 	const modeTools =
 		allCommands.find((c) => c.tabType === toolbarType)?.commands ?? [];
 
+	console.log(modeTools);
+
 	return (
 		<Draggable
 			nodeRef={nodeRef}
@@ -196,7 +159,7 @@ export function PenSidebar() {
 				className={[
 					"fixed left-0 top-0 z-[999999]",
 					"flex flex-col items-center gap-1",
-					"rounded-[1.35rem] border border-white/10 bg-zinc-950/72 p-1.5 text-zinc-50 shadow-2xl shadow-black/40 backdrop-blur-2xl",
+					"rounded border border-white/10 bg-zinc-950/72 p-1.5 text-zinc-50 shadow-2xl shadow-black/40 backdrop-blur-2xl",
 					"ring-1 ring-white/10",
 				].join(" ")}
 			>
@@ -210,22 +173,18 @@ export function PenSidebar() {
 				>
 					<AnimatePresence mode="popLayout" initial={false}>
 						{modeTools.map((tool) => {
-							const Icon = getToolIcon(tool.icon);
+							const Icon = getToolIcon(tool.command);
 
 							return (
 								<Tooltip key={tool.id}>
 									<TooltipTrigger asChild>
-										<motion.button
+										<MotionButton
 											layout
 											type="button"
+											variant={"secondary"}
 											disabled={tool.disabled}
-											className={[
-												"group relative flex h-11 w-11 items-center justify-center rounded-2xl",
-												"border border-white/10 bg-white/[0.04] text-zinc-200 shadow-sm",
-												"transition hover:scale-105 hover:border-white/20 hover:bg-white/[0.09] hover:text-white",
-												"active:scale-95 disabled:pointer-events-none disabled:opacity-40",
-											].join(" ")}
-											onClick={(e) => { 
+											className={[].join(" ")}
+											onClick={(e) => {
 												e.preventDefault();
 												e.stopPropagation();
 
@@ -233,15 +192,18 @@ export function PenSidebar() {
 											}}
 										>
 											<Icon className="h-5 w-5" strokeWidth={2.2} />
-
-											<span className="os-pen-btn-label pointer-events-none absolute left-full ml-2 hidden whitespace-nowrap rounded-xl border border-white/10 bg-zinc-950/95 px-2.5 py-1 text-xs text-zinc-100 shadow-xl group-hover:block">
-												{tool.name ?? tool.command}
-											</span>
-										</motion.button>
+										</MotionButton>
 									</TooltipTrigger>
 
 									<TooltipContent side="right">
-										{tool.name ?? tool.command}
+										<Card>
+											<CardContent>
+												<CardTitle>{tool.command}</CardTitle>
+												<CardDescription>
+													{tool.expandedTooltipKey?.replace("tooltips:::", "")}
+												</CardDescription>
+											</CardContent>
+										</Card>
 									</TooltipContent>
 								</Tooltip>
 							);

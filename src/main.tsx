@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
+import { ThemeProvider } from "@/components/theme-provider";
 import { FloatingNumpad } from "./components/FloatingNumberPad";
 import { PenSidebar } from "./components/PenSidebar";
 import { TooltipProvider } from "./components/ui/tooltip";
@@ -23,9 +24,11 @@ document.body.appendChild(rootEl);
 
 createRoot(rootEl).render(
 	<React.StrictMode>
-		<TooltipProvider delayDuration={120} skipDelayDuration={0}>
-			<PenSidebar />
-			<FloatingNumpad />
-		</TooltipProvider>
+		<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+			<TooltipProvider delayDuration={120} skipDelayDuration={0}>
+				<PenSidebar />
+				<FloatingNumpad />
+			</TooltipProvider>
+		</ThemeProvider>
 	</React.StrictMode>,
 );
