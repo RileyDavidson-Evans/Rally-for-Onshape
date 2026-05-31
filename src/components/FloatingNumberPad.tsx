@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -300,7 +299,7 @@ export function FloatingNumpad() {
 						}, ACTION_DELAY);
 					}}
 				>
-					<X className="h-4 w-4" />
+					X
 				</Button>
 			</div>
 

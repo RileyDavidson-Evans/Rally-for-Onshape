@@ -1,4 +1,4 @@
-import { GripVertical } from "lucide-react";
+import { IconGripHorizontal } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
@@ -164,7 +164,7 @@ export function PenSidebar() {
 				].join(" ")}
 			>
 				<div className="os-pen-drag-handle flex h-5 w-11 cursor-grab touch-none items-center justify-center rounded-xl">
-					<GripVertical className="h-3.5 w-3.5" />
+					<IconGripHorizontal className="h-3.5 w-3.5" />
 				</div>
 
 				<motion.div
