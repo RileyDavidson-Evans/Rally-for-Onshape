@@ -212,29 +212,6 @@ export function PenSidebar() {
 					>
 						<IconGripHorizontal className="h-5 w-5" />
 					</Button>
-
-					<Tooltip>
-						<TooltipTrigger asChild>
-							<Button
-								variant={labelsVisible ? "secondary" : "outline"}
-								className="h-10 w-10 cursor-pointer rounded-xl"
-								onClick={() => setLabelsVisible((current) => !current)}
-							>
-								<IconKeyboard className="h-5 w-5" />
-							</Button>
-						</TooltipTrigger>
-
-						<TooltipContent side="right">
-							<Card className="w-[260px]">
-								<CardHeader>
-									<CardTitle>Labels</CardTitle>
-									<CardDescription>
-										Toggle persistent tool labels.
-									</CardDescription>
-								</CardHeader>
-							</Card>
-						</TooltipContent>
-					</Tooltip>
 				</div>
 
 				<SidebarDivider />
