@@ -110,3 +110,12 @@
 		@apply bg-transparent text-foreground font-sans;
 	}
 }
+
+#onshape-extension-root * {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+#onshape-extension-root *::-webkit-scrollbar, #onshape-extension-root *::-webkit-scrollbar-track, #onshape-extension-root *::-webkit-scrollbar-thumb {
+	display: none;
+}
