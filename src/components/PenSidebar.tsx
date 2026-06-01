@@ -267,7 +267,7 @@ export function PenSidebar() {
 			<div
 				ref={nodeRef}
 				id="os-pen-shortcut-sidebar"
-				className="fixed left-0 top-0 z-[999999] flex max-h-[80vh] flex-col rounded-md border bg-background/95 p-2 shadow-2xl backdrop-blur"
+				className="fixed left-0 top-0 z-[999999] flex max-h-[80vh] flex-col rounded-md border bg-background/95 p-2 shadow-2xl backdrop-blur os-animate-in"
 			>
 				<div className="flex flex-col items-center gap-1">
 					<Button
@@ -320,7 +320,7 @@ export function PenSidebar() {
 							<Tooltip key={tool.id}>
 								<TooltipTrigger asChild>
 									<MotionButton
-										className="h-10 w-10 shrink-0 cursor-pointer"
+										className="h-10 w-10 shrink-0 cursor-pointer os-animate-in"
 										variant={
 											tool.command === currentTool ? "default" : "outline"
 										}
