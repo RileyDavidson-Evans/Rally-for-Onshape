@@ -4,216 +4,109 @@
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
-/* =========================================================
-   Onshape Dark ShadCN Theme — scoped away from custom toolbar
-   ========================================================= */
-:root,
-body[data-os-theme='dark'] {
-  --sh-bg: hsl(222.2 84% 4.9%);
-  --sh-card: hsl(222.2 84% 4.9%);
-  --sh-popover: hsl(222.2 84% 4.9%);
-  --sh-fg: hsl(210 40% 98%);
-  --sh-muted: hsl(217.2 32.6% 17.5%);
-  --sh-muted-fg: hsl(215 20.2% 65.1%);
-  --sh-border: hsl(217.2 32.6% 17.5%);
-  --sh-accent: hsl(217.2 32.6% 17.5%);
-  --sh-accent-fg: hsl(210 40% 98%);
-  --sh-radius: 12px;
+
+@theme inline {
+	--font-heading: var(--font-sans);
+	--font-sans: "Geist Variable", sans-serif;
+
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+
+	--color-destructive: var(--destructive);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Onshape design-token overrides */
-body[data-os-theme='dark'] {
-  --os-background-primary: var(--sh-bg) !important;
-  --os-background-secondary: var(--sh-card) !important;
-  --os-background-tertiary: var(--sh-muted) !important;
+#onshape-extension-root,
+#onshape-extension-portal-root {
+	--radius: 0.75rem;
 
-  --os-fill-primary: var(--sh-bg) !important;
-  --os-fill-secondary: var(--sh-card) !important;
-  --os-fill-tertiary: var(--sh-muted) !important;
-  --os-fill-senary: var(--sh-bg) !important;
-
-  --os-outline-primary: var(--sh-border) !important;
-  --os-outline-secondary: var(--sh-border) !important;
-  --os-outline-tertiary: var(--sh-border) !important;
-  --os-outline-subtle: hsl(217.2 32.6% 17.5% / 0.65) !important;
-
-  --os-text-primary: var(--sh-fg) !important;
-  --os-text-secondary: var(--sh-muted-fg) !important;
-
-  --os-icon-outline-primary: var(--sh-muted-fg) !important;
-  --os-icon-accent-tertiary: var(--sh-fg) !important;
-
-  --os-navbar-item--hover: var(--sh-accent) !important;
+	font-family: "Geist Variable", sans-serif;
+	color-scheme: dark;
 }
 
-/* Main app surfaces */
-body[data-os-theme='dark']
-  :where(
-    .left-navigation-container,
-    .osx-flyout-header,
-    .osx-flyout-scroll-content,
-    .osx-user-notification-flyout-header,
-    .osx-user-notification-flyout-scroll-content,
-    .modal-content,
-    .modal-dialog,
-    .dropdown-menu,
-    .popover,
-    .card,
-    .panel,
-    .toolbar
-  ):not(#os-pen-shortcut-sidebar):not(#os-floating-numpad):not(.os-pen-btn):not(
-    .os-numpad-btn
-  ) {
-  background: var(--sh-card) !important;
-  color: var(--sh-fg) !important;
-  border-color: var(--sh-border) !important;
+#onshape-extension-root.dark,
+#onshape-extension-portal-root.dark {
+	--background: oklch(0.145 0 0);
+	--foreground: oklch(0.985 0 0);
+
+	--card: oklch(0.205 0 0);
+	--card-foreground: oklch(0.985 0 0);
+
+	--popover: oklch(0.205 0 0);
+	--popover-foreground: oklch(0.985 0 0);
+
+	--primary: oklch(0.922 0 0);
+	--primary-foreground: oklch(0.205 0 0);
+
+	--secondary: oklch(0.269 0 0);
+	--secondary-foreground: oklch(0.985 0 0);
+
+	--muted: oklch(0.269 0 0);
+	--muted-foreground: oklch(0.708 0 0);
+
+	--accent: oklch(0.269 0 0);
+	--accent-foreground: oklch(0.985 0 0);
+
+	--destructive: oklch(0.704 0.191 22.216);
+
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.556 0 0);
+
+	--sidebar: oklch(0.205 0 0);
+	--sidebar-foreground: oklch(0.985 0 0);
+	--sidebar-primary: oklch(0.488 0.243 264.376);
+	--sidebar-primary-foreground: oklch(0.985 0 0);
+	--sidebar-accent: oklch(0.269 0 0);
+	--sidebar-accent-foreground: oklch(0.985 0 0);
+	--sidebar-border: oklch(1 0 0 / 10%);
+	--sidebar-ring: oklch(0.556 0 0);
 }
 
-/* Left nav from the uploaded Onshape HTML */
-body[data-os-theme='dark'] .left-navigation-container {
-  background: hsl(222.2 84% 4.9% / 0.96) !important;
-  border-right: 1px solid var(--sh-border) !important;
-}
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
 
-body[data-os-theme='dark'] .left-navigation-container .action-button:hover {
-  background: var(--sh-accent) !important;
-}
-
-body[data-os-theme='dark'] .left-navigation-container .background {
-  border-radius: 10px !important;
-}
-
-body[data-os-theme='dark']
-  .left-navigation-container
-  .icon.os-active
-  .background {
-  background: var(--sh-fg) !important;
-}
-
-body[data-os-theme='dark']
-  .left-navigation-container
-  .icon.os-active
-  .osx-svg-icon {
-  color: var(--sh-bg) !important;
-}
-
-/* Nav/top buttons — scoped to Onshape classes only */
-body[data-os-theme='dark']
-  :where(.osx-nav-item, .osx-flyout-toggle-button, .action-button, .btn):not(
-    .os-pen-btn
-  ):not(.os-numpad-btn):not(.os-numpad-close) {
-  color: var(--sh-fg) !important;
-  border-color: var(--sh-border) !important;
-  border-radius: 10px !important;
-}
-
-body[data-os-theme='dark']
-  :where(.osx-nav-item, .osx-flyout-toggle-button, .action-button, .btn):not(
-    .os-pen-btn
-  ):not(.os-numpad-btn):hover {
-  background: var(--sh-accent) !important;
-}
-
-/* Flyouts / side panels */
-body[data-os-theme='dark']
-  :where(
-    .osx-flyout-container,
-    .osx-flyout-header,
-    .osx-flyout-scroll-content,
-    .osx-user-notification-flyout-header,
-    .osx-user-notification-flyout-scroll-content
-  ) {
-  background: hsl(222.2 84% 4.9% / 0.96) !important;
-  border-color: var(--sh-border) !important;
-  color: var(--sh-fg) !important;
-}
-
-/* Inputs */
-body[data-os-theme='dark']
-  :where(input, textarea, select, .form-control):not(
-    #os-pen-shortcut-sidebar *
-  ):not(#os-floating-numpad *) {
-  background: hsl(222.2 84% 4.9%) !important;
-  color: var(--sh-fg) !important;
-  border: 1px solid var(--sh-border) !important;
-  border-radius: 10px !important;
-}
-
-body[data-os-theme='dark']
-  :where(input, textarea, select, .form-control):focus:not(
-    #os-pen-shortcut-sidebar *
-  ):not(#os-floating-numpad *) {
-  outline: 2px solid hsl(212.7 26.8% 83.9% / 0.45) !important;
-  outline-offset: 1px !important;
-}
-
-/* Tables / rows / menus */
-body[data-os-theme='dark']
-  :where(tr, li, [role='menuitem'], [role='option'], [role='listitem']):not(
-    #os-pen-shortcut-sidebar *
-  ):not(#os-floating-numpad *) {
-  color: var(--sh-fg) !important;
-}
-
-body[data-os-theme='dark']
-  :where(
-    tr:hover,
-    li:hover,
-    [role='menuitem']:hover,
-    [role='option']:hover,
-    [role='listitem']:hover
-  ):not(#os-pen-shortcut-sidebar *):not(#os-floating-numpad *) {
-  background: var(--sh-accent) !important;
-}
-
-/* Scrollable panes */
-body[data-os-theme='dark']
-  :where(
-    .osx-flyout-scroll-content,
-    .osx-user-notification-flyout-scroll-content,
-    [class*='scroll'],
-    [class*='Scroll']
-  ):not(#os-floating-numpad):not(#os-pen-shortcut-sidebar) {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(215 20.2% 65.1% / 0.5) transparent;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
-/* WebKit scrollbars */
-body[data-os-theme='dark']
-  *:not(#os-pen-shortcut-sidebar):not(#os-pen-shortcut-sidebar *):not(
-    #os-floating-numpad
-  ):not(#os-floating-numpad *)::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-body[data-os-theme='dark']
-  *:not(#os-pen-shortcut-sidebar):not(#os-pen-shortcut-sidebar *):not(
-    #os-floating-numpad
-  ):not(#os-floating-numpad *)::-webkit-scrollbar-thumb {
-  background: hsl(215 20.2% 65.1% / 0.38);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-/* Canvas / viewport background */
-body[data-os-theme='dark']
-  :where(
-    #renderTarget,
-    .glCanvas,
-    .os-main-view,
-    [class*='glView'],
-    [class*='scene'],
-    [class*='Scene'],
-    [class*='viewport'],
-    [class*='Viewport']
-  ):not(#os-pen-shortcut-sidebar):not(#os-floating-numpad) {
-  background: radial-gradient(
-    circle at top,
-    hsl(215 27.9% 16.9%),
-    hsl(222.2 84% 4.9%)
-  ) !important;
+	#onshape-extension-root,
+	#onshape-extension-portal-root {
+		@apply bg-transparent text-foreground font-sans;
+	}
 }

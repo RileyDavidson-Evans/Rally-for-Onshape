@@ -63,6 +63,28 @@ export function executeOnshapeShortcutCommand(
 	return true;
 }
 
+function showKeyboard() {
+	try {
+		const nav = navigator as Navigator & {
+			virtualKeyboard?: { show?: () => void };
+		};
+
+		nav.virtualKeyboard?.show?.();
+	} catch {}
+
+	try {
+		window.location.href = "ms-inputapp://";
+	} catch {}
+}
+
+function toggleFullscreen() {
+	if (!document.fullscreenElement) {
+		document.documentElement.requestFullscreen?.();
+	} else {
+		document.exitFullscreen?.();
+	}
+}
+
 export function pressKey(key: string, opts: PressKeyOptions = {}): void {
 	const isLetter = /^[a-z]$/i.test(key);
 	const isDigit = /^[0-9]$/.test(key);

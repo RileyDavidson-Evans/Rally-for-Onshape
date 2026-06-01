@@ -20,7 +20,6 @@
 		{
 			"matches": ["https://cad.onshape.com/*"],
 			"js": ["assets/main.js"],
-			"css": ["assets/main.css"],
 			"run_at": "document_idle"
 		}
 	],

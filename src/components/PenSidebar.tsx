@@ -9,63 +9,24 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { getUserShortcutCommands } from "@/core/userShortcuts";
-import type { ToolDefinition } from "@/features/types";
 import type {
 	OnshapeShortcutCommandsResponse,
 	OnshapeToolbarMode,
 } from "@/types";
 import { getToolIcon } from "../core/iconMapping";
 import { executeOnshapeShortcutCommand, pressKey } from "../core/utils";
-import { Card, CardContent, CardDescription, CardTitle } from "./ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "./ui/card";
 
 const STORAGE_KEY = "onshapePenSidebarPosition";
 const LABEL_MODE_KEY = "onshapePenSidebarLabelsAlwaysVisible";
 
-type ToolItem = {
-	type: "button";
-	id: string;
-	icon: ToolDefinition["icon"];
-	title: string;
-	onClick: () => void;
-	tone?: "default" | "primary" | "danger" | "success";
-};
-
-type SpacerItem = {
-	type: "spacer";
-	id: string;
-};
-
-type SectionLabelItem = {
-	type: "label";
-	id: string;
-	title: string;
-};
-
-type MenuItem = ToolItem | SpacerItem | SectionLabelItem;
-
 const MotionButton = motion.create(Button);
-
-function showKeyboard() {
-	try {
-		const nav = navigator as Navigator & {
-			virtualKeyboard?: { show?: () => void };
-		};
-
-		nav.virtualKeyboard?.show?.();
-	} catch {}
-
-	try {
-		window.location.href = "ms-inputapp://";
-	} catch {}
-}
-
-function toggleFullscreen() {
-	if (!document.fullscreenElement) {
-		document.documentElement.requestFullscreen?.();
-	} else {
-		document.exitFullscreen?.();
-	}
-}
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export function PenSidebar() {
@@ -156,60 +117,50 @@ export function PenSidebar() {
 			<div
 				ref={nodeRef}
 				id="os-pen-shortcut-sidebar"
-				className={[
-					"fixed left-0 top-0 z-[999999]",
-					"flex flex-col items-center gap-1",
-					"rounded border border-white/10 bg-zinc-950/72 p-1.5 text-zinc-50 shadow-2xl shadow-black/40 backdrop-blur-2xl",
-					"ring-1 ring-white/10",
-				].join(" ")}
+				className="fixed left-0 top-0 z-[999999] bg-background p-3 shadow rounded-md"
 			>
-				<div className="os-pen-drag-handle flex h-5 w-11 cursor-grab touch-none items-center justify-center rounded-xl">
-					<IconGripHorizontal className="h-3.5 w-3.5" />
-				</div>
-
-				<motion.div
-					layout
-					className="os-pen-buttons flex flex-col items-center gap-1"
+				<Button
+					variant="outline"
+					className="os-pen-drag-handle h-10 w-10 cursor-pointer mb-1"
 				>
-					<AnimatePresence mode="popLayout" initial={false}>
-						{modeTools.map((tool) => {
-							const Icon = getToolIcon(tool.command);
+					<IconGripHorizontal />
+				</Button>
 
-							return (
-								<Tooltip key={tool.id}>
-									<TooltipTrigger asChild>
-										<MotionButton
-											layout
-											type="button"
-											variant={"secondary"}
-											disabled={tool.disabled}
-											className={[].join(" ")}
-											onClick={(e) => {
-												e.preventDefault();
-												e.stopPropagation();
+				<div className="flex flex-col items-center gap-1">
+					{modeTools.map((tool) => {
+						const Icon = getToolIcon(tool.command);
 
-												executeOnshapeShortcutCommand(tool);
-											}}
-										>
-											<Icon className="h-5 w-5" strokeWidth={2.2} />
-										</MotionButton>
-									</TooltipTrigger>
+						return (
+							<Tooltip key={tool.id}>
+								<TooltipTrigger asChild>
+									<Button
+										className="h-10 w-10 cursor-pointer"
+										variant="outline"
+										onClick={(e) => {
+											e.preventDefault();
+											e.stopPropagation();
 
-									<TooltipContent side="right">
-										<Card>
-											<CardContent>
-												<CardTitle>{tool.command}</CardTitle>
-												<CardDescription>
-													{tool.expandedTooltipKey?.replace("tooltips:::", "")}
-												</CardDescription>
-											</CardContent>
-										</Card>
-									</TooltipContent>
-								</Tooltip>
-							);
-						})}
-					</AnimatePresence>
-				</motion.div>
+											executeOnshapeShortcutCommand(tool);
+										}}
+									>
+										<Icon />
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="right" className="bg-transparent">
+									<Card className="w-[350px]">
+										<CardHeader>
+											<CardTitle>{tool.command}</CardTitle>
+											<CardDescription>
+												{tool.expandedTooltipKey?.replace("tooltips:::", "")}
+											</CardDescription>
+										</CardHeader>
+									</Card>
+								</TooltipContent>
+							</Tooltip>
+						);
+					})}
+				</div>
 			</div>
 		</Draggable>
 	);
