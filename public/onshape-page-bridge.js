@@ -90,7 +90,6 @@
 		}
 
 		$rootScope.$broadcast = function patchedBroadcast(name, ...args) {
-			console.log("Broadcasting Angular event", name, args);
 			if (name !== "$stateChangeStart") {
 				forward("broadcast", name, args);
 			}
