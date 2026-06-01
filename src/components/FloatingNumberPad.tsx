@@ -138,11 +138,25 @@ export function FloatingNumpad() {
 		el.focus();
 
 		if (key === "Enter") {
-			pressKey("Enter", {
+			const enterEvent = {
+				key: "Enter",
 				code: "Enter",
 				keyCode: 13,
 				which: 13,
-			});
+				bubbles: true,
+				cancelable: true,
+			};
+
+			el.dispatchEvent(new KeyboardEvent("keydown", enterEvent));
+			el.dispatchEvent(new KeyboardEvent("keyup", enterEvent));
+
+			window.setTimeout(() => {
+				pressKey("Enter", {
+					code: "Enter",
+					keyCode: 13,
+					which: 13,
+				});
+			}, 30);
 
 			window.setTimeout(() => {
 				hideNumpad();
