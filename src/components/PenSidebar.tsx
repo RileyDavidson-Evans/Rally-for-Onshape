@@ -172,14 +172,32 @@ export function PenSidebar() {
 			label: "Undo",
 			description: "Undo the last action.",
 			icon: () => <IconRotateClockwise className="transform rotate-180" />,
-			onClick: () => pressKey("z", { ctrlKey: true }),
+			onClick: () =>
+				document.activeElement?.dispatchEvent(
+					new KeyboardEvent("keydown", {
+						key: "z",
+						code: "KeyZ",
+						ctrlKey: true,
+						bubbles: true,
+						cancelable: true,
+					}),
+				),
 		},
 		{
 			id: "redo",
 			label: "Redo",
 			description: "Redo the last undone action.",
 			icon: IconRotateClockwise,
-			onClick: () => pressKey("y", { ctrlKey: true }),
+			onClick: () =>
+				document.activeElement?.dispatchEvent(
+					new KeyboardEvent("keydown", {
+						key: "y",
+						code: "KeyY",
+						ctrlKey: true,
+						bubbles: true,
+						cancelable: true,
+					}),
+				),
 		},
 		{
 			id: "delete",
