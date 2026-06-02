@@ -15,8 +15,6 @@ import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
 const MotionButton = motion.create(Button);
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 function SidebarDivider() {
 	return <div className="my-3 mx-auto h-px w-8/12 bg-border" />;
 }

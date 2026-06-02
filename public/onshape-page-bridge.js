@@ -2,6 +2,18 @@
 	if (window.__onshapePageBridgeLoaded) return;
 	window.__onshapePageBridgeLoaded = true;
 
+	const ENABLE_ANGULAR_EVENT_FORWARDING = true;
+
+	const IGNORED_ANGULAR_EVENTS = new Set([
+		"$stateChangeStart",
+		"$stateChangeSuccess",
+		"$stateChangeError",
+		"$viewContentLoaded",
+		"RESIZE_ELEMENTS",
+		"OS_SPLITTER_CONTAINER_RESIZE",
+		"RESIZED_OS_SPLITTER_CONTAINER",
+	]);
+
 	function getInjector() {
 		return window.angular?.element(document).injector();
 	}
@@ -65,6 +77,12 @@
 		});
 	}
 
+	function shouldForwardAngularEvent(name) {
+		if (!name || IGNORED_ANGULAR_EVENTS.has(name)) return false;
+
+		return true;
+	}
+
 	function startAngularEventForwarding() {
 		const injector = getInjector();
 		if (!injector || window.__onshapeAngularEventForwardingStarted) return;
@@ -76,29 +94,49 @@
 		const originalBroadcast = $rootScope.$broadcast;
 		const originalEmit = $rootScope.$emit;
 
-		function forward(kind, name, args) {
-			window.postMessage(
-				{
-					type: "OS_ANGULAR_EVENT",
-					kind,
-					name,
-					args,
-					timestamp: Date.now(),
-				},
-				window.location.origin,
-			);
+		function forwardLater(kind, name, args) {
+			if (!shouldForwardAngularEvent(name)) return;
+
+			queueMicrotask(() => {
+				try {
+					window.postMessage(
+						{
+							type: "OS_ANGULAR_EVENT",
+							kind,
+							name,
+							args: args,
+							timestamp: Date.now(),
+						},
+						window.location.origin,
+					);
+				} catch (error) {
+					console.warn("Failed to forward Onshape Angular event", name, error);
+				}
+			});
 		}
 
 		$rootScope.$broadcast = function patchedBroadcast(name, ...args) {
-			if (name !== "$stateChangeStart") {
-				forward("broadcast", name, args);
+			const result = originalBroadcast.apply(this, [name, ...args]);
+
+			try {
+				forwardLater("broadcast", name, args);
+			} catch {
+				// Never let forwarding break Onshape.
 			}
-			return originalBroadcast.apply(this, [name, ...args]);
+
+			return result;
 		};
 
 		$rootScope.$emit = function patchedEmit(name, ...args) {
-			forward("emit", name, args);
-			return originalEmit.apply(this, [name, ...args]);
+			const result = originalEmit.apply(this, [name, ...args]);
+
+			try {
+				forwardLater("emit", name, args);
+			} catch {
+				// Never let forwarding break Onshape.
+			}
+
+			return result;
 		};
 
 		console.log("Onshape Angular event forwarding started");
@@ -108,14 +146,20 @@
 		const injector = getInjector();
 		const service = injector?.get("ElementToolbarService");
 
-		service?.executeCommand(data.namespace, data.command, data.commandDetails);
+		if (!service) {
+			throw new Error("Onshape ElementToolbarService not available");
+		}
+
+		service.executeCommand(data.namespace, data.command, data.commandDetails);
 	}
 
 	function executeBroadcastEvent(name, args = []) {
 		const injector = getInjector();
 		const $rootScope = injector?.get("$rootScope");
 
-		if (!$rootScope) throw new Error("Onshape $rootScope not available");
+		if (!$rootScope) {
+			throw new Error("Onshape $rootScope not available");
+		}
 
 		$rootScope.$broadcast(name, ...args);
 	}
@@ -173,9 +217,12 @@
 	});
 
 	const interval = window.setInterval(() => {
-		if (getInjector()) {
+		if (!getInjector()) return;
+
+		if (ENABLE_ANGULAR_EVENT_FORWARDING) {
 			startAngularEventForwarding();
-			window.clearInterval(interval);
 		}
+
+		window.clearInterval(interval);
 	}, 250);
 })();
