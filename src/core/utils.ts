@@ -200,7 +200,7 @@ export async function copyOnshapeIconSpriteToShadowRoot(
 	shadowRoot.prepend(clone);
 }
 
-function toggleFullscreen() {
+export function toggleFullscreen() {
 	if (!document.fullscreenElement) {
 		document.documentElement.requestFullscreen?.();
 	} else {

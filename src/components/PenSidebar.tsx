@@ -1,4 +1,10 @@
-import { ChevronDown, ChevronUp, GripHorizontal, Pencil } from "lucide-react";
+import {
+	ChevronDown,
+	ChevronUp,
+	Fullscreen,
+	GripHorizontal,
+	Pencil,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { Button } from "@/components/ui/button";
@@ -12,6 +18,7 @@ import {
 	FORWARDED_ONSHAPE_EVENTS,
 } from "@/constants/onshapeEvents";
 import { getUserShortcutCommands } from "@/core/userShortcuts";
+import { toggleFullscreen } from "@/core/utils";
 import type {
 	OnshapeShortcutCommandsResponse,
 	OnshapeToolbarMode,
@@ -149,6 +156,30 @@ export function PenSidebar() {
 					>
 						<GripHorizontal />
 					</Button>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								variant="outline"
+								size="icon"
+								className="h-10 w-10 shrink-0 cursor-pointer"
+								onClick={toggleFullscreen}
+							>
+								<Fullscreen />
+							</Button>
+						</TooltipTrigger>
+
+						<TooltipContent side="right">
+							<Card className="w-[350px]">
+								<CardHeader>
+									<CardTitle>Toggle Fullscreen</CardTitle>
+									<CardDescription>
+										Toggles the fullscreen onshape experience, give it a try to
+										experience onshape like a native app!
+									</CardDescription>
+								</CardHeader>
+							</Card>
+						</TooltipContent>
+					</Tooltip>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<Button
