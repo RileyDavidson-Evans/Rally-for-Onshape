@@ -46,11 +46,12 @@ export type ExecuteOnshapeCommandOptions = {
 	commandDetails?: unknown;
 	ignoreNamespace?: boolean;
 };
-
 export function suppressVirtualKeyboard(): void {
 	if (navigator.maxTouchPoints === 0) return;
 
-	function patchInput(input: HTMLInputElement | HTMLTextAreaElement) {
+	const patchInput = (
+		input: HTMLInputElement | HTMLTextAreaElement
+	): void => {
 		if (input.dataset.osKeyboardSuppressed) return;
 
 		input.dataset.osKeyboardSuppressed = "true";
@@ -59,22 +60,50 @@ export function suppressVirtualKeyboard(): void {
 		input.addEventListener("focus", () => {
 			navigator.virtualKeyboard?.hide?.();
 		});
-	}
+	};
 
-	const patchAll = () => {
-		document
+	const patchNode = (node: Node): void => {
+		if (!(node instanceof HTMLElement)) return;
+
+		if (
+			node instanceof HTMLInputElement ||
+			node instanceof HTMLTextAreaElement
+		) {
+			patchInput(node);
+			return;
+		}
+
+		node
 			.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
 				"input, textarea"
 			)
 			.forEach(patchInput);
 	};
 
-	patchAll();
+	// Patch inputs that already exist.
+	document
+		.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+			"input, textarea"
+		)
+		.forEach(patchInput);
 
-	new MutationObserver(patchAll).observe(document.documentElement, {
+	// Patch only newly-added inputs instead of rescanning the full DOM.
+	const observer = new MutationObserver((mutations) => {
+		for (const mutation of mutations) {
+			for (const node of mutation.addedNodes) {
+				patchNode(node);
+			}
+		}
+	});
+
+	observer.observe(document.documentElement, {
 		childList: true,
 		subtree: true,
 	});
+
+	(window as any).__onshapeVirtualKeyboardCleanup = () => {
+		observer.disconnect();
+	};
 }
 
 export function executeOnshapeShortcutCommand(
