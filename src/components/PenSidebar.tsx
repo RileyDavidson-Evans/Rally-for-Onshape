@@ -27,7 +27,12 @@ import { pressKey } from "../core/utils";
 import { PenSidebarMainContent } from "./PenSidebarMainContent";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
 
-const STORAGE_KEY = "onshapePenSidebarPosition";
+const STORAGE_KEY = "onshapePenSidebarScreenPosition";
+
+const DEFAULT_POSITION = {
+	x: 290,
+	y: 100,
+};
 
 export function PenSidebar() {
 	const nodeRef = useRef<HTMLDivElement>(null);
@@ -46,10 +51,11 @@ export function PenSidebar() {
 	const [position, setPosition] = useState(() => {
 		try {
 			return JSON.parse(
-				localStorage.getItem(STORAGE_KEY) ?? JSON.stringify({ x: 12, y: 200 }),
+				localStorage.getItem(STORAGE_KEY) ??
+					JSON.stringify({ x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y }),
 			);
 		} catch {
-			return { x: 12, y: 200 };
+			return { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
 		}
 	});
 
