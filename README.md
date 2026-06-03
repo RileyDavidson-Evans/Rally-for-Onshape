@@ -1,5 +1,7 @@
 # Onshape Tablet UI
 
+[Chrome Extension](https://chromewebstore.google.com/detail/onshape-tablet-ui/hanbmgaepnkkmmgafdpfocnjhfccckoh)
+
 A browser extension that adds tablet and pen-friendly UI enhancements for Onshape.
 
 It injects a custom React-based sidebar and floating numeric keypad into the Onshape workspace, making pen users more efficient with quick access to toolbar actions and numeric entry.
