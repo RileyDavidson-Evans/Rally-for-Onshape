@@ -191,7 +191,40 @@ export function PenSidebar() {
 			<div
 				ref={nodeRef}
 				id="os-pen-shortcut-sidebar"
-				className="fixed left-0 top-0 z-[9999] flex max-h-[70vh] flex-col rounded-md border bg-background/95 py-2 shadow-2xl backdrop-blur os-animate-in overflow-hidden"
+				className="
+		fixed left-0 top-0 z-[9999]
+		flex max-h-[70vh] flex-col overflow-hidden
+		rounded-xl
+		border border-white/10
+
+		bg-gradient-to-b
+		from-slate-900/95
+		via-slate-950/92
+		to-black/90
+
+		py-2
+		backdrop-blur-xl
+
+		shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]
+
+		before:pointer-events-none
+		before:absolute
+		before:inset-0
+		before:rounded-[inherit]
+		before:bg-gradient-to-b
+		before:from-white/5
+		before:via-white/[0.015]
+		before:to-transparent
+
+		after:pointer-events-none
+		after:absolute
+		after:inset-0
+		after:rounded-[inherit]
+		after:ring-1
+		after:ring-white/5
+
+		os-animate-in
+	"
 			>
 				<div className="grid grid-cols-2 justify-items-center gap-1 px-2">
 					<Tooltip>
