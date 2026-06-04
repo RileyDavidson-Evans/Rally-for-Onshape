@@ -270,8 +270,15 @@ export function FloatingNumpad() {
 			id="os-floating-numpad"
 			tabIndex={-1}
 			className={[
-				"fixed z-[999999] w-[230px] select-none rounded-2xl border border-border/70 bg-background/95 p-2 shadow-2xl backdrop-blur-xl",
-				"transition-all duration-150",
+				"fixed z-[999999] w-[230px] select-none overflow-hidden rounded-2xl",
+				"border border-white/10",
+				"bg-gradient-to-b from-slate-900/95 via-slate-950/92 to-black/90",
+				"p-2 backdrop-blur-xl",
+				"shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]",
+				"transition-all duration-150 ease-out",
+				"before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]",
+				"before:bg-gradient-to-b before:from-white/5 before:via-white/[0.015] before:to-transparent",
+				"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:ring-1 after:ring-white/5",
 				isVisible
 					? "pointer-events-auto scale-100 opacity-100"
 					: "pointer-events-none scale-95 opacity-0",
@@ -286,46 +293,22 @@ export function FloatingNumpad() {
 				cancelPendingHide();
 			}}
 		>
-			<div className="flex items-center justify-between px-1 pb-2">
-				<div className="flex items-center gap-2">
-					<div className="h-2 w-2 rounded-full bg-primary" />
-					<span className="text-xs font-semibold tracking-[0.18em] text-muted-foreground">
-						NUM
-					</span>
-				</div>
+			<div className="relative z-10">
+				<div className="flex items-center justify-between px-1 pb-2">
+					<div className="flex items-center gap-2">
+						<div className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_12px_rgba(96,165,250,0.8)]" />
 
-				<Button
-					className="h-7 w-7 cursor-pointer"
-					variant="ghost"
-					size="icon"
-					type="button"
-					tabIndex={-1}
-					onPointerDown={(e) => {
-						e.preventDefault();
-						e.stopPropagation();
+						<span className="text-xs font-semibold tracking-[0.18em] text-slate-400">
+							NUM
+						</span>
+					</div>
 
-						cancelPendingHide();
-
-						window.setTimeout(() => {
-							hideNumpad();
-						}, ACTION_DELAY);
-					}}
-				>
-					<X />
-				</Button>
-			</div>
-
-			<div className="grid grid-cols-4 gap-1.5">
-				{KEYS.map(([label, key, className]) => (
 					<Button
-						key={`${label}-${key}`}
-						className={[
-							"h-11 text-base font-medium cursor-pointer",
-							className === "wide" ? "col-span-4" : "",
-						].join(" ")}
-						variant={className === "wide" ? "secondary" : "outline"}
-						tabIndex={-1}
+						className="h-7 w-7 cursor-pointer rounded-lg text-slate-400 hover:bg-white/10 hover:text-white"
+						variant="ghost"
+						size="icon"
 						type="button"
+						tabIndex={-1}
 						onPointerDown={(e) => {
 							e.preventDefault();
 							e.stopPropagation();
@@ -333,14 +316,63 @@ export function FloatingNumpad() {
 							cancelPendingHide();
 
 							window.setTimeout(() => {
-								activeInputRef.current?.focus();
-								sendInputKey(key);
+								hideNumpad();
 							}, ACTION_DELAY);
 						}}
 					>
-						{label}
+						<X className="h-4 w-4" />
 					</Button>
-				))}
+				</div>
+
+				<Separator className="mb-2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+				<div className="grid grid-cols-4 gap-1.5">
+					{KEYS.map(([label, key, className]) => {
+						const isEnter = key === "Enter";
+						const isOperator = ["+", "-", "*", "/"].includes(key);
+						const isBackspace = key === "Backspace";
+
+						return (
+							<Button
+								key={`${label}-${key}`}
+								className={[
+									"h-11 cursor-pointer rounded-xl border text-base font-medium",
+									"shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
+									"transition-all duration-150",
+									"active:scale-95",
+
+									isEnter
+										? "col-span-4 border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/30 hover:text-white"
+										: "",
+
+									isOperator || isBackspace
+										? "border-white/10 bg-white/[0.075] text-slate-200 hover:bg-white/12 hover:text-white"
+										: "",
+
+									!isEnter && !isOperator && !isBackspace
+										? "border-white/10 bg-white/[0.045] text-slate-100 hover:bg-white/10 hover:text-white"
+										: "",
+								].join(" ")}
+								variant="ghost"
+								tabIndex={-1}
+								type="button"
+								onPointerDown={(e) => {
+									e.preventDefault();
+									e.stopPropagation();
+
+									cancelPendingHide();
+
+									window.setTimeout(() => {
+										activeInputRef.current?.focus();
+										sendInputKey(key);
+									}, ACTION_DELAY);
+								}}
+							>
+								{label}
+							</Button>
+						);
+					})}
+				</div>
 			</div>
 		</Card>
 	);
