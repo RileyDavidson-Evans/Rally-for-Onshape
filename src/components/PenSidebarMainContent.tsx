@@ -142,10 +142,8 @@ export function PenSidebarMainContent({
 							<Tooltip key={tool.id}>
 								<TooltipTrigger asChild>
 									<MotionButton
-										className="relative h-10 w-10 shrink-0 cursor-pointer"
-										variant={
-											tool.command === currentTool ? "outline" : "secondary"
-										}
+										className={`relative h-10 w-10 shrink-0 cursor-pointer ${tool.command === currentTool ? "bg-slate-800 border border-slate-700" : ""}`}
+										variant={"secondary"}
 										size="icon"
 										initial={{ opacity: 0, x: 3 }}
 										animate={{ opacity: 1, x: 0 }}
