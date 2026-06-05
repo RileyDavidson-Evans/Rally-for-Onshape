@@ -2,19 +2,61 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://github.com https://cad.onshape.com">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
     <link rel="stylesheet" href="../Style.css">
     <script src="../Script.js" defer></script>
 </head>
+
 <body>
-    <img src="../Icon.png" width="128" height="128" alt="Onshape Plus Icon">
-    <p class="platform-ios">You can turn on Onshape Plus’s Safari extension in Settings.</p>
-    <p class="platform-mac state-unknown">You can turn on Onshape Plus’s extension in Safari Extensions preferences.</p>
-    <p class="platform-mac state-on">Onshape Plus’s extension is currently on. You can turn it off in Safari Extensions preferences.</p>
-    <p class="platform-mac state-off">Onshape Plus’s extension is currently off. You can turn it on in Safari Extensions preferences.</p>
-    <button class="platform-mac open-preferences">Quit and Open Safari Extensions Preferences…</button>
+    <main class="app">
+        <img class="icon" src="../Icon.png" width="112" height="112" alt="Onshape Plus Icon">
+
+        <h1>Onshape Plus</h1>
+
+        <p class="subtitle">
+            Make Onshape faster, cleaner, and easier to use on iPad and Mac.
+        </p>
+
+        <section class="card">
+            <h2>Enable the Safari Extension</h2>
+
+            <ol class="steps platform-ios">
+                <li>Open <strong>Settings</strong></li>
+                <li>Go to <strong>Safari</strong></li>
+                <li>Tap <strong>Extensions</strong></li>
+                <li>Enable <strong>Onshape Plus</strong></li>
+                <li>Open <strong>cad.onshape.com</strong></li>
+            </ol>
+
+            <p class="platform-mac state-unknown">
+                You can turn on Onshape Plus in Safari Extensions preferences.
+            </p>
+
+            <p class="platform-mac state-on">
+                Onshape Plus is currently enabled.
+            </p>
+
+            <p class="platform-mac state-off">
+                Onshape Plus is currently disabled.
+            </p>
+
+            <button class="platform-mac open-preferences">
+                Open Safari Extensions Preferences
+            </button>
+        </section>
+
+        <section class="features">
+            <div>Touch-friendly controls</div>
+            <div>Pen-focused workflows</div>
+            <div>Floating CAD shortcuts</div>
+            <div>Open source</div>
+        </section>
+
+        <p class="disclaimer">
+            Onshape Plus is an independent third-party extension and is not affiliated with or endorsed by Onshape.
+        </p>
+    </main>
 </body>
 </html>
