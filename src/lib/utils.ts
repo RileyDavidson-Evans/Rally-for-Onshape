@@ -11,28 +11,48 @@ export const DEFAULT_POSITION = {
 	y: 100,
 };
 
+export const SIDEBAR_SAFE_MARGIN = 12;
+export const SIDEBAR_MIN_VISIBLE_SIZE = 80;
+
+export function getViewportSize() {
+	const viewport = window.visualViewport;
+
+	return {
+		width: viewport?.width ?? window.innerWidth,
+		height: viewport?.height ?? window.innerHeight,
+	};
+}
+
+export function clampSidebarPosition(position: { x: number; y: number }) {
+	const fallback = { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
+	const { width, height } = getViewportSize();
+
+	const x = Number(position?.x);
+	const y = Number(position?.y);
+
+	if (!Number.isFinite(x) || !Number.isFinite(y)) return fallback;
+
+	return {
+		x: Math.min(
+			Math.max(x, SIDEBAR_SAFE_MARGIN),
+			Math.max(SIDEBAR_SAFE_MARGIN, width - SIDEBAR_MIN_VISIBLE_SIZE),
+		),
+		y: Math.min(
+			Math.max(y, SIDEBAR_SAFE_MARGIN),
+			Math.max(SIDEBAR_SAFE_MARGIN, height - SIDEBAR_MIN_VISIBLE_SIZE),
+		),
+	};
+}
+
 export const getInitialPosition = () => {
 	const fallback = { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
 
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
-		if (!raw) return fallback;
+		if (!raw) return clampSidebarPosition(fallback);
 
-		const parsed = JSON.parse(raw);
-
-		const x = Number(parsed?.x);
-		const y = Number(parsed?.y);
-
-		const isValid =
-			Number.isFinite(x) &&
-			Number.isFinite(y) &&
-			x >= 0 &&
-			y >= 0 &&
-			x <= window.innerWidth - 80 &&
-			y <= window.innerHeight - 80;
-
-		return isValid ? { x, y } : fallback;
+		return clampSidebarPosition(JSON.parse(raw));
 	} catch {
-		return fallback;
+		return clampSidebarPosition(fallback);
 	}
 };

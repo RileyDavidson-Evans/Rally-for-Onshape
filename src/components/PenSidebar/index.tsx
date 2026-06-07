@@ -26,7 +26,11 @@ import {
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { getUserShortcutCommands } from "@/core/userShortcuts";
 import { toggleFullscreen, watchElementPresence } from "@/core/utils";
-import { DEFAULT_POSITION, getInitialPosition, STORAGE_KEY } from "@/lib/utils";
+import {
+	clampSidebarPosition,
+	getInitialPosition,
+	STORAGE_KEY,
+} from "@/lib/utils";
 import type {
 	OnshapeShortcutCommandsResponse,
 	OnshapeToolbarMode,
@@ -161,6 +165,39 @@ export function PenSidebar() {
 		return () => window.removeEventListener("message", onMessage);
 	}, []);
 
+	useEffect(() => {
+		if (!visible) return;
+
+		let timeoutId: number | undefined;
+
+		const fixPosition = () => {
+			window.clearTimeout(timeoutId);
+
+			timeoutId = window.setTimeout(() => {
+				setPosition((current) => {
+					const next = clampSidebarPosition(current);
+					localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+					return next;
+				});
+			}, 250);
+		};
+
+		fixPosition();
+
+		window.addEventListener("resize", fixPosition);
+		window.addEventListener("orientationchange", fixPosition);
+		window.visualViewport?.addEventListener("resize", fixPosition);
+		window.visualViewport?.addEventListener("scroll", fixPosition);
+
+		return () => {
+			window.clearTimeout(timeoutId);
+			window.removeEventListener("resize", fixPosition);
+			window.removeEventListener("orientationchange", fixPosition);
+			window.visualViewport?.removeEventListener("resize", fixPosition);
+			window.visualViewport?.removeEventListener("scroll", fixPosition);
+		};
+	}, [visible]);
+
 	if (!visible) return null;
 
 	const modeTools =
@@ -175,7 +212,7 @@ export function PenSidebar() {
 				setPosition({ x: data.x, y: data.y });
 			}}
 			onStop={(_, data) => {
-				const next = { x: data.x, y: data.y };
+				const next = clampSidebarPosition({ x: data.x, y: data.y });
 				setPosition(next);
 				localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
 			}}
