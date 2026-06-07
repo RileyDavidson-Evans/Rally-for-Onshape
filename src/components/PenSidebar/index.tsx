@@ -26,20 +26,13 @@ import {
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { getUserShortcutCommands } from "@/core/userShortcuts";
 import { toggleFullscreen, watchElementPresence } from "@/core/utils";
+import { DEFAULT_POSITION, getInitialPosition, STORAGE_KEY } from "@/lib/utils";
 import type {
 	OnshapeShortcutCommandsResponse,
 	OnshapeToolbarMode,
 } from "@/types";
 import { pressKey } from "../../core/utils";
-import { SettingsDialog } from "../dialogs/Settings";
 import { PenSidebarMainContent } from "./Content";
-
-const STORAGE_KEY = "onshapePenSidebarScreenPosition";
-
-const DEFAULT_POSITION = {
-	x: 290,
-	y: 100,
-};
 
 export function PenSidebar() {
 	const nodeRef = useRef<HTMLDivElement>(null);
@@ -61,16 +54,7 @@ export function PenSidebar() {
 
 	const initialLoadDoneRef = useRef(false);
 
-	const [position, setPosition] = useState(() => {
-		try {
-			return JSON.parse(
-				localStorage.getItem(STORAGE_KEY) ??
-					JSON.stringify({ x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y }),
-			);
-		} catch {
-			return { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
-		}
-	});
+	const [position, setPosition] = useState(getInitialPosition);
 
 	const [toolbarType, setToolbarType] =
 		useState<OnshapeToolbarMode>("Part Studio");
