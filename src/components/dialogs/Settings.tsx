@@ -23,6 +23,12 @@ import {
 
 const links = [
 	{
+		label: "Edit Quick Menu Actions",
+		description: "Customize the Onshape shortcut menu used by Onshape Plus.",
+		icon: Pencil,
+		href: EDIT_SHORTCUT_ITEMS_URL,
+	},
+	{
 		label: "Discord",
 		description: "Join the community, report bugs, and request features.",
 		icon: MessageCircle,
@@ -39,12 +45,6 @@ const links = [
 		description: "Support development of Onshape Plus.",
 		icon: Coffee,
 		href: BUY_ME_A_COFFEE_URL,
-	},
-	{
-		label: "Edit Quick Menu Actions",
-		description: "Customize the Onshape shortcut menu used by Onshape Plus.",
-		icon: Pencil,
-		href: EDIT_SHORTCUT_ITEMS_URL,
 	},
 ];
 

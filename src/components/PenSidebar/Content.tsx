@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { executeOnshapeShortcutCommand, pressKey } from "@/core/utils";
 import {
 	topUtilityActions,
@@ -42,6 +44,8 @@ export function PenSidebarMainContent({
 	redoEnabled: boolean;
 	featureDialogVisible: boolean;
 }) {
+	const { openSettings } = useSettingsDialog();
+
 	return (
 		<>
 			<SidebarDivider />
@@ -144,7 +148,7 @@ export function PenSidebarMainContent({
 						)}
 
 						{modeTools.map((tool, index) => (
-							<Tooltip key={tool.id}>
+							<Tooltip key={tool.id} disableHoverableContent={false}>
 								<TooltipTrigger asChild>
 									<MotionButton
 										className={`relative h-10 w-10 shrink-0 cursor-pointer ${tool.command === currentTool ? "bg-slate-800 border border-slate-700" : ""}`}
@@ -193,6 +197,15 @@ export function PenSidebarMainContent({
 												)}
 											</CardDescription>
 										</CardHeader>
+										<CardFooter>
+											<Button
+												onClick={openSettings}
+												variant={"link"}
+												className="cursor-pointer"
+											>
+												Customize your quick actions
+											</Button>
+										</CardFooter>
 									</Card>
 								</TooltipContent>
 							</Tooltip>
