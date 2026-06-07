@@ -70,7 +70,7 @@ if (!document.getElementById("onshape-extension-host")) {
 			<SettingsDialogProvider>
 				<PortalContainerProvider container={portalRoot}>
 					<TooltipProvider
-						delayDuration={0}
+						delayDuration={350}
 						skipDelayDuration={0}
 						disableHoverableContent
 					>
