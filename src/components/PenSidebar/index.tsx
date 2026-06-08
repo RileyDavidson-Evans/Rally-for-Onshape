@@ -277,15 +277,29 @@ export function PenSidebar() {
 							</Card>
 						</TooltipContent>
 					</Tooltip>
-
-					<Button
-						variant="secondary"
-						size="icon"
-						className="h-10 w-10 cursor-pointer"
-						onClick={openSettings}
-					>
-						<Settings className="h-5 w-5" />
-					</Button>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<Button
+								variant="secondary"
+								size="icon"
+								className="h-10 w-10 cursor-pointer"
+								onClick={openSettings}
+							>
+								<Settings className="h-5 w-5" />
+							</Button>
+						</TooltipTrigger>
+						<TooltipContent>
+							<Card className="w-[350px]">
+								<CardHeader>
+									<CardTitle>Configuration</CardTitle>
+									<CardDescription>
+										Change the way Onshape Plus works to best suit your
+										workflow. View links for the Github, Discord and more.
+									</CardDescription>
+								</CardHeader>
+							</Card>
+						</TooltipContent>
+					</Tooltip>
 
 					<Tooltip>
 						<TooltipTrigger asChild>
