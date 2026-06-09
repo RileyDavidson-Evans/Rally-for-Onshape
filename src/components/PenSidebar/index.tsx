@@ -178,6 +178,8 @@ export function PenSidebar() {
 
 			if (data.name === FORWARDED_ONSHAPE_EVENTS.DOCUMENT_UNLOADED) {
 				onLeaveDocumentHandler();
+				window.removeEventListener("message", onMessage);
+				document.removeEventListener("fullscreenchange", onFullScreenChange);
 			}
 
 			if (data.name === FORWARDED_ONSHAPE_EVENTS.ADD_NEW_FEATURE) {

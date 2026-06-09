@@ -3,9 +3,18 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import {
+	ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE,
+	FORWARDED_ONSHAPE_EVENTS,
+} from "@/constants/onshapeEvents";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { shouldUseFloatingNumpad } from "@/core/settings";
-import { fireInputEvents, pressKey, setNativeValue } from "../core/utils";
+import {
+	fireInputEvents,
+	pressKey,
+	setNativeValue,
+	suppressVirtualKeyboard,
+} from "../core/utils";
 
 const ACTION_DELAY = 40;
 const AUTO_HIDE_DELAY = 600;
@@ -217,10 +226,8 @@ export function FloatingNumpad() {
 	}
 
 	useEffect(() => {
+		let cleanupKeyboardSuppression: (() => void) | null = null;
 		const handleFocusIn = (e: FocusEvent) => {
-			if (!window.location.pathname.startsWith("/documents/")) {
-				return;
-			}
 			if (!shouldUseFloatingNumpad()) return;
 			const target = e.target;
 			const numpad = numpadRef.current;
@@ -254,10 +261,32 @@ export function FloatingNumpad() {
 			scheduleAutoHide();
 		};
 
-		window.addEventListener("focusin", handleFocusIn, true);
-		window.addEventListener("focusout", handleFocusOut, true);
+		async function onMessage(event: MessageEvent) {
+			if (event.source !== window) return;
+
+			const data = event.data;
+			if (!data || data.type !== ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE)
+				return;
+			if (data.name === FORWARDED_ONSHAPE_EVENTS.ELEMENT_LOAD_DONE) {
+				cleanupKeyboardSuppression?.();
+				cleanupKeyboardSuppression = suppressVirtualKeyboard();
+				window.addEventListener("focusin", handleFocusIn, true);
+				window.addEventListener("focusout", handleFocusOut, true);
+			}
+
+			if (data.name === FORWARDED_ONSHAPE_EVENTS.DOCUMENT_UNLOADED) {
+				cleanupKeyboardSuppression?.();
+				cleanupKeyboardSuppression = null;
+				window.removeEventListener("focusin", handleFocusIn, true);
+				window.removeEventListener("focusout", handleFocusOut, true);
+			}
+		}
+
+		window.addEventListener("message", onMessage);
 
 		return () => {
+			cleanupKeyboardSuppression?.();
+			window.removeEventListener("message", onMessage);
 			window.removeEventListener("focusin", handleFocusIn, true);
 			window.removeEventListener("focusout", handleFocusOut, true);
 

@@ -46,18 +46,52 @@ export type ExecuteOnshapeCommandOptions = {
 	commandDetails?: unknown;
 	ignoreNamespace?: boolean;
 };
-export function suppressVirtualKeyboard(): void {
-	if (navigator.maxTouchPoints === 0) return;
+
+const CLEANUP_KEY = "__onshapeVirtualKeyboardCleanup";
+
+export function suppressVirtualKeyboard(): () => void {
+	if (navigator.maxTouchPoints === 0) return () => {};
+
+	const isDocumentPage =
+		location.hostname === "cad.onshape.com" &&
+		location.pathname.includes("/documents/");
+
+	if (!isDocumentPage) return () => {};
+
+	(window as any)[CLEANUP_KEY]?.();
+
+	const patchedInputs = new Map<
+		HTMLInputElement | HTMLTextAreaElement,
+		string | null
+	>();
+
+	const hideKeyboard = () => {
+		navigator.virtualKeyboard?.hide?.();
+	};
 
 	const patchInput = (input: HTMLInputElement | HTMLTextAreaElement): void => {
-		if (input.dataset.osKeyboardSuppressed) return;
+		if (patchedInputs.has(input)) return;
+
+		patchedInputs.set(input, input.getAttribute("inputmode"));
 
 		input.dataset.osKeyboardSuppressed = "true";
 		input.setAttribute("inputmode", "none");
+		input.addEventListener("focus", hideKeyboard);
+	};
 
-		input.addEventListener("focus", () => {
-			navigator.virtualKeyboard?.hide?.();
-		});
+	const unpatchInput = (
+		input: HTMLInputElement | HTMLTextAreaElement,
+	): void => {
+		const previousInputMode = patchedInputs.get(input);
+
+		if (previousInputMode == null) {
+			input.removeAttribute("inputmode");
+		} else {
+			input.setAttribute("inputmode", previousInputMode);
+		}
+
+		delete input.dataset.osKeyboardSuppressed;
+		input.removeEventListener("focus", hideKeyboard);
 	};
 
 	const patchNode = (node: Node): void => {
@@ -78,12 +112,10 @@ export function suppressVirtualKeyboard(): void {
 			.forEach(patchInput);
 	};
 
-	// Patch inputs that already exist.
 	document
 		.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea")
 		.forEach(patchInput);
 
-	// Patch only newly-added inputs instead of rescanning the full DOM.
 	const observer = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
 			for (const node of mutation.addedNodes) {
@@ -97,11 +129,24 @@ export function suppressVirtualKeyboard(): void {
 		subtree: true,
 	});
 
-	(window as any).__onshapeVirtualKeyboardCleanup = () => {
+	const cleanup = () => {
 		observer.disconnect();
-	};
-}
 
+		for (const input of patchedInputs.keys()) {
+			unpatchInput(input);
+		}
+
+		patchedInputs.clear();
+
+		if ((window as any)[CLEANUP_KEY] === cleanup) {
+			delete (window as any)[CLEANUP_KEY];
+		}
+	};
+
+	(window as any)[CLEANUP_KEY] = cleanup;
+
+	return cleanup;
+}
 export function executeOnshapeShortcutCommand(
 	tool: ExecuteOnshapeCommandOptions,
 ): boolean {
@@ -118,7 +163,7 @@ export function executeOnshapeShortcutCommand(
 	return true;
 }
 
-function showKeyboard() {
+export function showKeyboard() {
 	try {
 		const nav = navigator as Navigator & {
 			virtualKeyboard?: { show?: () => void };
