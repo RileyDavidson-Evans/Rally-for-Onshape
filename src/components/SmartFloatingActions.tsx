@@ -1,5 +1,4 @@
 import { debounce } from "lodash-es";
-import { Move3d, Sparkles } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FORWARDED_ONSHAPE_EVENTS } from "@/constants/onshapeEvents";
 import {
@@ -16,6 +15,11 @@ type Position = {
 	top: number;
 };
 
+const SMART_COMMANDS = {
+	singleEdge: ["fillet", "chamfer", "measure"],
+	singleFace: ["extrude", "Sketch", "measure"],
+} as const;
+
 function isFromSmartFloatingActions(event: Event) {
 	return event.composedPath().some((target) => {
 		return (
@@ -23,6 +27,21 @@ function isFromSmartFloatingActions(event: Event) {
 			target.classList.contains("os-smart-floating-actions")
 		);
 	});
+}
+
+function getSmartCommandNames(selections: ClassifiedOnshapeSelection[]) {
+	if (selections.length !== 1) return [];
+
+	const selection = selections[0];
+
+	if (selection.kind === "edge") return SMART_COMMANDS.singleEdge;
+	if (selection.kind === "face") return SMART_COMMANDS.singleFace;
+
+	return [];
+}
+
+function commandMatches(toolCommand: string, wantedCommand: string) {
+	return toolCommand.toLowerCase().includes(wantedCommand.toLowerCase());
 }
 
 export function SmartFloatingActions() {
@@ -101,21 +120,38 @@ export function SmartFloatingActions() {
 		}, []),
 	);
 
-	const items = useMemo(
-		() =>
-			modeTools?.commands.slice(0, 3).map((s) => ({
-				id: s.id,
-				label: s.command,
-				icon: <OnshapeIcon icon={s.icon as string} />,
-				onClick: () => {
-					executeOnshapeShortcutCommand(s);
-				},
-			})) || [],
+	const items = useMemo(() => {
+		if (!modeTools) return [];
 
-		[selections],
+		const smartCommandNames = getSmartCommandNames(selections);
+
+		return smartCommandNames
+			.map((commandName) => {
+				const tool = modeTools.commands.find((candidate) =>
+					commandMatches(candidate.command, commandName),
+				);
+
+				if (!tool) return null;
+
+				return {
+					id: tool.id,
+					label: tool.command,
+					icon: <OnshapeIcon icon={tool.icon as string} />,
+					onClick: () => {
+						executeOnshapeShortcutCommand(tool);
+					},
+				};
+			})
+			.filter((item): item is NonNullable<typeof item> => item !== null);
+	}, [modeTools, selections]);
+
+	if (selections.length === 0 || !position || items.length === 0) return null;
+
+	return (
+		<RadialContextMenu
+			position={position}
+			items={items}
+			className="os-smart-floating-actions"
+		/>
 	);
-
-	if (selections.length === 0 || !position) return null;
-
-	return <RadialContextMenu position={position} items={items} />;
 }
