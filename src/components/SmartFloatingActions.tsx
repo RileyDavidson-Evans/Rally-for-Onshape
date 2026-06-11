@@ -17,7 +17,7 @@ type Position = {
 
 const SMART_COMMANDS = {
 	singleEdge: ["fillet", "chamfer", "measure"],
-	singleFace: ["extrude", "Sketch", "measure"],
+	singleFace: ["extrude", "sketch", "measure"],
 } as const;
 
 function isFromSmartFloatingActions(event: Event) {
@@ -70,26 +70,50 @@ export function SmartFloatingActions() {
 	);
 
 	useEffect(() => {
-		const handlePointerUp = (event: PointerEvent) => {
+		const updateLastPointerPosition = (event: PointerEvent | MouseEvent) => {
 			if (isFromSmartFloatingActions(event)) return;
 
 			lastPointerPositionRef.current = {
 				left: event.clientX,
 				top: event.clientY - 50,
 			};
+		};
+
+		const handlePointerEvent = (event: PointerEvent) => {
+			if (isFromSmartFloatingActions(event)) return;
+
+			updateLastPointerPosition(event);
 
 			triggerFetchOfSelections();
+			window.setTimeout(triggerFetchOfSelections, 125);
+			window.setTimeout(triggerFetchOfSelections, 250);
+		};
+
+		const handleMouseEvent = (event: MouseEvent) => {
+			if (isFromSmartFloatingActions(event)) return;
+
+			updateLastPointerPosition(event);
+
+			triggerFetchOfSelections();
+			window.setTimeout(triggerFetchOfSelections, 125);
 		};
 
 		const handleKeyUp = () => {
 			triggerFetchOfSelections();
+			window.setTimeout(triggerFetchOfSelections, 125);
 		};
 
-		window.addEventListener("pointerup", handlePointerUp, true);
+		window.addEventListener("pointerdown", handlePointerEvent, true);
+		window.addEventListener("pointerup", handlePointerEvent, true);
+		window.addEventListener("click", handleMouseEvent, true);
+		window.addEventListener("mouseup", handleMouseEvent, true);
 		window.addEventListener("keyup", handleKeyUp, true);
 
 		return () => {
-			window.removeEventListener("pointerup", handlePointerUp, true);
+			window.removeEventListener("pointerdown", handlePointerEvent, true);
+			window.removeEventListener("pointerup", handlePointerEvent, true);
+			window.removeEventListener("click", handleMouseEvent, true);
+			window.removeEventListener("mouseup", handleMouseEvent, true);
 			window.removeEventListener("keyup", handleKeyUp, true);
 
 			triggerFetchOfSelections.cancel();
