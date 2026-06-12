@@ -44,10 +44,25 @@ function commandMatches(toolCommand: string, wantedCommand: string) {
 	return toolCommand.toLowerCase().includes(wantedCommand.toLowerCase());
 }
 
+function getSelectionSignature(selections: ClassifiedOnshapeSelection[]) {
+	return selections
+		.map((selection) => {
+			const id =
+				"id" in selection && typeof selection.id === "string"
+					? selection.id
+					: JSON.stringify(selection);
+
+			return `${selection.kind}:${id}`;
+		})
+		.sort()
+		.join("|");
+}
+
 export function SmartFloatingActions() {
 	const { allAvailableTools, toolbarType } = useOnshapeBridge();
 
 	const lastPointerPositionRef = useRef<Position | null>(null);
+	const selectionSignatureRef = useRef("");
 
 	const [selections, setSelections] = useState<ClassifiedOnshapeSelection[]>(
 		[],
@@ -122,25 +137,31 @@ export function SmartFloatingActions() {
 
 	useOnshapeBridgeSubscription(
 		useCallback((event) => {
-			if (event.name === FORWARDED_ONSHAPE_EVENTS.SELECTION_UPDATED) {
-				const nextSelections = Array.isArray(event.data)
-					? (event.data as ClassifiedOnshapeSelection[])
-					: [];
+			if (event.name !== FORWARDED_ONSHAPE_EVENTS.SELECTION_UPDATED) return;
 
-				setSelections(nextSelections);
+			const nextSelections = Array.isArray(event.data)
+				? (event.data as ClassifiedOnshapeSelection[])
+				: [];
 
-				if (nextSelections.length === 0) {
-					setPosition(null);
-					return;
-				}
+			const nextSignature = getSelectionSignature(nextSelections);
+			const selectionChanged = nextSignature !== selectionSignatureRef.current;
 
-				setPosition(
-					lastPointerPositionRef.current ?? {
-						left: window.innerWidth / 2,
-						top: window.innerHeight / 2,
-					},
-				);
+			selectionSignatureRef.current = nextSignature;
+			setSelections(nextSelections);
+
+			if (nextSelections.length === 0) {
+				setPosition(null);
+				return;
 			}
+
+			if (!selectionChanged) return;
+
+			setPosition(
+				lastPointerPositionRef.current ?? {
+					left: window.innerWidth / 2,
+					top: window.innerHeight / 2,
+				},
+			);
 		}, []),
 	);
 
