@@ -16,8 +16,8 @@ type Position = {
 };
 
 const SMART_COMMANDS = {
-	singleEdge: ["fillet", "chamfer"],
-	multipleEdges: ["fillet", "chamfer"],
+	singleEdge: ["fillet", "chamfer", "plane"],
+	multipleEdges: ["fillet", "chamfer", "loft"],
 	singleFace: ["extrude", "newSketch", "moveFace", "offsetSurface", "plane"],
 	multipleFaces: [
 		"extrude",
