@@ -7,7 +7,10 @@ import {
 	useOnshapeBridge,
 	useOnshapeBridgeSubscription,
 } from "@/contexts/OnshapeBridgeContext";
-import { executeOnshapeShortcutCommand } from "@/core/utils";
+import {
+	executeOnshapeShortcutCommand,
+	watchElementPresence,
+} from "@/core/utils";
 import type { ClassifiedOnshapeSelection } from "@/types/onshape/selection";
 
 type Position = {
@@ -103,6 +106,8 @@ export function SmartFloatingActions() {
 	);
 	const [position, setPosition] = useState<Position | null>(null);
 
+	const [enabled, setEnabled] = useState(true);
+
 	const modeTools = allAvailableTools.find((c) => c.tabType === toolbarType);
 
 	const triggerFetchOfSelections = useMemo(
@@ -169,6 +174,26 @@ export function SmartFloatingActions() {
 		};
 	}, [triggerFetchOfSelections]);
 
+	useEffect(() => {
+		const featureDialogParent = document.querySelector("#content-div");
+
+		if (featureDialogParent) {
+			watchElementPresence(
+				"#feature-dialog",
+				(isPresent) => {
+					if (isPresent) {
+						setEnabled(false);
+					} else {
+						setTimeout(() => {
+							setEnabled(true);
+						}, 1000);
+					}
+				},
+				featureDialogParent,
+			);
+		}
+	}, []);
+
 	useOnshapeBridgeSubscription(
 		useCallback(
 			(event) => {
@@ -231,7 +256,13 @@ export function SmartFloatingActions() {
 			.filter((item): item is NonNullable<typeof item> => item !== null);
 	}, [modeTools, selections]);
 
-	if (currentTool || selections.length === 0 || !position || items.length === 0)
+	if (
+		!enabled ||
+		currentTool ||
+		selections.length === 0 ||
+		!position ||
+		items.length === 0
+	)
 		return null;
 
 	return (
