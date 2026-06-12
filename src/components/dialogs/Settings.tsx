@@ -1,4 +1,11 @@
-import { Code, Coffee, MessageCircle, Pencil, Zap } from "lucide-react";
+import {
+	Calculator,
+	Code,
+	Coffee,
+	MessageCircle,
+	Pencil,
+	Zap,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -15,6 +22,8 @@ import {
 } from "@/constants/social";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import type { FloatingNumpadMode } from "@/core/settings";
+import { ButtonGroup } from "../ui/button-group";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const links = [
 	{
@@ -82,7 +91,7 @@ export function SettingsDialog() {
 		<Dialog open={isSettingsOpen} onOpenChange={setSettingsOpen}>
 			<DialogContent
 				className="
-					max-w-[420px] overflow-hidden rounded-2xl
+					max-w-[600px]! overflow-hidden rounded-2xl
 					border border-white/10
 					bg-gradient-to-b from-slate-900/95 via-slate-950/92 to-black/90
 					p-0 text-white
@@ -94,7 +103,7 @@ export function SettingsDialog() {
 					<div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-b from-white/5 via-white/[0.015] to-transparent" />
 
 					<div className="relative z-10 p-5">
-						<DialogHeader>
+						<DialogHeader className="mb-5">
 							<DialogTitle className="text-lg font-semibold">
 								Welcome to Onshape Plus
 							</DialogTitle>
@@ -104,94 +113,99 @@ export function SettingsDialog() {
 								support development.
 							</DialogDescription>
 						</DialogHeader>
-
-						<div className="mt-5 rounded-xl border border-white/10 bg-white/[0.035] p-3">
-							<div className="text-sm font-medium text-slate-100">
-								Floating Numpad
-							</div>
-
-							<div className="mt-1 text-xs leading-snug text-slate-300">
-								Choose when the floating numeric keypad should appear.
-							</div>
-
-							<div className="mt-3 grid grid-cols-3 gap-1.5">
-								{floatingNumpadModes.map((mode) => {
-									const isSelected = floatingNumpadMode === mode.value;
-
-									return (
-										<Button
-											key={mode.value}
-											type="button"
-											variant="ghost"
-											className={[
-												"h-9 cursor-pointer rounded-lg border text-xs font-medium",
-												isSelected
-													? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
-													: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
-											].join(" ")}
-											onClick={() => setFloatingNumpadMode(mode.value)}
-										>
-											{mode.label}
-										</Button>
-									);
-								})}
-							</div>
-
-							<div className="mt-3 text-xs leading-snug text-slate-400">
-								{
-									floatingNumpadModes.find(
-										(mode) => mode.value === floatingNumpadMode,
-									)?.description
-								}
-							</div>
-						</div>
-
-						<div className="mt-3 rounded-xl border border-white/10 bg-white/[0.035] p-3">
-							<div className="flex items-start gap-3">
-								<div
-									className="
+						<div className="flex flex-col gap-2">
+							<div className="rounded-xl border border-white/10 bg-white/[0.035] p-3 flex justify-between items-center">
+								<div className="flex items-start gap-3 items-center">
+									<div
+										className="
 										flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
 										border border-white/10 bg-white/[0.06] text-blue-300
 									"
-								>
-									<Zap className="h-5 w-5" />
-								</div>
-
-								<div className="min-w-0 flex-1">
-									<div className="text-sm font-medium text-slate-100">
-										Smart Context Actions
+									>
+										<Calculator className="h-5 w-5" />
 									</div>
+									<div>
+										<div className="text-sm font-medium text-slate-100">
+											Floating Numpad
+										</div>
 
-									<div className="mt-1 text-xs leading-snug text-slate-300">
-										Shows a small lightning menu near your selection with
-										relevant CAD actions. It adapts automatically for faces,
-										edges, and multi-selection workflows.
+										<div className="mt-1 text-xs leading-snug text-slate-300">
+											Choose when the floating numeric keypad should appear.
+										</div>
 									</div>
 								</div>
 
-								<Button
-									type="button"
-									variant="ghost"
-									className={[
-										"h-9 shrink-0 cursor-pointer rounded-lg border px-3 text-xs font-medium",
-										smartFloatingActionsEnabled
-											? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
-											: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
-									].join(" ")}
-									onClick={() =>
-										setSmartFloatingActionsEnabled(!smartFloatingActionsEnabled)
-									}
-								>
-									{smartFloatingActionsEnabled ? "On" : "Off"}
-								</Button>
+								<ButtonGroup>
+									{floatingNumpadModes.map((mode) => {
+										const isSelected = floatingNumpadMode === mode.value;
+
+										return (
+											<Tooltip key={mode.value}>
+												<TooltipTrigger asChild>
+													<Button
+														key={mode.value}
+														type="button"
+														variant="ghost"
+														className={[
+															"h-9 cursor-pointer rounded-lg border text-xs font-medium",
+															isSelected
+																? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
+																: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
+														].join(" ")}
+														onClick={() => setFloatingNumpadMode(mode.value)}
+													>
+														{mode.label}
+													</Button>
+												</TooltipTrigger>
+												<TooltipContent>{mode.description}</TooltipContent>
+											</Tooltip>
+										);
+									})}
+								</ButtonGroup>
 							</div>
 
-							<div className="mt-3 text-xs leading-snug text-slate-400">
-								Experimental... but amazing.
-							</div>
-						</div>
+							<div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
+								<div className="flex items-start gap-3">
+									<div
+										className="
+										flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
+										border border-white/10 bg-white/[0.06] text-blue-300
+									"
+									>
+										<Zap className="h-5 w-5" />
+									</div>
 
-						<div className="mt-3 grid gap-2">
+									<div className="min-w-0 flex-1">
+										<div className="text-sm font-medium text-slate-100">
+											Smart Context Actions
+										</div>
+
+										<div className="mt-1 text-xs leading-snug text-slate-300">
+											Displays relevant CAD actions directly beside your current
+											selection.
+										</div>
+									</div>
+
+									<Button
+										type="button"
+										variant="ghost"
+										className={[
+											"h-9 shrink-0 cursor-pointer rounded-lg border px-3 text-xs font-medium",
+											smartFloatingActionsEnabled
+												? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
+												: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
+										].join(" ")}
+										onClick={() =>
+											setSmartFloatingActionsEnabled(
+												!smartFloatingActionsEnabled,
+											)
+										}
+									>
+										{smartFloatingActionsEnabled ? "On" : "Off"}
+									</Button>
+								</div>
+							</div>
+
 							{links.map((item) => {
 								const Icon = item.icon;
 
@@ -231,10 +245,6 @@ export function SettingsDialog() {
 									</a>
 								);
 							})}
-						</div>
-
-						<div className="mt-5 rounded-xl border border-white/10 bg-white/[0.035] p-3 text-xs leading-relaxed text-slate-300">
-							Onshape Plus is free and open source. Thanks for trying it.
 						</div>
 					</div>
 				</div>
