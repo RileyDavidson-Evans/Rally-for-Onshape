@@ -33,6 +33,7 @@ export function PenSidebar() {
 	const [featureDialogVisible, setFeatureDialogVisible] = useState(false);
 	const [position, setPosition] = useState(getInitialPosition);
 	const fixPositionRef = useRef<number | undefined>(undefined);
+	const [loading, setLoading] = useState(true);
 
 	const init = async () => {
 		try {
@@ -81,6 +82,8 @@ export function PenSidebar() {
 			}
 		} catch (e) {
 			console.log("Hello from space ", e);
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -139,6 +142,7 @@ export function PenSidebar() {
 	const modeTools =
 		allCommands.find((c) => c.tabType === toolbarType)?.commands ?? [];
 
+	if (loading) return null;
 	return (
 		<Draggable
 			nodeRef={nodeRef}
