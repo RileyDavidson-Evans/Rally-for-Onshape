@@ -17,7 +17,16 @@ type Position = {
 
 const SMART_COMMANDS = {
 	singleEdge: ["fillet", "chamfer"],
-	singleFace: ["extrude", "newSketch", "moveFace", "offsetSurface"],
+	multipleEdges: ["fillet", "chamfer"],
+	singleFace: ["extrude", "newSketch", "moveFace", "offsetSurface", "plane"],
+	multipleFaces: [
+		"extrude",
+		"loft",
+		"boolean",
+		"deleteFace",
+		"moveFace",
+		"offsetSurface",
+	],
 } as const;
 
 function isFromSmartFloatingActions(event: Event) {
@@ -29,19 +38,10 @@ function isFromSmartFloatingActions(event: Event) {
 	});
 }
 
-function getSmartCommandNames(selections: ClassifiedOnshapeSelection[]) {
-	if (selections.length !== 1) return [];
-
-	const selection = selections[0];
-
-	if (selection.kind === "edge") return SMART_COMMANDS.singleEdge;
-	if (selection.kind === "face") return SMART_COMMANDS.singleFace;
-
-	return [];
-}
-
 function commandMatches(toolCommand: string, wantedCommand: string) {
-	return toolCommand.toLowerCase().includes(wantedCommand.toLowerCase());
+	const normalize = (value: string) => value.toLowerCase().replace(/\s+/g, "");
+
+	return normalize(toolCommand).includes(normalize(wantedCommand));
 }
 
 function getSelectionSignature(selections: ClassifiedOnshapeSelection[]) {
@@ -56,6 +56,40 @@ function getSelectionSignature(selections: ClassifiedOnshapeSelection[]) {
 		})
 		.sort()
 		.join("|");
+}
+
+function getSelectionKind(selections: ClassifiedOnshapeSelection[]) {
+	if (selections.length === 0) return null;
+
+	const firstKind = selections[0]?.kind;
+	if (!firstKind) return null;
+
+	const allSameKind = selections.every(
+		(selection) => selection.kind === firstKind,
+	);
+
+	return allSameKind ? firstKind : null;
+}
+
+function getSmartCommandNames(selections: ClassifiedOnshapeSelection[]) {
+	const selectionKind = getSelectionKind(selections);
+	if (!selectionKind) return [];
+
+	const isMultiple = selections.length > 1;
+
+	if (selectionKind === "edge") {
+		return isMultiple
+			? SMART_COMMANDS.multipleEdges
+			: SMART_COMMANDS.singleEdge;
+	}
+
+	if (selectionKind === "face") {
+		return isMultiple
+			? SMART_COMMANDS.multipleFaces
+			: SMART_COMMANDS.singleFace;
+	}
+
+	return [];
 }
 
 export function SmartFloatingActions() {
@@ -136,33 +170,37 @@ export function SmartFloatingActions() {
 	}, [triggerFetchOfSelections]);
 
 	useOnshapeBridgeSubscription(
-		useCallback((event) => {
-			if (event.name !== FORWARDED_ONSHAPE_EVENTS.SELECTION_UPDATED) return;
+		useCallback(
+			(event) => {
+				if (event.name !== FORWARDED_ONSHAPE_EVENTS.SELECTION_UPDATED) return;
 
-			const nextSelections = Array.isArray(event.data)
-				? (event.data as ClassifiedOnshapeSelection[])
-				: [];
+				const nextSelections = Array.isArray(event.data)
+					? (event.data as ClassifiedOnshapeSelection[])
+					: [];
 
-			const nextSignature = getSelectionSignature(nextSelections);
-			const selectionChanged = nextSignature !== selectionSignatureRef.current;
+				const nextSignature = getSelectionSignature(nextSelections);
+				const selectionChanged =
+					nextSignature !== selectionSignatureRef.current;
 
-			selectionSignatureRef.current = nextSignature;
-			setSelections(nextSelections);
+				selectionSignatureRef.current = nextSignature;
+				setSelections(nextSelections);
 
-			if (nextSelections.length === 0) {
-				setPosition(null);
-				return;
-			}
+				if (nextSelections.length === 0) {
+					setPosition(null);
+					return;
+				}
 
-			if (!selectionChanged) return;
+				if (!selectionChanged && position) return;
 
-			setPosition(
-				lastPointerPositionRef.current ?? {
-					left: window.innerWidth / 2,
-					top: window.innerHeight / 2,
-				},
-			);
-		}, []),
+				setPosition(
+					lastPointerPositionRef.current ?? {
+						left: window.innerWidth / 2,
+						top: window.innerHeight / 2,
+					},
+				);
+			},
+			[position],
+		),
 	);
 
 	const items = useMemo(() => {
