@@ -173,3 +173,7 @@ body.onshape-plus-fullscreen-mode osx-row.os-content-container {
 body.onshape-plus-fullscreen-mode os-vue-panel-selector-component {
 	display: none;
 }
+
+.os-browser-warning-message {
+	display: none;
+}
