@@ -58,7 +58,11 @@ Install from the Chrome Web Store or load the extension manually.
 
 ### Safari (iPad)
 
-Available on the App Store.
+https://apps.apple.com/us/app/onshape-plus/id6777179140
+
+### Android Tablet
+
+[View the guide](./docs/AndroidTabletInstall.md)
 
 ---
 
