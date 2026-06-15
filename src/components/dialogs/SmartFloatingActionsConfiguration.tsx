@@ -97,6 +97,8 @@ function SmartActionToolMultiSelect({
 }: SmartActionToolMultiSelectProps) {
 	const [open, setOpen] = useState(false);
 
+	const [searchValue, setSearchValue] = useState("");
+
 	const toolsById = useMemo(
 		() =>
 			Object.fromEntries(options.map((tool) => [tool.id, tool])) as Record<
@@ -108,6 +110,8 @@ function SmartActionToolMultiSelect({
 
 	const selectedSummary = getSelectedSummary(value, toolsById);
 
+	const selectedOptions = options.filter((o) => value.includes(o.id));
+
 	const toggleValue = (toolId: string) => {
 		if (value.includes(toolId)) {
 			onChange(value.filter((id) => id !== toolId));
@@ -117,6 +121,7 @@ function SmartActionToolMultiSelect({
 		onChange([...value, toolId]);
 	};
 
+	console.log("Search value ", searchValue);
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger asChild>
@@ -150,12 +155,29 @@ function SmartActionToolMultiSelect({
 					<CommandInput
 						placeholder="Search actions..."
 						className="h-9 text-xs"
+						value={searchValue}
+						onValueChange={setSearchValue}
 					/>
 
 					<CommandList className="max-h-[220px] overflow-y-auto overscroll-contain">
 						<CommandEmpty>No actions found.</CommandEmpty>
 
-						<CommandGroup>
+						{searchValue.length === 0 && selectedOptions.length > 0 && (
+							<CommandGroup heading="Selected">
+								{selectedOptions.map((tool) => (
+									<CommandItem
+										key={`selected-${tool.id}`}
+										value={`selected-${tool.id}`}
+										onSelect={() => toggleValue(tool.id)}
+									>
+										<Check className="mr-2 h-3 w-3 text-blue-200" />
+										{tool.label}
+									</CommandItem>
+								))}
+							</CommandGroup>
+						)}
+
+						<CommandGroup heading="All actions">
 							{options.map((tool) => {
 								const isSelected = value.includes(tool.id);
 
@@ -163,10 +185,6 @@ function SmartActionToolMultiSelect({
 									<CommandItem
 										key={tool.id}
 										value={`${tool.label} ${tool.id}`}
-										className="
-								cursor-pointer text-xs text-slate-200
-								aria-selected:bg-white/10 aria-selected:text-white
-							"
 										onSelect={() => toggleValue(tool.id)}
 									>
 										<div
@@ -180,15 +198,7 @@ function SmartActionToolMultiSelect({
 											<Check className="h-3 w-3" />
 										</div>
 
-										<div className="min-w-0 flex-1">
-											<div className="truncate">{tool.label}</div>
-
-											{tool.description && (
-												<div className="truncate text-[11px] text-slate-400">
-													{tool.description}
-												</div>
-											)}
-										</div>
+										{tool.label}
 									</CommandItem>
 								);
 							})}
