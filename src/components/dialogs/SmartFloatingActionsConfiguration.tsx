@@ -3,6 +3,8 @@ import {
 	ChevronDown,
 	ChevronsUpDown,
 	RotateCcw,
+	Settings,
+	X,
 	Zap,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -124,7 +126,7 @@ function SmartActionToolMultiSelect({
 					role="combobox"
 					aria-expanded={open}
 					className="
-						h-9 w-[150px] justify-between rounded-lg border border-white/10
+						w-[150px] justify-between rounded-lg border border-white/10
 						bg-white/[0.045] px-3 text-left text-xs font-medium text-slate-200
 						hover:bg-white/10 hover:text-white
 					"
@@ -140,7 +142,7 @@ function SmartActionToolMultiSelect({
 			<PopoverContent
 				align="start"
 				className="
-		w-72 border-white/10
+		w-96 border-white/10
 		bg-slate-950/95 p-0 text-white shadow-2xl backdrop-blur-xl
 	"
 			>
@@ -253,7 +255,7 @@ export function SmartActionsCustomizer({
 						checked={settings.smartActionsEnabled}
 						onCheckedChange={(v) => setSetting("smartActionsEnabled", v)}
 					/>
-					<ChevronDown
+					<Settings
 						className={cn(
 							"h-4 w-4 shrink-0 text-slate-400 transition-transform",
 							isExpanded && "rotate-180",
@@ -288,6 +290,19 @@ export function SmartActionsCustomizer({
 													setSectionTools(section.key, toolIds)
 												}
 											/>
+											<Button
+												type="button"
+												variant="ghost"
+												className="
+												shrink-0 cursor-pointer rounded-md border border-white/10
+												bg-white/[0.045] px-2 text-[11px] text-slate-300
+												hover:bg-white/10 hover:text-white
+											"
+												onClick={() => setSectionTools(section.key, [])}
+											>
+												<X className="mr-1 h-3 w-3" />
+												Clear
+											</Button>
 											<Button
 												type="button"
 												variant="ghost"

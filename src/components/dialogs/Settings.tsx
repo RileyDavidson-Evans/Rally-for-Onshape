@@ -1,3 +1,4 @@
+import { capitalize } from "lodash-es";
 import {
 	Calculator,
 	Code,
@@ -174,8 +175,10 @@ export function SettingsDialog() {
 							<SmartActionsCustomizer
 								availableTools={partsStudioTools.map((t) => ({
 									id: t.command,
-									label: t.command,
-									description: t.expandedTooltipKey,
+									label: capitalize(t.command),
+									description: capitalize(
+										t.expandedTooltipKey?.replace("tooltips:::", ""),
+									),
 								}))}
 							/>
 
