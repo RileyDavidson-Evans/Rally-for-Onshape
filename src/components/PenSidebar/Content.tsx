@@ -1,4 +1,3 @@
-import { capitalize } from "lodash-es";
 import { LoaderCircle, Settings, XCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { OnshapeIcon } from "@/components/shared/OnShapeIcon";
@@ -190,9 +189,7 @@ export function PenSidebarMainContent({
 												{tool.name?.replace("server:::", "")}
 											</CardTitle>
 											<CardDescription>
-												{capitalize(
-													tool.expandedTooltipKey?.replace("tooltips:::", ""),
-												)}
+												{tool.expandedTooltipKey?.replace("tooltips:::", "")}
 											</CardDescription>
 										</CardHeader>
 									</Card>

@@ -1,4 +1,3 @@
-import { capitalize } from "lodash-es";
 import {
 	Calculator,
 	Code,
@@ -176,9 +175,7 @@ export function SettingsDialog() {
 								availableTools={partsStudioTools.map((t) => ({
 									id: t.command,
 									label: t.name?.replace("server:::", "") || "",
-									description: capitalize(
-										t.expandedTooltipKey?.replace("tooltips:::", ""),
-									),
+									description: t.expandedTooltipKey?.replace("tooltips:::", ""),
 								}))}
 							/>
 

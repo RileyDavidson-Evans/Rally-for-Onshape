@@ -1,4 +1,3 @@
-import { capitalize, debounce } from "lodash-es";
 import { Settings } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { OnshapeIcon } from "@/components/shared/OnShapeIcon";
@@ -14,6 +13,7 @@ import {
 	executeOnshapeShortcutCommand,
 	watchElementPresence,
 } from "@/core/utils";
+import { debounce } from "@/lib/misc";
 import type { RadialMenuConfig } from "@/storage/extensionStorage";
 import type { ClassifiedOnshapeSelection } from "@/types/onshape/selection";
 
@@ -198,8 +198,6 @@ export function SmartFloatingActions() {
 			window.removeEventListener("click", handleMouseEvent, true);
 			window.removeEventListener("mouseup", handleMouseEvent, true);
 			window.removeEventListener("keyup", handleKeyUp, true);
-
-			triggerFetchOfSelections.cancel();
 		};
 	}, [triggerFetchOfSelections]);
 
@@ -363,10 +361,10 @@ export function SmartFloatingActions() {
 					return {
 						id: tool.id,
 						label: tool.name?.replace("server:::", ""),
-						tooltipContent: capitalize(
+						tooltipContent:
 							tool.expandedTooltipKey?.replace("tooltips:::", "") ??
-								tool.command,
-						),
+							tool.command,
+
 						icon: <OnshapeIcon icon={tool.icon as string} />,
 						onClick: () => {
 							suppressUntilNextUserInteractionRef.current = true;
