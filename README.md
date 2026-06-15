@@ -2,6 +2,13 @@
 
 Make Onshape faster, cleaner, and easier to use.
 
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+![Privacy](https://img.shields.io/badge/Data%20Collection-None-success)
+![Telemetry](https://img.shields.io/badge/Telemetry-None-success)
+![Open Source](https://img.shields.io/badge/Open%20Source-Yes-brightgreen)
+
+Open source, publicly auditable, and backed by GitHub security tooling including CodeQL, Dependabot, Secret Scanning, and Dependency Review.
+
 Onshape Plus is an open-source browser extension that enhances the Onshape experience with thoughtful UI improvements, touch and pen optimizations, productivity tools, and quality-of-life features designed for both tablet and desktop workflows.
 
 Whether you're using a mouse, trackpad, touchscreen, or stylus, Onshape Plus helps reduce friction and streamline common modeling tasks while preserving the workflows you already know.
@@ -14,17 +21,19 @@ Available for Chrome, Microsoft Edge, and Safari on iPad.
 
 * ✅ Open Source
 * ✅ Public GitHub Releases
+* ✅ Public Source Code
 * ✅ No Analytics
 * ✅ No Telemetry
 * ✅ No External Data Collection
 * ✅ No Account Required
+* ✅ Security Documentation Available
 
 Learn more:
 
 * [Security Policy](./SECURITY.md)
 * [Security Overview](./docs/security-overview.md)
 * [Build & Verify Guide](./docs/build-and-verify.md)
-
+* [GitHub Security Dashboard](https://github.com/RileyDavidson-Evans/onshape-plus/security)
 ---
 
 ## Why Onshape Plus?
@@ -49,7 +58,11 @@ Install from the Chrome Web Store or load the extension manually.
 
 ### Safari (iPad)
 
-Available on the App Store.
+https://apps.apple.com/us/app/onshape-plus/id6777179140
+
+### Android Tablet
+
+[View the guide](./docs/AndroidTabletInstall.md)
 
 ---
 
@@ -85,21 +98,23 @@ Built to complement Onshape rather than replace it.
 * Minimal visual disruption
 * Consistent Onshape-inspired styling
 
-### Open Source
+### Open & Transparent
 
 Onshape Plus is developed in the open and available for anyone to inspect, audit, and contribute to.
 
 * Fully open source
-* No tracking
-* No analytics
+* No tracking or telemetry
 * No account required
 * Community-driven development
+* Public GitHub releases and source code
 
 ---
 
 ## Screenshots
 
-*Screenshots and feature demonstrations coming soon.*
+![Onshape Plus Screenshot](./media/chrome%20toolbar%20highlight.png)
+![Onshape Plus Screenshot](./media/Fullscreen%20chrome%20promo.png)
+![Onshape Plus Screenshot](./media/Chrome%20floating%20number%20pad%20highlight.png)
 
 ---
 
@@ -134,8 +149,28 @@ For organizations evaluating Onshape Plus, the following documentation is availa
 * [Security Policy](./SECURITY.md)
 * [Security Overview](./docs/security-overview.md)
 * [Build & Verify Guide](./docs/build-and-verify.md)
+* [GitHub Security Dashboard](https://github.com/RileyDavidson-Evans/onshape-plus/security)
 
-Every published release corresponds to a public GitHub release tag, allowing organizations to review, build, and verify the source code associated with a specific version.
+### Security Tooling
+
+Onshape Plus uses GitHub's built-in security tooling, including:
+
+* CodeQL Static Analysis
+* Dependabot Vulnerability Monitoring
+* Dependabot Security Updates
+* Dependency Graph Analysis
+* Secret Scanning
+* Dependency Review
+* Public Security Documentation
+
+### Release Verification
+
+Every published release corresponds to a public GitHub release tag, allowing organizations to:
+
+* Review the exact source code associated with a release
+* Build the extension locally from source
+* Verify permissions and functionality
+* Perform independent security reviews before deployment
 
 ---
 
