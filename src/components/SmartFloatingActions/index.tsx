@@ -380,7 +380,7 @@ export function SmartFloatingActions() {
 				id: "customize",
 				label: "Customize",
 				tooltipContent:
-					"Enable or disable the Smart Actions menu and choose which tools appear for each selection type.",
+					"Enable or disable the Quick Actions menu and choose which tools appear for each selection type.",
 				icon: <Settings className="text-blue-300" />,
 				onClick: () => {
 					openSettings();
