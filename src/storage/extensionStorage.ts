@@ -9,11 +9,17 @@ export type RadialMenuConfig = {
 	multipleEdges: string[];
 };
 
+export type ToolbarPosition = {
+	x: number;
+	y: number;
+};
+
 export type OnshapePlusStorageSchema = {
 	smartActionsEnabled: boolean;
 	hasSeenWelcomeDialog: boolean;
 	floatingNumpadMode: FloatingNumpadMode;
 	radialMenuConfig: RadialMenuConfig;
+	toolbarPosition: ToolbarPosition;
 };
 
 export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
@@ -25,6 +31,10 @@ export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 		singleEdge: ["fillet", "chamfer", "measure"],
 		multipleFaces: ["extrude", "loft", "boolean"],
 		multipleEdges: ["fillet", "chamfer", "measure"],
+	},
+	toolbarPosition: {
+		x: 290,
+		y: 100,
 	},
 };
 

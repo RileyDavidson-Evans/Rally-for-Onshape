@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { FORWARDED_ONSHAPE_EVENTS } from "@/constants/onshapeEvents";
-import { HAS_SEEN_SETTINGS_ONBOARDING_KEY } from "@/constants/storage";
+import { useExtensionSettings } from "@/contexts/ExtensionSettingsContext";
 import {
 	useOnshapeBridge,
 	useOnshapeBridgeSubscription,
@@ -9,11 +9,8 @@ import {
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { getUserShortcutCommands } from "@/core/userShortcuts";
 import { watchElementPresence } from "@/core/utils";
-import {
-	clampSidebarPosition,
-	getInitialPosition,
-	STORAGE_KEY,
-} from "@/lib/utils";
+import { clampSidebarPosition } from "@/lib/utils";
+import { DEFAULT_STORAGE_VALUES } from "@/storage/extensionStorage";
 import type { OnshapeShortcutCommandsResponse } from "@/types";
 import { PenSidebarMainContent } from "./Content";
 import { FixedItems } from "./FixedItems";
@@ -21,6 +18,8 @@ import { FixedItems } from "./FixedItems";
 export function PenSidebar() {
 	const nodeRef = useRef<HTMLDivElement>(null);
 	const { openSettings } = useSettingsDialog();
+
+	const { settings, setSetting } = useExtensionSettings();
 
 	const { toolbarType, currentTool, undoEnabled, redoEnabled, setCurrentTool } =
 		useOnshapeBridge();
@@ -31,8 +30,6 @@ export function PenSidebar() {
 
 	const [collapsed, setCollapsed] = useState(false);
 	const [featureDialogVisible, setFeatureDialogVisible] = useState(false);
-	const [position, setPosition] = useState(getInitialPosition);
-	const fixPositionRef = useRef<number | undefined>(undefined);
 	const [loading, setLoading] = useState(true);
 
 	const init = async () => {
@@ -52,12 +49,8 @@ export function PenSidebar() {
 
 			setAllCommands(commands);
 
-			const hasSeenSettingsOnboarding = localStorage.getItem(
-				HAS_SEEN_SETTINGS_ONBOARDING_KEY,
-			);
-
-			if (!hasSeenSettingsOnboarding) {
-				localStorage.setItem(HAS_SEEN_SETTINGS_ONBOARDING_KEY, "true");
+			if (!settings.hasSeenWelcomeDialog) {
+				setSetting("hasSeenWelcomeDialog", true);
 
 				window.setTimeout(() => {
 					openSettings();
@@ -112,15 +105,12 @@ export function PenSidebar() {
 	);
 
 	const fixPosition = () => {
-		window.clearTimeout(fixPositionRef.current);
-
-		fixPositionRef.current = window.setTimeout(() => {
-			setPosition((current) => {
-				const next = clampSidebarPosition(current);
-				localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-				return next;
-			});
-		}, 250);
+		console.log("in here hello");
+		const next = clampSidebarPosition(
+			settings.toolbarPosition,
+			DEFAULT_STORAGE_VALUES.toolbarPosition,
+		);
+		setSetting("toolbarPosition", next);
 	};
 
 	useEffect(() => {
@@ -131,7 +121,6 @@ export function PenSidebar() {
 		window.visualViewport?.addEventListener("scroll", fixPosition);
 
 		return () => {
-			window.clearTimeout(fixPositionRef.current);
 			window.removeEventListener("resize", fixPosition);
 			window.removeEventListener("orientationchange", fixPosition);
 			window.visualViewport?.removeEventListener("resize", fixPosition);
@@ -147,14 +136,19 @@ export function PenSidebar() {
 		<Draggable
 			nodeRef={nodeRef}
 			handle=".os-pen-drag-handle"
-			position={position}
+			position={settings.toolbarPosition}
 			onDrag={(_, data) => {
-				setPosition({ x: data.x, y: data.y });
+				setSetting("toolbarPosition", {
+					x: data.x,
+					y: data.y,
+				});
 			}}
 			onStop={(_, data) => {
-				const next = clampSidebarPosition({ x: data.x, y: data.y });
-				setPosition(next);
-				localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+				const next = clampSidebarPosition(
+					{ x: data.x, y: data.y },
+					DEFAULT_STORAGE_VALUES.toolbarPosition,
+				);
+				setSetting("toolbarPosition", next);
 			}}
 		>
 			<div

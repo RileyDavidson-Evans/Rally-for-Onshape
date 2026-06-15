@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
-import { shouldUseFloatingNumpad } from "@/core/settings";
 import {
 	fireInputEvents,
 	pressKey,
@@ -133,8 +132,6 @@ export function FloatingNumpad() {
 
 	const handleFocusIn = useCallback(
 		(e: FocusEvent) => {
-			if (!shouldUseFloatingNumpad()) return;
-
 			const target = e.target;
 			const numpad = numpadRef.current;
 

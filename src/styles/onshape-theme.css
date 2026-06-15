@@ -177,3 +177,9 @@ body.onshape-plus-fullscreen-mode os-vue-panel-selector-component {
 .os-browser-warning-message {
 	display: none;
 }
+
+#onshape-extension-host {
+	height: 100svh;
+	width: 100svw;
+	overflow: hidden;
+}

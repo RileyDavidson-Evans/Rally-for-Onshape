@@ -23,8 +23,10 @@ export function getViewportSize() {
 	};
 }
 
-export function clampSidebarPosition(position: { x: number; y: number }) {
-	const fallback = { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
+export function clampSidebarPosition(
+	position: { x: number; y: number },
+	fallback: { x: number; y: number },
+) {
 	const { width, height } = getViewportSize();
 
 	const x = Number(position?.x);
@@ -43,19 +45,6 @@ export function clampSidebarPosition(position: { x: number; y: number }) {
 		),
 	};
 }
-
-export const getInitialPosition = () => {
-	const fallback = { x: DEFAULT_POSITION.x, y: DEFAULT_POSITION.y };
-
-	try {
-		const raw = localStorage.getItem(STORAGE_KEY);
-		if (!raw) return clampSidebarPosition(fallback);
-
-		return clampSidebarPosition(JSON.parse(raw));
-	} catch {
-		return clampSidebarPosition(fallback);
-	}
-};
 
 export function isSafari() {
 	const userAgent = window.navigator.userAgent;

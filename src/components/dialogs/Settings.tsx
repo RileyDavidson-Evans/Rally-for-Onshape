@@ -20,9 +20,10 @@ import {
 	DISCORD_LINK,
 	GITHUB_URL,
 } from "@/constants/social";
+import { useExtensionSettings } from "@/contexts/ExtensionSettingsContext";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
-import type { FloatingNumpadMode } from "@/core/settings";
 import { isSafari } from "@/lib/utils";
+import type { FloatingNumpadMode } from "@/storage/extensionStorage";
 import { ButtonGroup } from "../ui/button-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
@@ -80,14 +81,9 @@ const floatingNumpadModes: {
 ];
 
 export function SettingsDialog() {
-	const {
-		isSettingsOpen,
-		setSettingsOpen,
-		floatingNumpadMode,
-		setFloatingNumpadMode,
-		smartFloatingActionsEnabled,
-		setSmartFloatingActionsEnabled,
-	} = useSettingsDialog();
+	const { isSettingsOpen, setSettingsOpen } = useSettingsDialog();
+
+	const { settings, setSetting } = useExtensionSettings();
 
 	return (
 		<Dialog open={isSettingsOpen} onOpenChange={setSettingsOpen}>
@@ -139,7 +135,8 @@ export function SettingsDialog() {
 
 								<ButtonGroup>
 									{floatingNumpadModes.map((mode) => {
-										const isSelected = floatingNumpadMode === mode.value;
+										const isSelected =
+											settings.floatingNumpadMode === mode.value;
 
 										return (
 											<Tooltip key={mode.value}>
@@ -154,7 +151,9 @@ export function SettingsDialog() {
 																? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
 																: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
 														].join(" ")}
-														onClick={() => setFloatingNumpadMode(mode.value)}
+														onClick={() =>
+															setSetting("floatingNumpadMode", mode.value)
+														}
 													>
 														{mode.label}
 													</Button>
@@ -193,17 +192,18 @@ export function SettingsDialog() {
 										variant="ghost"
 										className={[
 											"h-9 shrink-0 cursor-pointer rounded-lg border px-3 text-xs font-medium",
-											smartFloatingActionsEnabled
+											settings.smartActionsEnabled
 												? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
 												: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
 										].join(" ")}
 										onClick={() =>
-											setSmartFloatingActionsEnabled(
-												!smartFloatingActionsEnabled,
+											setSetting(
+												"smartActionsEnabled",
+												!settings.smartActionsEnabled,
 											)
 										}
 									>
-										{smartFloatingActionsEnabled ? "On" : "Off"}
+										{settings.smartActionsEnabled ? "On" : "Off"}
 									</Button>
 								</div>
 							</div>

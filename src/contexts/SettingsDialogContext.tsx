@@ -7,25 +7,11 @@ import {
 	useState,
 } from "react";
 
-import {
-	type FloatingNumpadMode,
-	getFloatingNumpadMode,
-	getSmartFloatingActionsEnabled,
-	setFloatingNumpadMode as persistFloatingNumpadMode,
-	setSmartFloatingActionsEnabled as persistSmartFloatingActionsEnabled,
-} from "@/core/settings";
-
 type SettingsDialogContextValue = {
 	isSettingsOpen: boolean;
 	openSettings: () => void;
 	closeSettings: () => void;
 	setSettingsOpen: (open: boolean) => void;
-
-	floatingNumpadMode: FloatingNumpadMode;
-	setFloatingNumpadMode: (mode: FloatingNumpadMode) => void;
-
-	smartFloatingActionsEnabled: boolean;
-	setSmartFloatingActionsEnabled: (enabled: boolean) => void;
 };
 
 const SettingsDialogContext = createContext<SettingsDialogContextValue | null>(
@@ -35,12 +21,6 @@ const SettingsDialogContext = createContext<SettingsDialogContextValue | null>(
 export function SettingsDialogProvider({ children }: { children: ReactNode }) {
 	const [isSettingsOpen, setSettingsOpen] = useState(false);
 
-	const [floatingNumpadMode, setFloatingNumpadModeState] =
-		useState<FloatingNumpadMode>(() => getFloatingNumpadMode());
-
-	const [smartFloatingActionsEnabled, setSmartFloatingActionsEnabledState] =
-		useState<boolean>(() => getSmartFloatingActionsEnabled());
-
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
 	}, []);
@@ -49,40 +29,14 @@ export function SettingsDialogProvider({ children }: { children: ReactNode }) {
 		setSettingsOpen(false);
 	}, []);
 
-	const setFloatingNumpadMode = useCallback((mode: FloatingNumpadMode) => {
-		setFloatingNumpadModeState(mode);
-		persistFloatingNumpadMode(mode);
-	}, []);
-
-	const setSmartFloatingActionsEnabled = useCallback((enabled: boolean) => {
-		setSmartFloatingActionsEnabledState(enabled);
-		persistSmartFloatingActionsEnabled(enabled);
-	}, []);
-
 	const value = useMemo(
 		() => ({
 			isSettingsOpen,
 			openSettings,
 			closeSettings,
 			setSettingsOpen,
-
-			floatingNumpadMode,
-			setFloatingNumpadMode,
-
-			smartFloatingActionsEnabled,
-			setSmartFloatingActionsEnabled,
 		}),
-		[
-			isSettingsOpen,
-			openSettings,
-			closeSettings,
-
-			floatingNumpadMode,
-			setFloatingNumpadMode,
-
-			smartFloatingActionsEnabled,
-			setSmartFloatingActionsEnabled,
-		],
+		[isSettingsOpen, openSettings, closeSettings],
 	);
 
 	return (
