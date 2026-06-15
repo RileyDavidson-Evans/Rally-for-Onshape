@@ -21,11 +21,13 @@ import {
 	GITHUB_URL,
 } from "@/constants/social";
 import { useExtensionSettings } from "@/contexts/ExtensionSettingsContext";
+import { useOnshapeBridge } from "@/contexts/OnshapeBridgeContext";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { isSafari } from "@/lib/utils";
 import type { FloatingNumpadMode } from "@/storage/extensionStorage";
 import { ButtonGroup } from "../ui/button-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
 
 const links = [
 	{
@@ -82,6 +84,10 @@ const floatingNumpadModes: {
 
 export function SettingsDialog() {
 	const { isSettingsOpen, setSettingsOpen } = useSettingsDialog();
+	const { allAvailableTools } = useOnshapeBridge();
+
+	const partsStudioTools =
+		allAvailableTools.find((t) => t.tabType === "Part Studio")?.commands || [];
 
 	const { settings, setSetting } = useExtensionSettings();
 
@@ -165,48 +171,13 @@ export function SettingsDialog() {
 								</ButtonGroup>
 							</div>
 
-							<div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
-								<div className="flex items-start gap-3">
-									<div
-										className="
-										flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-										border border-white/10 bg-white/[0.06] text-blue-300
-									"
-									>
-										<Zap className="h-5 w-5" />
-									</div>
-
-									<div className="min-w-0 flex-1">
-										<div className="text-sm font-medium text-slate-100">
-											Smart Context Actions
-										</div>
-
-										<div className="mt-1 text-xs leading-snug text-slate-300">
-											Displays relevant CAD actions directly beside your current
-											selection.
-										</div>
-									</div>
-
-									<Button
-										type="button"
-										variant="ghost"
-										className={[
-											"h-9 shrink-0 cursor-pointer rounded-lg border px-3 text-xs font-medium",
-											settings.smartActionsEnabled
-												? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
-												: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
-										].join(" ")}
-										onClick={() =>
-											setSetting(
-												"smartActionsEnabled",
-												!settings.smartActionsEnabled,
-											)
-										}
-									>
-										{settings.smartActionsEnabled ? "On" : "Off"}
-									</Button>
-								</div>
-							</div>
+							<SmartActionsCustomizer
+								availableTools={partsStudioTools.map((t) => ({
+									id: t.command,
+									label: t.command,
+									description: t.expandedTooltipKey,
+								}))}
+							/>
 
 							{links.map((item) => {
 								const Icon = item.icon;
