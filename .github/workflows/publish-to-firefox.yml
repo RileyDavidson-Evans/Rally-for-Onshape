@@ -1,0 +1,100 @@
+name: Publish Firefox Extension
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  publish-firefox:
+    name: Build, package, and submit to Firefox Add-ons
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Derive version from release tag
+        shell: bash
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+
+          if ! [[ "$VERSION" =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+            echo "Invalid Firefox extension version: $VERSION"
+            echo "Use release tags like v0.1.0 or v1.2.3"
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Set package and manifest versions
+        run: |
+          node -e "
+            const fs = require('fs');
+
+            const version = process.env.VERSION;
+
+            const files = [
+              'package.json',
+              'public/manifest.json'
+            ];
+
+            for (const file of files) {
+              const json = JSON.parse(fs.readFileSync(file, 'utf8'));
+              json.version = version;
+              fs.writeFileSync(file, JSON.stringify(json, null, 2) + '\n');
+              console.log(\`Set \${file} version to \${version}\`);
+            }
+          "
+
+      - name: Build extension
+        run: npm run build
+
+
+      - name: Verify built manifest version
+        run: |
+          node -e "
+            const manifest = require('./dist/manifest.json');
+
+            if (manifest.version !== process.env.VERSION) {
+              console.error('Expected version', process.env.VERSION, 'but got', manifest.version);
+              process.exit(1);
+            }
+
+            console.log('Built manifest version:', manifest.version);
+          "
+
+      - name: Lint Firefox extension
+        run: npm run firefox:lint
+
+      - name: Build Firefox extension ZIP
+        run: npm run firefox:build -- --artifacts-dir artifacts --filename firefox-extension-${{ env.VERSION }}.zip --overwrite-dest
+
+      - name: Upload ZIP to GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/firefox-extension-${{ env.VERSION }}.zip
+
+      - name: Submit extension to Firefox Add-ons
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          WEB_EXT_API_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
+        run: |
+          npm run firefox:sign -- \
+            --artifacts-dir artifacts \
+            --channel listed \
+            --api-key "$WEB_EXT_API_KEY" \
+            --api-secret "$WEB_EXT_API_SECRET" \
+            --approval-timeout 0
+

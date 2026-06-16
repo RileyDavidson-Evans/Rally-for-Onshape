@@ -33,15 +33,20 @@
 			"description": "Reload extension"
 		}
 	},
-	"background": {
-		"service_worker": "background.js",
-		"type": "module"
-	},
 	"web_accessible_resources": [
 		{
 			"resources": ["onshape-page-bridge.js"],
 			"matches": ["https://cad.onshape.com/*"]
 		}
 	],
-	"permissions": ["storage"]
+	"permissions": ["storage"],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "onshape-plus@rileydavidson.dev",
+			"strict_min_version": "109.0",
+			"data_collection_permissions": {
+				"required": ["none"]
+			}
+		}
+	}
 }
