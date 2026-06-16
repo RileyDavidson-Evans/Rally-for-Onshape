@@ -35,7 +35,6 @@
 	},
 	"background": {
 		"service_worker": "background.js",
-		"scripts": ["background.js"],
 		"type": "module"
 	},
 	"web_accessible_resources": [
