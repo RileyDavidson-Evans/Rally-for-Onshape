@@ -9,7 +9,8 @@
 		"build:watch": "vite build --watch",
 		"firefox:lint": "web-ext lint --source-dir dist",
 		"firefox:run": "web-ext run --source-dir dist",
-		"firefox:build": "web-ext build --source-dir dist"
+		"firefox:build": "web-ext build --source-dir dist",
+		"firefox:sign": "web-ext sign --source-dir dist"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.16",
