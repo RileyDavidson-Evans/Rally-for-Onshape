@@ -6,7 +6,10 @@
 		"safari:sync": "npm run build && node ./scripts/sync-safari-extension.mjs",
 		"safari:open": "open ./apps/safari/Onshape\\ Plus/Onshape\\ Plus.xcodeproj",
 		"build": "vite build",
-		"build:watch": "vite build --watch"
+		"build:watch": "vite build --watch",
+		"firefox:lint": "web-ext lint --source-dir dist",
+		"firefox:run": "web-ext run --source-dir dist",
+		"firefox:build": "web-ext build --source-dir dist"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.16",
@@ -17,7 +20,8 @@
 		"@types/webextension-polyfill": "^0.12.5",
 		"@vitejs/plugin-react": "^6.0.2",
 		"typescript": "^6.0.3",
-		"vite": "^8.0.14"
+		"vite": "^8.0.14",
+		"web-ext": "^10.4.0"
 	},
 	"dependencies": {
 		"@fontsource-variable/geist": "^5.2.9",
