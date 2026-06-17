@@ -11,8 +11,7 @@ import {
 	ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE,
 	FORWARDED_ONSHAPE_EVENTS,
 } from "@/constants/onshapeEvents";
-import type { OnshapeToolbarMode } from "@/types";
-import type { SafeOnshapeCommand } from "@/types/onshape-bridge";
+import type { OnshapeShortcutCommand, OnshapeToolbarMode } from "@/types";
 
 type OnshapeBridgeEvent = {
 	type: typeof ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE;
@@ -23,7 +22,10 @@ type OnshapeBridgeEvent = {
 
 type OnshapeBridgeHandler = (event: OnshapeBridgeEvent) => void;
 
-type AllTools = { tabType: string; commands: SafeOnshapeCommand[] }[];
+type AllTools = {
+	tabType: OnshapeToolbarMode;
+	commands: OnshapeShortcutCommand[];
+}[];
 
 type OnshapeBridgeContextValue = {
 	isDocumentLoaded: boolean;

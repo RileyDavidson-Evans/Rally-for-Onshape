@@ -1,6 +1,9 @@
 import browser from "webextension-polyfill";
+import type { OnshapeToolbarMode } from "@/types";
 
 export type FloatingNumpadMode = "auto" | "always" | "off";
+
+export type ToolbarQuickActionsConfig = Record<OnshapeToolbarMode, string[]>;
 
 export type RadialMenuConfig = {
 	singleFace: string[];
@@ -15,17 +18,24 @@ export type ToolbarPosition = {
 };
 
 export type OnshapePlusStorageSchema = {
+	settingsVersion: number;
 	smartActionsEnabled: boolean;
 	hasSeenWelcomeDialog: boolean;
 	floatingNumpadMode: FloatingNumpadMode;
 	radialMenuConfig: RadialMenuConfig;
 	toolbarPosition: ToolbarPosition;
+	toolbarQuickActions: ToolbarQuickActionsConfig;
 };
 
 export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
+	settingsVersion: 2,
+
 	smartActionsEnabled: true,
+
 	hasSeenWelcomeDialog: false,
+
 	floatingNumpadMode: "auto",
+
 	radialMenuConfig: {
 		singleFace: ["extrude", "newSketch", "moveFace", "offsetSurface", "cPlane"],
 		singleEdge: ["fillet", "chamfer", "cPlane"],
@@ -39,9 +49,20 @@ export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 		],
 		multipleEdges: ["fillet", "chamfer", "loft"],
 	},
+
 	toolbarPosition: {
 		x: 290,
 		y: 100,
+	},
+
+	// intentionally empty
+	// migration will populate from the user's
+	// existing Onshape S shortcut configuration
+	toolbarQuickActions: {
+		Sketch: [],
+		"Part Studio": [],
+		Assembly: [],
+		Drawing: [],
 	},
 };
 

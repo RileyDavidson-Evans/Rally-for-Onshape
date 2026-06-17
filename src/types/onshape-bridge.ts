@@ -1,3 +1,5 @@
+import type { OnshapeShortcutCommand, OnshapeToolbarMode } from ".";
+
 export type AngularEventKind = "broadcast" | "emit";
 
 export type UnknownRecord = Record<string, unknown>;
@@ -17,36 +19,15 @@ export interface OnshapeAngular {
 	};
 }
 
-export interface OnshapeCommand {
-	namespace: string;
-	command: string;
-	showLabel?: boolean;
-	tooltipKey?: string;
-	icon?: unknown;
-	commandDetails?: unknown;
-	expandedTooltipKey?: string;
-	useDynamicSnippet?: boolean;
-	name?: string;
-	context?: unknown;
-	nodeType?: string;
-	ownerType?: string;
-	ownerId?: string;
-	display?: unknown;
-	disabled?: boolean;
-	isGeneralTool?: boolean;
-	ignoreNamespace?: boolean;
-	isFsVersionCompatible?: boolean;
-}
-
 export interface OnshapeMiniToolbarSettingGroup {
-	tabType: string;
-	tabId?: string;
+	tabType: OnshapeToolbarMode;
+	tabId: number;
 	commands?: Array<string | { command: string }>;
 }
 
 export interface OnshapeMiniToolbarCollectionGroup {
-	tabType: string;
-	commands: OnshapeCommand[];
+	tabType: OnshapeToolbarMode;
+	commands: OnshapeShortcutCommand[];
 }
 
 export interface MiniToolbarService {
@@ -63,34 +44,10 @@ export interface ElementToolbarService {
 	) => unknown;
 }
 
-export interface SafeOnshapeCommand {
-	id: string;
-	tabType: string;
-	tabId?: string;
-	showLabel?: boolean;
-	namespace: string;
-	tooltipKey?: string;
-	icon?: unknown;
-	command: string;
-	commandDetails?: unknown;
-	expandedTooltipKey?: string;
-	useDynamicSnippet?: boolean;
-	name?: string;
-	context?: unknown;
-	nodeType?: string;
-	ownerType?: string;
-	ownerId?: string;
-	display?: unknown;
-	disabled?: boolean;
-	isGeneralTool?: boolean;
-	ignoreNamespace?: boolean;
-	isFsVersionCompatible?: boolean;
-}
-
 export interface OnshapeShortcutCommandsResponse {
 	tabType: string;
-	tabId?: string;
-	commands: SafeOnshapeCommand[];
+	tabId: number;
+	commands: OnshapeShortcutCommand[];
 }
 
 export interface BaseInboundMessage {

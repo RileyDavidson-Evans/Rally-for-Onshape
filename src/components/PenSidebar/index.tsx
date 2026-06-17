@@ -21,8 +21,14 @@ export function PenSidebar() {
 
 	const { settings, setSetting } = useExtensionSettings();
 
-	const { toolbarType, currentTool, undoEnabled, redoEnabled, setCurrentTool } =
-		useOnshapeBridge();
+	const {
+		toolbarType,
+		currentTool,
+		undoEnabled,
+		redoEnabled,
+		setCurrentTool,
+		allAvailableTools,
+	} = useOnshapeBridge();
 
 	const [allCommands, setAllCommands] = useState<
 		OnshapeShortcutCommandsResponse[]
@@ -127,8 +133,11 @@ export function PenSidebar() {
 		};
 	}, []);
 
-	const modeTools =
-		allCommands.find((c) => c.tabType === toolbarType)?.commands ?? [];
+	const flatAllTools = allAvailableTools.flatMap((t) => t.commands);
+
+	const modeTools = settings.toolbarQuickActions[toolbarType]
+		.map((c) => flatAllTools.find((fa) => fa.command === c))
+		.filter((v) => !!v);
 
 	if (loading) return null;
 	return (
