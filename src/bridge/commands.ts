@@ -1,20 +1,19 @@
 import { classifyOnshapeSelection, delay } from "@/core/utils";
+import type { OnshapeShortcutCommand, OnshapeToolbarMode } from "@/types";
 import type { OnshapeSelectionService } from "@/types/onshape/selection";
 import type {
 	ElementToolbarService,
 	ExecuteCommandMessage,
 	MiniToolbarService,
-	OnshapeCommand,
 	OnshapeShortcutCommandsResponse,
-	SafeOnshapeCommand,
 } from "@/types/onshape-bridge";
 import { getInjector } from "./injector";
 
 function safeCommand(
-	command: OnshapeCommand,
-	tabType: string,
-	tabId?: string,
-): SafeOnshapeCommand {
+	command: OnshapeShortcutCommand,
+	tabType: OnshapeToolbarMode,
+	tabId: number,
+): OnshapeShortcutCommand {
 	return {
 		id: `${command.namespace}-${command.command}`,
 		tabType,
@@ -47,6 +46,7 @@ function getCommandName(setting: string | { command: string }): string {
 export async function getUserShortcutCommands(): Promise<
 	OnshapeShortcutCommandsResponse[]
 > {
+	document.documentElement.style.setProperty("--mini-toolbar-display", "none");
 	const injector = getInjector();
 	if (!injector) throw new Error("Onshape injector not available");
 
@@ -54,6 +54,16 @@ export async function getUserShortcutCommands(): Promise<
 	mini.refreshMiniToolbarSettings();
 
 	await delay(1000);
+
+	document.body.dispatchEvent(
+		new MouseEvent("mousedown", {
+			bubbles: true,
+			cancelable: true,
+			view: window,
+		}),
+	);
+
+	document.documentElement.style.setProperty("--mini-toolbar-display", "block");
 
 	return (mini.miniToolbarSetting ?? []).map((settingGroup) => {
 		const collectionGroup = (mini.miniToolbarCollection ?? []).find(
@@ -68,7 +78,7 @@ export async function getUserShortcutCommands(): Promise<
 					(command) => command.command === commandName,
 				);
 			})
-			.filter((command): command is OnshapeCommand => Boolean(command))
+			.filter((command): command is OnshapeShortcutCommand => Boolean(command))
 			.map((command) =>
 				safeCommand(command, settingGroup.tabType, settingGroup.tabId),
 			);
@@ -97,8 +107,9 @@ export function getCurrentSelectionCommands() {
 }
 
 export async function getAllAvailableCommands(): Promise<
-	{ tabType: string; commands: SafeOnshapeCommand[] }[]
+	{ tabType: OnshapeToolbarMode; commands: OnshapeShortcutCommand[] }[]
 > {
+	document.documentElement.style.setProperty("--mini-toolbar-display", "none");
 	const injector = getInjector();
 	if (!injector) throw new Error("Onshape injector not available");
 
@@ -107,13 +118,21 @@ export async function getAllAvailableCommands(): Promise<
 
 	await delay(1000);
 
+	document.body.dispatchEvent(
+		new MouseEvent("mousedown", {
+			bubbles: true,
+			cancelable: true,
+			view: window,
+		}),
+	);
+
+	document.documentElement.style.setProperty("--mini-toolbar-display", "block");
+
 	return (
-		mini?.miniToolbarCollection?.map((c) => ({
+		mini?.miniToolbarCollection?.map((c, i) => ({
 			...c,
 			commands:
-				c.commands?.map((command) =>
-					safeCommand(command, c.tabType, c.tabType),
-				) || [],
+				c.commands?.map((command) => safeCommand(command, c.tabType, i)) || [],
 		})) || []
 	);
 }

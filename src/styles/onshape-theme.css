@@ -1,6 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 @import "./os-glass.css";
 
+:root {
+	--mini-toolbar-display: block;
+}
+
 :root,
 [data-os-theme],
 [data-os-theme="light"],
@@ -182,4 +186,8 @@ body.onshape-plus-fullscreen-mode os-vue-panel-selector-component {
 	height: 100svh;
 	width: 100svw;
 	overflow: hidden;
+}
+
+.os-mini-toolbar-panel {
+	display: var(--mini-toolbar-display) !important;
 }

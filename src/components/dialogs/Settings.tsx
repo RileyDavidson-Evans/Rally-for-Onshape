@@ -25,17 +25,13 @@ import { useOnshapeBridge } from "@/contexts/OnshapeBridgeContext";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { isSafari } from "@/lib/utils";
 import type { FloatingNumpadMode } from "@/storage/extensionStorage";
+import { ONSHAPE_TOOLBAR_MODES, type OnshapeToolbarMode } from "@/types";
 import { ButtonGroup } from "../ui/button-group";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
+import { ToolbarQuickActionsConfig } from "./ToolbarQuickActionsConfig";
 
 const links = [
-	{
-		label: "Toolbar Actions",
-		description: "Customize the Onshape shortcut menu used by Onshape Plus.",
-		icon: Pencil,
-		href: EDIT_SHORTCUT_ITEMS_URL,
-	},
 	{
 		label: "Discord",
 		description: "Join the community, report bugs, and request features.",
@@ -90,6 +86,26 @@ export function SettingsDialog() {
 		allAvailableTools.find((t) => t.tabType === "Part Studio")?.commands || [];
 
 	const { settings, setSetting } = useExtensionSettings();
+
+	const getToolsForMode = (mode: OnshapeToolbarMode) =>
+		allAvailableTools
+			.find((toolGroup) => toolGroup.tabType === mode)
+			?.commands.map((tool) => ({
+				id: tool.command,
+				label: tool.name?.replace("server:::", "") || tool.command,
+				description: tool.expandedTooltipKey?.replace("tooltips:::", ""),
+			})) ?? [];
+
+	const availableToolsByMode = Object.fromEntries(
+		ONSHAPE_TOOLBAR_MODES.map((mode) => [mode, getToolsForMode(mode)]),
+	) as Record<
+		OnshapeToolbarMode,
+		{
+			id: string;
+			label: string;
+			description?: string;
+		}[]
+	>;
 
 	return (
 		<Dialog open={isSettingsOpen} onOpenChange={setSettingsOpen}>
@@ -177,6 +193,10 @@ export function SettingsDialog() {
 									label: t.name?.replace("server:::", "") || "",
 									description: t.expandedTooltipKey?.replace("tooltips:::", ""),
 								}))}
+							/>
+
+							<ToolbarQuickActionsConfig
+								availableToolsByMode={availableToolsByMode}
 							/>
 
 							{links.map((item) => {

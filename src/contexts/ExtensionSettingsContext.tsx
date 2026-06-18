@@ -7,6 +7,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { getUserShortcutCommands } from "@/core/userShortcuts";
 import {
 	DEFAULT_STORAGE_VALUES,
 	getStorageItem,
@@ -16,6 +17,7 @@ import {
 	updateStorageItem,
 	watchStorageItem,
 } from "@/storage/extensionStorage";
+import { ONSHAPE_TOOLBAR_MODES, type OnshapeToolbarMode } from "@/types";
 
 type ExtensionSettingsContextValue = {
 	settings: OnshapePlusStorageSchema;
@@ -50,9 +52,53 @@ export function ExtensionSettingsProvider({
 
 	const [isLoading, setIsLoading] = useState(true);
 
-	useEffect(() => {
-		let isMounted = true;
+	const migrateUserToolbarShortcuts = async (
+		settingsConfig: OnshapePlusStorageSchema,
+	): Promise<OnshapePlusStorageSchema> => {
+		if (settingsConfig.migrations.initialToolbarActionsMigrated) {
+			return settingsConfig;
+		}
 
+		try {
+			const currentUserShortcuts = await getUserShortcutCommands();
+
+			const toolbarQuickActions = {
+				...DEFAULT_STORAGE_VALUES.toolbarQuickActions,
+				...Object.fromEntries(
+					currentUserShortcuts
+						.filter((mode) =>
+							ONSHAPE_TOOLBAR_MODES.includes(
+								mode.tabType as OnshapeToolbarMode,
+							),
+						)
+						.map((mode) => [
+							mode.tabType,
+							mode.commands.map((command) => command.command),
+						]),
+				),
+			} as OnshapePlusStorageSchema["toolbarQuickActions"];
+
+			const migrations = {
+				...settingsConfig.migrations,
+				initialToolbarActionsMigrated: true,
+			};
+
+			await Promise.all([
+				setStorageItem("toolbarQuickActions", toolbarQuickActions),
+				setStorageItem("migrations", migrations),
+			]);
+
+			return {
+				...settingsConfig,
+				toolbarQuickActions,
+				migrations,
+			};
+		} catch (error) {
+			return settingsConfig;
+		}
+	};
+
+	useEffect(() => {
 		async function loadSettings() {
 			const entries = await Promise.all(
 				(Object.keys(DEFAULT_STORAGE_VALUES) as StorageKey[]).map(
@@ -64,20 +110,18 @@ export function ExtensionSettingsProvider({
 				),
 			);
 
-			if (!isMounted) {
-				return;
-			}
+			const settingsConfig = Object.fromEntries(
+				entries,
+			) as OnshapePlusStorageSchema;
 
-			setSettings(Object.fromEntries(entries) as OnshapePlusStorageSchema);
+			const migratedSettings =
+				await migrateUserToolbarShortcuts(settingsConfig);
 
+			setSettings(migratedSettings);
 			setIsLoading(false);
 		}
 
 		loadSettings();
-
-		return () => {
-			isMounted = false;
-		};
 	}, []);
 
 	useEffect(() => {
@@ -172,6 +216,8 @@ export function ExtensionSettingsProvider({
 			resetAllSettings,
 		],
 	);
+
+	if (isLoading) return null;
 
 	return (
 		<ExtensionSettingsContext.Provider value={value}>

@@ -6,82 +6,42 @@ import {
 	useOnshapeBridge,
 	useOnshapeBridgeSubscription,
 } from "@/contexts/OnshapeBridgeContext";
-import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
-import { getUserShortcutCommands } from "@/core/userShortcuts";
 import { watchElementPresence } from "@/core/utils";
 import { clampSidebarPosition } from "@/lib/utils";
 import { DEFAULT_STORAGE_VALUES } from "@/storage/extensionStorage";
-import type { OnshapeShortcutCommandsResponse } from "@/types";
 import { PenSidebarMainContent } from "./Content";
 import { FixedItems } from "./FixedItems";
 
 export function PenSidebar() {
 	const nodeRef = useRef<HTMLDivElement>(null);
-	const { openSettings } = useSettingsDialog();
 
 	const { settings, setSetting } = useExtensionSettings();
 
-	const { toolbarType, currentTool, undoEnabled, redoEnabled, setCurrentTool } =
-		useOnshapeBridge();
-
-	const [allCommands, setAllCommands] = useState<
-		OnshapeShortcutCommandsResponse[]
-	>([]);
+	const {
+		toolbarType,
+		currentTool,
+		undoEnabled,
+		redoEnabled,
+		setCurrentTool,
+		allAvailableTools,
+	} = useOnshapeBridge();
 
 	const [collapsed, setCollapsed] = useState(false);
 	const [featureDialogVisible, setFeatureDialogVisible] = useState(false);
-	const [loading, setLoading] = useState(true);
-
-	const init = async () => {
-		try {
-			document
-				.querySelector(".os-mini-toolbar-panel")
-				?.classList.add("os-extension-hidden-item");
-
-			const commands = await getUserShortcutCommands();
-			document.body.dispatchEvent(
-				new MouseEvent("mousedown", {
-					bubbles: true,
-					cancelable: true,
-					view: window,
-				}),
-			);
-
-			setAllCommands(commands);
-
-			if (!settings.hasSeenWelcomeDialog) {
-				setSetting("hasSeenWelcomeDialog", true);
-
-				window.setTimeout(() => {
-					openSettings();
-				}, 500);
-			}
-
-			document
-				.querySelector(".os-mini-toolbar-panel")
-				?.classList.remove("os-extension-hidden-item");
-
-			const featureDialogParent = document.querySelector("#content-div");
-
-			if (featureDialogParent) {
-				watchElementPresence(
-					"#feature-dialog",
-					(isPresent) => {
-						setFeatureDialogVisible(isPresent);
-						setCurrentTool(null);
-					},
-					featureDialogParent,
-				);
-			}
-		} catch (e) {
-			console.log("Hello from space ", e);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	useEffect(() => {
-		init();
+		const featureDialogParent = document.querySelector("#content-div");
+
+		if (featureDialogParent) {
+			watchElementPresence(
+				"#feature-dialog",
+				(isPresent) => {
+					setFeatureDialogVisible(isPresent);
+					setCurrentTool(null);
+				},
+				featureDialogParent,
+			);
+		}
 	}, []);
 
 	const setOnshapeSideBarWidth = () => {
@@ -128,9 +88,12 @@ export function PenSidebar() {
 	}, []);
 
 	const modeTools =
-		allCommands.find((c) => c.tabType === toolbarType)?.commands ?? [];
+		allAvailableTools
+			.find((t) => t.tabType === toolbarType)
+			?.commands.filter((c) =>
+				settings.toolbarQuickActions[toolbarType].includes(c.command),
+			) || [];
 
-	if (loading) return null;
 	return (
 		<Draggable
 			nodeRef={nodeRef}
