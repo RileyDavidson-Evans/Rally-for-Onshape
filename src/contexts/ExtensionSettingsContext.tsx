@@ -60,23 +60,7 @@ export function ExtensionSettingsProvider({
 		}
 
 		try {
-			document
-				.querySelector(".os-mini-toolbar-panel")
-				?.classList.add("os-extension-hidden-item");
-
 			const currentUserShortcuts = await getUserShortcutCommands();
-
-			document.body.dispatchEvent(
-				new MouseEvent("mousedown", {
-					bubbles: true,
-					cancelable: true,
-					view: window,
-				}),
-			);
-
-			document
-				.querySelector(".os-mini-toolbar-panel")
-				?.classList.remove("os-extension-hidden-item");
 
 			const toolbarQuickActions = {
 				...DEFAULT_STORAGE_VALUES.toolbarQuickActions,

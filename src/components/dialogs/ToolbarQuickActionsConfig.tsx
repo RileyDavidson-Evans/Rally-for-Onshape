@@ -73,7 +73,7 @@ export function ToolbarQuickActionsConfig({
 					</div>
 				</div>
 
-				<Button size="icon" variant="ghost">
+				<Button size="icon" variant="ghost" className="cursor-pointer">
 					<ChevronDown
 						className={cn(
 							"h-5 w-5 shrink-0 text-slate-200 transition-transform",

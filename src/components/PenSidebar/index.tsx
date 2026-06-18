@@ -87,11 +87,12 @@ export function PenSidebar() {
 		};
 	}, []);
 
-	const modeTools = allAvailableTools
-		.find((t) => t.tabType === toolbarType)
-		?.commands.filter((c) =>
-			settings.toolbarQuickActions[toolbarType].includes(c.command),
-		);
+	const modeTools =
+		allAvailableTools
+			.find((t) => t.tabType === toolbarType)
+			?.commands.filter((c) =>
+				settings.toolbarQuickActions[toolbarType].includes(c.command),
+			) || [];
 
 	return (
 		<Draggable

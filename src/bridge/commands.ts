@@ -46,6 +46,7 @@ function getCommandName(setting: string | { command: string }): string {
 export async function getUserShortcutCommands(): Promise<
 	OnshapeShortcutCommandsResponse[]
 > {
+	document.documentElement.style.setProperty("--mini-toolbar-display", "none");
 	const injector = getInjector();
 	if (!injector) throw new Error("Onshape injector not available");
 
@@ -53,6 +54,16 @@ export async function getUserShortcutCommands(): Promise<
 	mini.refreshMiniToolbarSettings();
 
 	await delay(1000);
+
+	document.body.dispatchEvent(
+		new MouseEvent("mousedown", {
+			bubbles: true,
+			cancelable: true,
+			view: window,
+		}),
+	);
+
+	document.documentElement.style.setProperty("--mini-toolbar-display", "block");
 
 	return (mini.miniToolbarSetting ?? []).map((settingGroup) => {
 		const collectionGroup = (mini.miniToolbarCollection ?? []).find(
@@ -98,6 +109,7 @@ export function getCurrentSelectionCommands() {
 export async function getAllAvailableCommands(): Promise<
 	{ tabType: OnshapeToolbarMode; commands: OnshapeShortcutCommand[] }[]
 > {
+	document.documentElement.style.setProperty("--mini-toolbar-display", "none");
 	const injector = getInjector();
 	if (!injector) throw new Error("Onshape injector not available");
 
@@ -105,6 +117,16 @@ export async function getAllAvailableCommands(): Promise<
 	mini.refreshMiniToolbarSettings();
 
 	await delay(1000);
+
+	document.body.dispatchEvent(
+		new MouseEvent("mousedown", {
+			bubbles: true,
+			cancelable: true,
+			view: window,
+		}),
+	);
+
+	document.documentElement.style.setProperty("--mini-toolbar-display", "block");
 
 	return (
 		mini?.miniToolbarCollection?.map((c, i) => ({
