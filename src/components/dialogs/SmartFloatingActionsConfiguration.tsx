@@ -1,4 +1,4 @@
-import { RotateCcw, Settings, X, Zap } from "lucide-react";
+import { ChevronDown, RotateCcw, Settings, X, Zap } from "lucide-react";
 import { useState } from "react";
 import { CommandMultiSelect } from "@/components/shared/CommandMultiSelect";
 import { Button } from "@/components/ui/button";
@@ -76,8 +76,12 @@ export function SmartActionsCustomizer({
 				type="button"
 				className="
 					flex w-full items-center gap-3 p-3 text-left
-					transition-colors hover:bg-white/[0.04]
+					transition-colors hover:bg-white/[0.04] cursor-pointer
 				"
+				onClick={(event) => {
+					event.stopPropagation();
+					setIsExpanded((current) => !current);
+				}}
 			>
 				<div
 					className="
@@ -100,34 +104,36 @@ export function SmartActionsCustomizer({
 				</div>
 
 				<div className="flex items-center gap-4">
-					<Button
-						size="icon"
-						variant={"ghost"}
-						className="cursor-pointer"
-						onClick={(event) => {
-							event.stopPropagation();
-							setIsExpanded((current) => !current);
-						}}
-					>
-						<Settings
+					<Button size="icon" variant={"ghost"}>
+						<ChevronDown
 							className={cn(
 								"h-5 w-5 shrink-0 cursor-pointer text-slate-200 transition-transform",
+								isExpanded && "rotate-180",
 							)}
 						/>
 					</Button>
-
-					<Switch
-						checked={settings.smartActionsEnabled}
-						onCheckedChange={(value) =>
-							setSetting("smartActionsEnabled", value)
-						}
-					/>
 				</div>
 			</button>
 
 			{isExpanded && (
 				<div className="border-t border-white/10 p-3 pt-2">
 					<div className="flex flex-col gap-3">
+						<div className="rounded-lg border border-white/10 bg-black/15 p-3">
+							<div className="flex items-center justify-between gap-3">
+								<div className="min-w-0">
+									<div className="font-medium text-slate-100">Enabled</div>
+								</div>
+
+								<div className="flex items-center gap-3">
+									<Switch
+										checked={settings.smartActionsEnabled}
+										onCheckedChange={(value) =>
+											setSetting("smartActionsEnabled", value)
+										}
+									/>
+								</div>
+							</div>
+						</div>
 						{SMART_ACTION_SECTIONS.map((section) => {
 							const selectedToolIds = settings.radialMenuConfig[section.key];
 

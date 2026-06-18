@@ -1,4 +1,4 @@
-import { RotateCcw, Settings, Wrench, X } from "lucide-react";
+import { ChevronDown, RotateCcw, Settings, Wrench, X } from "lucide-react";
 import { useState } from "react";
 import { CommandMultiSelect } from "@/components/shared/CommandMultiSelect";
 import { Button } from "@/components/ui/button";
@@ -46,9 +46,13 @@ export function ToolbarQuickActionsConfig({
 			<button
 				type="button"
 				className="
-					flex w-full items-center gap-3 p-3 text-left
+					cursor-pointer flex w-full items-center gap-3 p-3 text-left
 					transition-colors hover:bg-white/[0.04]
 				"
+				onClick={(event) => {
+					event.stopPropagation();
+					setIsExpanded((current) => !current);
+				}}
 			>
 				<div
 					className="
@@ -69,18 +73,11 @@ export function ToolbarQuickActionsConfig({
 					</div>
 				</div>
 
-				<Button
-					size="icon"
-					variant="ghost"
-					className="cursor-pointer"
-					onClick={(event) => {
-						event.stopPropagation();
-						setIsExpanded((current) => !current);
-					}}
-				>
-					<Settings
+				<Button size="icon" variant="ghost">
+					<ChevronDown
 						className={cn(
 							"h-5 w-5 shrink-0 text-slate-200 transition-transform",
+							isExpanded && "rotate-180",
 						)}
 					/>
 				</Button>
