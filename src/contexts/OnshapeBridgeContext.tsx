@@ -177,6 +177,8 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 		],
 	);
 
+	if (!isDocumentLoaded || !allAvailableTools.length) return null;
+
 	return (
 		<OnshapeBridgeContext.Provider value={value}>
 			{children}

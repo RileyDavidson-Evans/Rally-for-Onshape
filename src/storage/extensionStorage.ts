@@ -17,6 +17,10 @@ export type ToolbarPosition = {
 	y: number;
 };
 
+export type Migrations = {
+	initialToolbarActionsMigrated: boolean;
+};
+
 export type OnshapePlusStorageSchema = {
 	settingsVersion: number;
 	smartActionsEnabled: boolean;
@@ -25,6 +29,7 @@ export type OnshapePlusStorageSchema = {
 	radialMenuConfig: RadialMenuConfig;
 	toolbarPosition: ToolbarPosition;
 	toolbarQuickActions: ToolbarQuickActionsConfig;
+	migrations: Migrations;
 };
 
 export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
@@ -63,6 +68,10 @@ export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 		"Part Studio": [],
 		Assembly: [],
 		Drawing: [],
+	},
+
+	migrations: {
+		initialToolbarActionsMigrated: false,
 	},
 };
 

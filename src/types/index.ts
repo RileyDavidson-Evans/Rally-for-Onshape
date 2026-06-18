@@ -9,7 +9,7 @@ export const ONSHAPE_TOOLBAR_MODES: OnshapeToolbarMode[] = [
 	"Part Studio",
 	"Assembly",
 	"Drawing",
-];
+] as const;
 
 export interface OnshapeShortcutCommand {
 	id: string;

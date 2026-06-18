@@ -3,9 +3,11 @@ import {
 	type ReactNode,
 	useCallback,
 	useContext,
+	useEffect,
 	useMemo,
 	useState,
 } from "react";
+import { useExtensionSettings } from "./ExtensionSettingsContext";
 
 type SettingsDialogContextValue = {
 	isSettingsOpen: boolean;
@@ -20,9 +22,18 @@ const SettingsDialogContext = createContext<SettingsDialogContextValue | null>(
 
 export function SettingsDialogProvider({ children }: { children: ReactNode }) {
 	const [isSettingsOpen, setSettingsOpen] = useState(false);
-
+	const { settings, setSetting } = useExtensionSettings();
 	const openSettings = useCallback(() => {
 		setSettingsOpen(true);
+	}, []);
+
+	useEffect(() => {
+		if (!settings.hasSeenWelcomeDialog) {
+			setTimeout(() => {
+				openSettings();
+				setSetting("hasSeenWelcomeDialog", true);
+			}, 1000);
+		}
 	}, []);
 
 	const closeSettings = useCallback(() => {
