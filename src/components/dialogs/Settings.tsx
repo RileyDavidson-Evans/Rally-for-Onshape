@@ -48,7 +48,7 @@ const links = [
 	},
 	{
 		label: "Buy Me a Coffee",
-		description: "Support development of Onshape Plus.",
+		description: "Support development of Rally for Onshape.",
 		icon: Coffee,
 		href: BUY_ME_A_COFFEE_URL,
 		target: "_blank",
@@ -64,7 +64,7 @@ const floatingNumpadModes: {
 	{
 		value: "auto",
 		label: "Auto",
-		description: "Show only when Onshape Plus detects tablet mode.",
+		description: "Show only when Rally for Onshape detects tablet mode.",
 	},
 	{
 		value: "always",
@@ -125,7 +125,7 @@ export function SettingsDialog() {
 					<div className="relative z-10 p-5">
 						<DialogHeader className="mb-5">
 							<DialogTitle className="text-lg font-semibold">
-								Welcome to Onshape Plus
+								Welcome to Rally for Onshape
 							</DialogTitle>
 
 							<DialogDescription className="text-sm text-slate-300">

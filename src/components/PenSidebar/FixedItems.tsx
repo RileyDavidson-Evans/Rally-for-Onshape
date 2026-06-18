@@ -87,8 +87,8 @@ export function FixedItems({
 						<CardHeader>
 							<CardTitle>Configuration</CardTitle>
 							<CardDescription>
-								Change the way Onshape Plus works to best suit your workflow.
-								View links for the Github, Discord and more.
+								Change the way Rally for Onshape works to best suit your
+								workflow. View links for the Github, Discord and more.
 							</CardDescription>
 						</CardHeader>
 					</Card>

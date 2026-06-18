@@ -1,10 +1,10 @@
 # Build and Verify
 
-This guide explains how to verify that a published Onshape Plus release corresponds to the publicly available source code.
+This guide explains how to verify that a published Rally for Onshape release corresponds to the publicly available source code.
 
 ## Source Availability
 
-All Onshape Plus releases are published from source code available in this repository.
+All Rally for Onshape releases are published from source code available in this repository.
 
 Each published extension release corresponds to a GitHub Release and Git tag.
 
@@ -78,11 +78,11 @@ Confirm:
 
 Reviewers can use browser Developer Tools to inspect network activity while using the extension.
 
-Onshape Plus is designed to operate locally within the browser and does not intentionally transmit Onshape document data, CAD geometry, user information, company information, authentication tokens, or session data to external services.
+Rally for Onshape is designed to operate locally within the browser and does not intentionally transmit Onshape document data, CAD geometry, user information, company information, authentication tokens, or session data to external services.
 
 ## Independent Review
 
-Because Onshape Plus is open source, organizations may:
+Because Rally for Onshape is open source, organizations may:
 
 * Review all source code
 * Review dependency manifests and lockfiles
