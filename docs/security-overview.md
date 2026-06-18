@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Onshape Plus is intended to improve the Onshape browser experience through local UI/UX enhancements.
+Rally for Onshape is intended to improve the Onshape browser experience through local UI/UX enhancements.
 
 Examples include:
 
@@ -27,7 +27,7 @@ It does not run globally across all websites.
 
 | Permission                  | Why it is needed                                                   |
 | --------------------------- | ------------------------------------------------------------------ |
-| `storage`                   | Saves local Onshape Plus settings in the browser.                  |
+| `storage`                   | Saves local Rally for Onshape settings in the browser.                  |
 | `https://cad.onshape.com/*` | Allows the extension to inject its UI only into Onshape CAD pages. |
 
 ## Data Flow
@@ -37,7 +37,7 @@ User browser
   ↓
 Onshape page
   ↓
-Onshape Plus local content script
+Rally for Onshape local content script
   ↓
 Local UI enhancements and local settings storage
 ```
@@ -46,7 +46,7 @@ No Onshape data is sent from the extension to an external server.
 
 ## What the Extension Does Not Do
 
-Onshape Plus does not:
+Rally for Onshape does not:
 
 * Read or export CAD files
 * Upload CAD data
@@ -74,7 +74,7 @@ These settings remain local to the user's browser unless the browser itself sync
 
 ## Write Actions
 
-Onshape Plus is primarily a UI/UX extension.
+Rally for Onshape is primarily a UI/UX extension.
 
 Some features can trigger existing Onshape UI commands, such as Undo, Redo, Delete, Confirm, Cancel, Fit View, Normal To, Extrude, Fillet, Chamfer, or similar commands.
 
@@ -94,7 +94,7 @@ npm run build
 
 ## Enterprise Evaluation
 
-For companies evaluating Onshape Plus, recommended review steps include:
+For companies evaluating Rally for Onshape, recommended review steps include:
 
 1. Review `manifest.json`.
 2. Confirm the requested permissions.

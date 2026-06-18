@@ -1,6 +1,6 @@
-# Install Onshape Plus on Android Tablets
+# Install Rally for Onshape on Android Tablets
 
-Good news! 🎉 Onshape Plus works on Android tablets through Microsoft Edge Canary.
+Good news! 🎉 Rally for Onshape works on Android tablets through Microsoft Edge Canary.
 
 > **Note:** Extension support on Android is currently available through Microsoft Edge Canary and may change as Microsoft continues developing mobile extension support.
 
@@ -12,7 +12,7 @@ https://play.google.com/store/apps/details?id=com.microsoft.emmx.canary
 
 ---
 
-## Step 2: Open the Onshape Plus Extension Page
+## Step 2: Open the Rally for Onshape Extension Page
 
 Visit:
 
@@ -46,7 +46,7 @@ Copy the Extension ID from the end of the URL:
 
 5. Tap **OK**
 
-After a few moments, Onshape Plus should appear in your installed extensions list.
+After a few moments, Rally for Onshape should appear in your installed extensions list.
 
 ---
 
@@ -59,7 +59,7 @@ Once the extension is installed:
 3. Sign in to your Onshape account
 4. Open any document
 
-Onshape Plus should automatically activate and you'll see the Onshape Plus toolbar appear inside Onshape.
+Rally for Onshape should automatically activate and you'll see the Rally for Onshape toolbar appear inside Onshape.
 
 ---
 
@@ -67,4 +67,4 @@ Onshape Plus should automatically activate and you'll see the Onshape Plus toolb
 
 If you run into any issues, have ideas, or want to request a feature, feel free to reach out on [Discord](https://discord.gg/kzk92KGRt4).
 
-Every piece of feedback helps make Onshape Plus better.
+Every piece of feedback helps make Rally for Onshape better.

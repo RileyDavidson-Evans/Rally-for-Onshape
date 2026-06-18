@@ -1,4 +1,4 @@
-# Onshape Plus
+# Rally for Onshape
 
 Make Onshape faster, cleaner, and easier to use.
 
@@ -9,9 +9,9 @@ Make Onshape faster, cleaner, and easier to use.
 
 Open source, publicly auditable, and backed by GitHub security tooling including CodeQL, Dependabot, Secret Scanning, and Dependency Review.
 
-Onshape Plus is an open-source browser extension that enhances the Onshape experience with thoughtful UI improvements, touch and pen optimizations, productivity tools, and quality-of-life features designed for both tablet and desktop workflows.
+Rally for Onshape is an open-source browser extension that enhances the Onshape experience with thoughtful UI improvements, touch and pen optimizations, productivity tools, and quality-of-life features designed for both tablet and desktop workflows.
 
-Whether you're using a mouse, trackpad, touchscreen, or stylus, Onshape Plus helps reduce friction and streamline common modeling tasks while preserving the workflows you already know.
+Whether you're using a mouse, trackpad, touchscreen, or stylus, Rally for Onshape helps reduce friction and streamline common modeling tasks while preserving the workflows you already know.
 
 Available for Chrome, Microsoft Edge, and Safari on iPad.
 
@@ -36,9 +36,9 @@ Learn more:
 * [GitHub Security Dashboard](https://github.com/RileyDavidson-Evans/onshape-plus/security)
 ---
 
-## Why Onshape Plus?
+## Why Rally for Onshape?
 
-Onshape is a powerful CAD platform. Onshape Plus builds on that foundation by adding optional enhancements that improve accessibility, efficiency, and usability without requiring changes to your existing workflow.
+Onshape is a powerful CAD platform. Rally for Onshape builds on that foundation by adding optional enhancements that improve accessibility, efficiency, and usability without requiring changes to your existing workflow.
 
 Features are designed to feel native to Onshape and integrate seamlessly into the existing interface.
 
@@ -100,7 +100,7 @@ Built to complement Onshape rather than replace it.
 
 ### Open & Transparent
 
-Onshape Plus is developed in the open and available for anyone to inspect, audit, and contribute to.
+Rally for Onshape is developed in the open and available for anyone to inspect, audit, and contribute to.
 
 * Fully open source
 * No tracking or telemetry
@@ -112,9 +112,9 @@ Onshape Plus is developed in the open and available for anyone to inspect, audit
 
 ## Screenshots
 
-![Onshape Plus Screenshot](./media/chrome%20toolbar%20highlight.png)
-![Onshape Plus Screenshot](./media/Fullscreen%20chrome%20promo.png)
-![Onshape Plus Screenshot](./media/Chrome%20floating%20number%20pad%20highlight.png)
+![Rally for Onshape Screenshot](./media/chrome%20toolbar%20highlight.png)
+![Rally for Onshape Screenshot](./media/Fullscreen%20chrome%20promo.png)
+![Rally for Onshape Screenshot](./media/Chrome%20floating%20number%20pad%20highlight.png)
 
 ---
 
@@ -132,7 +132,7 @@ Onshape Plus is developed in the open and available for anyone to inspect, audit
 
 ## Security & Privacy
 
-Onshape Plus is designed to operate locally within your browser.
+Rally for Onshape is designed to operate locally within your browser.
 
 * No telemetry
 * No analytics
@@ -144,7 +144,7 @@ The extension stores only local user preferences using browser extension storage
 
 ### Security Documentation
 
-For organizations evaluating Onshape Plus, the following documentation is available:
+For organizations evaluating Rally for Onshape, the following documentation is available:
 
 * [Security Policy](./SECURITY.md)
 * [Security Overview](./docs/security-overview.md)
@@ -153,7 +153,7 @@ For organizations evaluating Onshape Plus, the following documentation is availa
 
 ### Security Tooling
 
-Onshape Plus uses GitHub's built-in security tooling, including:
+Rally for Onshape uses GitHub's built-in security tooling, including:
 
 * CodeQL Static Analysis
 * Dependabot Vulnerability Monitoring
@@ -246,7 +246,7 @@ If you have ideas for improving tablet workflows, touch interactions, accessibil
 
 ## Disclaimer
 
-Onshape Plus is an independent community project and is not affiliated with, endorsed by, or sponsored by Onshape or PTC.
+Rally for Onshape is an independent community project and is not affiliated with, endorsed by, or sponsored by Onshape or PTC.
 
 All trademarks are the property of their respective owners.
 
