@@ -95,7 +95,7 @@ export function RadialContextMenu({
 	return (
 		<div
 			className={[
-				"os-smart-floating-actions pointer-events-none fixed z-[999999] select-none",
+				"os-smart-floating-actions pointer-events-none fixed z-40 select-none",
 				className ?? "",
 			].join(" ")}
 			style={{
@@ -210,7 +210,7 @@ export function RadialContextMenu({
 											</Button>
 										</TooltipTrigger>
 
-										<TooltipContent side="right" className="z-[10000000]">
+										<TooltipContent side="right" className="z-50">
 											<Card className="w-[350px]">
 												<CardHeader>
 													<CardTitle>{item.label}</CardTitle>

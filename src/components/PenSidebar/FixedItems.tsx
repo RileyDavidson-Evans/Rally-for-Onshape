@@ -59,7 +59,7 @@ export function FixedItems({
 						<GripHorizontal />
 					</Button>
 				</TooltipTrigger>
-				<TooltipContent side="right">
+				<TooltipContent side="left">
 					<Card className="w-[350px]">
 						<CardHeader>
 							<CardTitle>Move</CardTitle>
@@ -82,7 +82,7 @@ export function FixedItems({
 						<Settings className="h-5 w-5" />
 					</Button>
 				</TooltipTrigger>
-				<TooltipContent>
+				<TooltipContent side="right">
 					<Card className="w-[350px]">
 						<CardHeader>
 							<CardTitle>Configuration</CardTitle>
@@ -107,7 +107,7 @@ export function FixedItems({
 					</Button>
 				</TooltipTrigger>
 
-				<TooltipContent side="right">
+				<TooltipContent side="left">
 					<Card className="w-[350px]">
 						<CardHeader>
 							<CardTitle>Toggle Fullscreen</CardTitle>

@@ -3,6 +3,8 @@ import type { OnshapeToolbarMode } from "@/types";
 
 export type FloatingNumpadMode = "auto" | "always" | "off";
 
+export type Theme = "light" | "dark";
+
 export type ToolbarQuickActionsConfig = Record<OnshapeToolbarMode, string[]>;
 
 export type RadialMenuConfig = {
@@ -25,6 +27,7 @@ export type OnshapePlusStorageSchema = {
 	settingsVersion: number;
 	smartActionsEnabled: boolean;
 	hasSeenWelcomeDialog: boolean;
+	theme: Theme;
 	floatingNumpadMode: FloatingNumpadMode;
 	radialMenuConfig: RadialMenuConfig;
 	toolbarPosition: ToolbarPosition;
@@ -34,6 +37,8 @@ export type OnshapePlusStorageSchema = {
 
 export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 	settingsVersion: 2,
+
+	theme: "dark",
 
 	smartActionsEnabled: true,
 

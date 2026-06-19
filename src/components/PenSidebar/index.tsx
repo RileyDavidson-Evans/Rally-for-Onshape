@@ -119,7 +119,7 @@ export function PenSidebar() {
 				className="
 					os-plus-glass
 					rounded-lg
-					fixed left-0 top-0 z-[9999]
+					fixed left-0 top-0 z-30
 					flex max-h-[70vh] flex-col
 					overflow-hidden
 					w-max

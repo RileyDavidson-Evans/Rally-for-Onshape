@@ -7,8 +7,15 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { ExtensionSettingsProvider } from "./contexts/ExtensionSettingsContext";
 import { OnshapeBridgeProvider } from "./contexts/OnshapeBridgeContext";
 import { SettingsDialogProvider } from "./contexts/SettingsDialogContext";
+import { applyTheme } from "./core/theme";
 import { copyOnshapeIconSpriteToShadowRoot } from "./core/utils";
 import { PortalContainerProvider } from "./extensions/PortalContainerContext";
+import { getStorageItem } from "./storage/extensionStorage";
+
+const applySelectedTheme = async () => {
+	const t = await getStorageItem("theme");
+	applyTheme(t);
+};
 
 function injectOnshapeBridge(): void {
 	if (document.getElementById("os-onshape-page-bridge")) return;
@@ -29,6 +36,7 @@ function injectGlobalStyle(id: string, css: string) {
 	document.documentElement.appendChild(style);
 }
 
+applySelectedTheme();
 injectOnshapeBridge();
 injectGlobalStyle("os-onshape-theme", onshapeThemeCss);
 

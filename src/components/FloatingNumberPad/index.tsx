@@ -280,7 +280,7 @@ export function FloatingNumpad() {
 			id="os-floating-numpad"
 			tabIndex={-1}
 			className={[
-				"fixed z-[999999] w-[230px] select-none overflow-hidden rounded-2xl",
+				"fixed z-50 w-[230px] select-none overflow-hidden rounded-2xl",
 				"border border-white/10",
 				"bg-gradient-to-b from-slate-900/95 via-slate-950/92 to-black/90",
 				"p-2 backdrop-blur-xl",
