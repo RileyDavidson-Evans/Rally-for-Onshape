@@ -1,6 +1,5 @@
 import {
 	Check,
-	Focus,
 	MousePointerBan,
 	Redo,
 	ScanEye,
