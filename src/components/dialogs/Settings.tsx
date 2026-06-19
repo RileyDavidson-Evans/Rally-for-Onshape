@@ -19,6 +19,7 @@ import { isSafari } from "@/lib/utils";
 import type { FloatingNumpadMode } from "@/storage/extensionStorage";
 import { ONSHAPE_TOOLBAR_MODES, type OnshapeToolbarMode } from "@/types";
 import { ButtonGroup } from "../ui/button-group";
+import { Card, CardContent } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
 import { ThemeCustomizer } from "./ThemeCustomizer";
@@ -173,7 +174,11 @@ export function SettingsDialog() {
 													</Button>
 												</TooltipTrigger>
 
-												<TooltipContent>{mode.description}</TooltipContent>
+												<TooltipContent>
+													<Card className="w-[350px]">
+														<CardContent>{mode.description}</CardContent>
+													</Card>
+												</TooltipContent>
 											</Tooltip>
 										);
 									})}
