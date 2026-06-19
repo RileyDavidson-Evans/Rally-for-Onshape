@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import {
 	fireInputEvents,
@@ -750,51 +751,13 @@ export function FloatingNumpad() {
 				</div>
 
 				<Separator className="mb-2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
-				<div className="mb-2 grid grid-cols-3 gap-1.5">
-					<Button
-						className="!h-8 rounded-md text-xs font-semibold"
-						variant="ghost"
-						tabIndex={-1}
-						type="button"
-						onPointerDown={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							setMode("numbers");
-						}}
-					>
-						123
-					</Button>
-					<Button
-						className="!h-8 rounded-md text-xs font-semibold"
-						variant="ghost"
-						tabIndex={-1}
-						type="button"
-						onPointerDown={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							setMode("text");
-						}}
-					>
-						ABC
-					</Button>
-					<Button
-						className="!h-8 rounded-md text-xs font-semibold"
-						variant="ghost"
-						tabIndex={-1}
-						type="button"
-						onPointerDown={(e) => {
-							e.preventDefault();
-							e.stopPropagation();
-							setMode("symbols");
-						}}
-					>
-						# &amp; ()
-					</Button>
-				</div>
-
-				{mode === "numbers" && (
-					<>
+				<Tabs defaultValue="numbers" className="w-full">
+					<TabsList className="w-full">
+						<TabsTrigger value="numbers">Numbers</TabsTrigger>
+						<TabsTrigger value="text">Text</TabsTrigger>
+						<TabsTrigger value="symbols">Symbols</TabsTrigger>
+					</TabsList>
+					<TabsContent value="numbers">
 						<div className="mb-2 grid grid-cols-6 gap-1.5">
 							{UNIT_KEYS.map(renderKey)}
 						</div>
@@ -804,79 +767,77 @@ export function FloatingNumpad() {
 						<div className="grid grid-cols-4 gap-1.5">
 							{NUMBER_KEYS.map(renderKey)}
 						</div>
-					</>
-				)}
+					</TabsContent>
+					<TabsContent value="text">
+						<div className="space-y-1.5">
+							{textKeys.map((row, rowIndex) => (
+								<div
+									key={`text-row-${rowIndex}`}
+									className={[
+										"grid gap-1.5",
+										rowIndex === 0 ? "grid-cols-10" : "",
+										rowIndex === 1 ? "grid-cols-9 px-4" : "",
+										rowIndex === 2 ? "grid-cols-7 px-8" : "",
+									].join(" ")}
+								>
+									{row.map(renderKey)}
+								</div>
+							))}
 
-				{mode === "text" && (
-					<div className="space-y-1.5">
-						{textKeys.map((row, rowIndex) => (
-							<div
-								key={`text-row-${rowIndex}`}
-								className={[
-									"grid gap-1.5",
-									rowIndex === 0 ? "grid-cols-10" : "",
-									rowIndex === 1 ? "grid-cols-9 px-4" : "",
-									rowIndex === 2 ? "grid-cols-7 px-8" : "",
-								].join(" ")}
-							>
-								{row.map(renderKey)}
+							<div className="grid grid-cols-5 gap-1.5">
+								<Button
+									className={[
+										"!h-10 cursor-pointer rounded-md border text-sm font-semibold",
+										isShift
+											? "border-blue-400/30 bg-blue-500/20 text-blue-100"
+											: "border-white/10 bg-white/[0.075] text-slate-200",
+									].join(" ")}
+									variant="ghost"
+									tabIndex={-1}
+									type="button"
+									onPointerDown={(e) => {
+										e.preventDefault();
+										e.stopPropagation();
+										setIsShift((value) => !value);
+									}}
+								>
+									Shift
+								</Button>
+
+								{renderKey(SYMBOL_KEYS[0])}
+								{renderKey({
+									label: "_",
+									value: "_",
+									key: "-",
+									code: "Minus",
+									keyCode: 189,
+									modifiers: { shift: true },
+								})}
+								{renderKey({
+									label: "Space",
+									value: " ",
+									key: " ",
+									code: "Space",
+									keyCode: 32,
+									type: "action",
+								})}
+								{renderKey({
+									label: "⌫",
+									key: "Backspace",
+									code: "Backspace",
+									keyCode: 8,
+									type: "action",
+								})}
 							</div>
-						))}
-
-						<div className="grid grid-cols-5 gap-1.5">
-							<Button
-								className={[
-									"!h-10 cursor-pointer rounded-md border text-sm font-semibold",
-									isShift
-										? "border-blue-400/30 bg-blue-500/20 text-blue-100"
-										: "border-white/10 bg-white/[0.075] text-slate-200",
-								].join(" ")}
-								variant="ghost"
-								tabIndex={-1}
-								type="button"
-								onPointerDown={(e) => {
-									e.preventDefault();
-									e.stopPropagation();
-									setIsShift((value) => !value);
-								}}
-							>
-								Shift
-							</Button>
-
-							{renderKey(SYMBOL_KEYS[0])}
-							{renderKey({
-								label: "_",
-								value: "_",
-								key: "-",
-								code: "Minus",
-								keyCode: 189,
-								modifiers: { shift: true },
-							})}
-							{renderKey({
-								label: "Space",
-								value: " ",
-								key: " ",
-								code: "Space",
-								keyCode: 32,
-								type: "action",
-							})}
-							{renderKey({
-								label: "⌫",
-								key: "Backspace",
-								code: "Backspace",
-								keyCode: 8,
-								type: "action",
-							})}
 						</div>
-					</div>
-				)}
-
-				{mode === "symbols" && (
-					<div className="grid grid-cols-4 gap-1.5">
-						{SYMBOL_KEYS.map(renderKey)}
-						{FUNCTION_KEYS.map(renderKey)}
-					</div>
-				)}
+					</TabsContent>
+					<TabsContent value="symbols">
+						<div className="grid grid-cols-4 gap-1.5">
+							{SYMBOL_KEYS.map(renderKey)}
+							{FUNCTION_KEYS.map(renderKey)}
+						</div>
+					</TabsContent>
+				</Tabs>
 
 				<Separator className="my-2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
