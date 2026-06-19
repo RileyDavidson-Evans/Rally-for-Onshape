@@ -6,5 +6,6 @@ export const applyTheme = (t: Theme) => {
 	extensionHost?.setAttribute("rally-for-onshape-theme", t);
 	document.body.setAttribute("rally-for-onshape-theme", t);
 	document.body.setAttribute("data-os-theme", t);
+	document.body.setAttribute("data-bs-theme", t);
 	document.documentElement.setAttribute("data-os-theme", t);
 };
