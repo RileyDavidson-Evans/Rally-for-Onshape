@@ -1,4 +1,4 @@
-import { ChevronDown, RotateCcw, Settings, X, Zap } from "lucide-react";
+import { ChevronDown, RotateCcw, X, Zap } from "lucide-react";
 import { useState } from "react";
 import { CommandMultiSelect } from "@/components/shared/CommandMultiSelect";
 import { Button } from "@/components/ui/button";
@@ -23,27 +23,22 @@ type SmartActionsCustomizerProps = {
 const SMART_ACTION_SECTIONS: {
 	key: keyof RadialMenuConfig;
 	label: string;
-	description: string;
 }[] = [
 	{
 		key: "singleFace",
 		label: "Single Face",
-		description: "Actions shown when one face is selected.",
 	},
 	{
 		key: "singleEdge",
 		label: "Single Edge",
-		description: "Actions shown when one edge is selected.",
 	},
 	{
 		key: "multipleFaces",
 		label: "Multiple Faces",
-		description: "Actions shown when multiple faces are selected.",
 	},
 	{
 		key: "multipleEdges",
 		label: "Multiple Edges",
-		description: "Actions shown when multiple edges are selected.",
 	},
 ];
 
@@ -71,12 +66,12 @@ export function SmartActionsCustomizer({
 	};
 
 	return (
-		<div className="rounded-xl border border-white/10 bg-white/[0.035]">
+		<div className="rounded-xl border border-border bg-muted/35">
 			<button
 				type="button"
 				className="
-					flex w-full items-center gap-3 p-3 text-left
-					transition-colors hover:bg-white/[0.04] cursor-pointer
+					flex w-full cursor-pointer items-center gap-3 p-3 text-left
+					transition-colors hover:bg-accent
 				"
 				onClick={(event) => {
 					event.stopPropagation();
@@ -86,42 +81,48 @@ export function SmartActionsCustomizer({
 				<div
 					className="
 						flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-						border border-white/10 bg-white/[0.06] text-blue-300
+						border border-border bg-background/60 text-primary
 					"
 				>
 					<Zap className="h-5 w-5" />
 				</div>
 
 				<div className="min-w-0 flex-1">
-					<div className="text-sm font-medium text-slate-100">
+					<div className="text-sm font-medium text-card-foreground">
 						Quick Actions
 					</div>
 
-					<div className="mt-1 text-xs leading-snug text-slate-300">
+					<div className="mt-1 text-xs leading-snug text-muted-foreground">
 						Choose which actions appear when selecting faces and edges in Part
 						Studio.
 					</div>
 				</div>
 
-				<div className="flex items-center gap-4">
-					<Button size="icon" variant={"ghost"} className="cursor-pointer">
-						<ChevronDown
-							className={cn(
-								"h-5 w-5 shrink-0 cursor-pointer text-slate-200 transition-transform",
-								isExpanded && "rotate-180",
-							)}
-						/>
-					</Button>
-				</div>
+				<Button
+					size="icon"
+					variant="ghost"
+					className="shrink-0 cursor-pointer text-muted-foreground hover:bg-background/60 hover:text-foreground"
+					type="button"
+					tabIndex={-1}
+				>
+					<ChevronDown
+						className={cn(
+							"h-5 w-5 shrink-0 transition-transform",
+							isExpanded && "rotate-180",
+						)}
+					/>
+				</Button>
 			</button>
 
 			{isExpanded && (
-				<div className="border-t border-white/10 p-3 pt-2">
+				<div className="border-t border-border p-3 pt-2">
 					<div className="flex flex-col gap-3">
-						<div className="rounded-lg border border-white/10 bg-black/15 p-3">
+						<div className="rounded-lg border border-border bg-background/45 p-3">
 							<div className="flex items-center justify-between gap-3">
 								<div className="min-w-0">
-									<div className="font-medium text-slate-100">Enabled</div>
+									<div className="font-medium text-card-foreground">
+										Enabled
+									</div>
 								</div>
 
 								<div className="flex items-center gap-3">
@@ -134,17 +135,18 @@ export function SmartActionsCustomizer({
 								</div>
 							</div>
 						</div>
+
 						{SMART_ACTION_SECTIONS.map((section) => {
 							const selectedToolIds = settings.radialMenuConfig[section.key];
 
 							return (
 								<div
 									key={section.key}
-									className="rounded-lg border border-white/10 bg-black/15 p-3"
+									className="rounded-lg border border-border bg-background/45 p-3"
 								>
 									<div className="flex items-center justify-between gap-3">
 										<div className="min-w-0">
-											<div className="font-medium text-slate-100">
+											<div className="font-medium text-card-foreground">
 												{section.label}
 											</div>
 										</div>
@@ -167,9 +169,9 @@ export function SmartActionsCustomizer({
 												type="button"
 												variant="ghost"
 												className="
-													shrink-0 cursor-pointer rounded-md border border-white/10
-													bg-white/[0.045] px-2 text-[11px] text-slate-300
-													hover:bg-white/10 hover:text-white
+													shrink-0 cursor-pointer rounded-md border border-border
+													bg-background/50 px-2 text-[11px] text-muted-foreground
+													hover:bg-accent hover:text-accent-foreground
 												"
 												onClick={() => setSectionTools(section.key, [])}
 											>
@@ -181,9 +183,9 @@ export function SmartActionsCustomizer({
 												type="button"
 												variant="ghost"
 												className="
-													shrink-0 cursor-pointer rounded-md border border-white/10
-													bg-white/[0.045] px-2 text-[11px] text-slate-300
-													hover:bg-white/10 hover:text-white
+													shrink-0 cursor-pointer rounded-md border border-border
+													bg-background/50 px-2 text-[11px] text-muted-foreground
+													hover:bg-accent hover:text-accent-foreground
 												"
 												onClick={() => resetSection(section.key)}
 											>

@@ -1,11 +1,4 @@
-import {
-	Calculator,
-	Code,
-	Coffee,
-	MessageCircle,
-	Pencil,
-	Zap,
-} from "lucide-react";
+import { Calculator, Code, Coffee, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -14,7 +7,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { EDIT_SHORTCUT_ITEMS_URL } from "@/constants/onshape";
 import {
 	BUY_ME_A_COFFEE_URL,
 	DISCORD_LINK,
@@ -27,8 +19,10 @@ import { isSafari } from "@/lib/utils";
 import type { FloatingNumpadMode } from "@/storage/extensionStorage";
 import { ONSHAPE_TOOLBAR_MODES, type OnshapeToolbarMode } from "@/types";
 import { ButtonGroup } from "../ui/button-group";
+import { Card, CardContent } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
+import { ThemeCustomizer } from "./ThemeCustomizer";
 import { ToolbarQuickActionsConfig } from "./ToolbarQuickActionsConfig";
 
 const links = [
@@ -81,11 +75,10 @@ const floatingNumpadModes: {
 export function SettingsDialog() {
 	const { isSettingsOpen, setSettingsOpen } = useSettingsDialog();
 	const { allAvailableTools } = useOnshapeBridge();
+	const { settings, setSetting } = useExtensionSettings();
 
 	const partsStudioTools =
 		allAvailableTools.find((t) => t.tabType === "Part Studio")?.commands || [];
-
-	const { settings, setSetting } = useExtensionSettings();
 
 	const getToolsForMode = (mode: OnshapeToolbarMode) =>
 		allAvailableTools
@@ -112,44 +105,45 @@ export function SettingsDialog() {
 			<DialogContent
 				className="
 					max-w-[600px]! overflow-hidden rounded-2xl
-					border border-white/10
-					bg-gradient-to-b from-slate-900/95 via-slate-950/92 to-black/90
-					p-0 text-white
-					shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]
+					border border-border
+					bg-card/95 p-0 text-card-foreground
+					shadow-[0_20px_50px_rgb(0_0_0/0.25),inset_0_1px_0_rgb(255_255_255/0.06)]
 					backdrop-blur-xl
 				"
 			>
 				<div className="relative">
-					<div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-b from-white/5 via-white/[0.015] to-transparent" />
+					<div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-b from-foreground/[0.06] via-foreground/[0.015] to-transparent" />
 
 					<div className="relative z-10 p-5">
 						<DialogHeader className="mb-5">
-							<DialogTitle className="text-lg font-semibold">
+							<DialogTitle className="text-lg font-semibold text-card-foreground">
 								Welcome to Rally for Onshape
 							</DialogTitle>
 
-							<DialogDescription className="text-sm text-slate-300">
+							<DialogDescription className="text-sm text-muted-foreground">
 								Customize your workflow, join the community, report bugs, or
 								support development.
 							</DialogDescription>
 						</DialogHeader>
+
 						<div className="flex flex-col gap-2">
-							<div className="rounded-xl border border-white/10 bg-white/[0.035] p-3 flex justify-between items-center">
-								<div className="flex items-start gap-3 items-center">
+							<div className="flex items-center justify-between rounded-xl border border-border bg-muted/35 p-3">
+								<div className="flex items-center gap-3">
 									<div
 										className="
-										flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-										border border-white/10 bg-white/[0.06] text-blue-300
-									"
+											flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
+											border border-border bg-background/60 text-primary
+										"
 									>
 										<Calculator className="h-5 w-5" />
 									</div>
+
 									<div>
-										<div className="text-sm font-medium text-slate-100">
+										<div className="text-sm font-medium text-card-foreground">
 											Floating Numpad
 										</div>
 
-										<div className="mt-1 text-xs leading-snug text-slate-300">
+										<div className="mt-1 text-xs leading-snug text-muted-foreground">
 											Choose when the floating numeric keypad should appear.
 										</div>
 									</div>
@@ -164,14 +158,13 @@ export function SettingsDialog() {
 											<Tooltip key={mode.value}>
 												<TooltipTrigger asChild>
 													<Button
-														key={mode.value}
 														type="button"
 														variant="ghost"
 														className={[
 															"h-9 cursor-pointer rounded-lg border text-xs font-medium",
 															isSelected
-																? "border-blue-400/30 bg-blue-500/20 text-blue-100 hover:bg-blue-500/25"
-																: "border-white/10 bg-white/[0.045] text-slate-300 hover:bg-white/10 hover:text-white",
+																? "border-primary/35 bg-primary/15 text-primary hover:bg-primary/20"
+																: "border-border bg-background/40 text-muted-foreground hover:bg-accent hover:text-accent-foreground",
 														].join(" ")}
 														onClick={() =>
 															setSetting("floatingNumpadMode", mode.value)
@@ -180,7 +173,12 @@ export function SettingsDialog() {
 														{mode.label}
 													</Button>
 												</TooltipTrigger>
-												<TooltipContent>{mode.description}</TooltipContent>
+
+												<TooltipContent>
+													<Card className="w-[350px]">
+														<CardContent>{mode.description}</CardContent>
+													</Card>
+												</TooltipContent>
 											</Tooltip>
 										);
 									})}
@@ -199,38 +197,45 @@ export function SettingsDialog() {
 								availableToolsByMode={availableToolsByMode}
 							/>
 
+							<ThemeCustomizer />
+
 							{links.map((item) => {
 								const Icon = item.icon;
 
 								return (
-									<a key={item.label} href={item.href} target={item.target}>
+									<a
+										key={item.label}
+										href={item.href}
+										target={item.target}
+										rel="noreferrer"
+									>
 										<button
 											type="button"
 											className="
-											group flex w-full cursor-pointer items-center gap-3 rounded-xl
-											border border-white/10 bg-white/[0.045] p-3 text-left
-											shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]
-											transition-all duration-150
-											hover:border-white/15 hover:bg-white/[0.075]
-											active:scale-[0.985]
-										"
+												group flex w-full cursor-pointer items-center gap-3 rounded-xl
+												border border-border bg-muted/35 p-3 text-left
+												shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]
+												transition-all duration-150
+												hover:border-primary/25 hover:bg-accent
+												active:scale-[0.985]
+											"
 										>
 											<div
 												className="
-												flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
-												border border-white/10 bg-white/[0.06]
-												text-blue-300
-												group-hover:bg-blue-500/15 group-hover:text-blue-200
-											"
+													flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
+													border border-border bg-background/60 text-primary
+													group-hover:bg-primary/15 group-hover:text-primary
+												"
 											>
 												<Icon className="h-5 w-5" />
 											</div>
 
 											<div className="min-w-0">
-												<div className="text-sm font-medium text-slate-100">
+												<div className="text-sm font-medium text-card-foreground">
 													{item.label}
 												</div>
-												<div className="mt-0.5 text-xs leading-snug text-slate-300">
+
+												<div className="mt-0.5 text-xs leading-snug text-muted-foreground">
 													{item.description}
 												</div>
 											</div>

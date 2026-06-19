@@ -3,19 +3,14 @@
 
 :root {
 	--mini-toolbar-display: block;
+	--os-plus-on-shape-left-content-pane-width: 205px;
+	--os-font-family: "Poppins", system-ui, sans-serif;
 }
 
-:root,
-[data-os-theme],
-[data-os-theme="light"],
-[data-os-theme="dark"] {
+/* Default Rally dark theme */
+body[rally-for-onshape-theme="dark"] {
 	color-scheme: dark;
 
-	--os-plus-on-shape-left-content-pane-width: 205px;
-
-	--os-font-family: "Poppins", system-ui, sans-serif;
-
-	/* Premium graphite / blue-black palette */
 	--os-color-shadcn-background: #090b11;
 	--os-color-shadcn-card: #12151d;
 	--os-color-shadcn-muted: #1b2230;
@@ -86,6 +81,19 @@
 	--os-tree-item-background--selected: var(--os-color-surface-selected);
 
 	--os-shortcut-menu-fill: rgba(18, 21, 29, 0.97);
+
+	--rally-canvas-background:
+		radial-gradient(
+			circle at top left,
+			rgba(59, 130, 246, 0.05),
+			transparent 50%
+		),
+		radial-gradient(
+			circle at bottom right,
+			rgba(99, 102, 241, 0.04),
+			transparent 55%
+		),
+		linear-gradient(180deg, #12151d 0%, #090b11 100%);
 }
 
 html,
@@ -109,18 +117,7 @@ th {
 }
 
 #canvas {
-	background:
-		radial-gradient(
-			circle at top left,
-			rgba(59, 130, 246, 0.05),
-			transparent 50%
-		),
-		radial-gradient(
-			circle at bottom right,
-			rgba(99, 102, 241, 0.04),
-			transparent 55%
-		),
-		linear-gradient(180deg, #12151d 0%, #090b11 100%) !important;
+	background: var(--rally-canvas-background) !important;
 }
 
 body.onshape-plus-fullscreen-mode nav.fixed-top.navbar {

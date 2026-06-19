@@ -50,7 +50,7 @@ export function PenSidebarMainContent({
 			<SidebarDivider />
 
 			<div className="grid grid-cols-2 justify-items-center gap-1 px-2">
-				{topUtilityActions.map((action) => {
+				{topUtilityActions.map((action, i) => {
 					const Icon = action.icon;
 					const buttonDisabled =
 						(action.label === "Undo" && !undoEnabled) ||
@@ -76,7 +76,7 @@ export function PenSidebarMainContent({
 								</Button>
 							</TooltipTrigger>
 
-							<TooltipContent side="right">
+							<TooltipContent side={i % 2 === 0 ? "left" : "right"}>
 								<Card className="w-[260px]">
 									<CardHeader>
 										<CardTitle>{action.label}</CardTitle>
@@ -92,7 +92,7 @@ export function PenSidebarMainContent({
 			<SidebarDivider />
 
 			<div className="grid grid-cols-2 justify-items-center gap-1 px-2">
-				{topUtilityActionsExtended.map((action) => {
+				{topUtilityActionsExtended.map((action, i) => {
 					const Icon = action.icon;
 
 					return (
@@ -112,7 +112,7 @@ export function PenSidebarMainContent({
 								</Button>
 							</TooltipTrigger>
 
-							<TooltipContent side="right">
+							<TooltipContent side={i % 2 === 0 ? "left" : "right"}>
 								<Card className="w-[260px]">
 									<CardHeader>
 										<CardTitle>{action.label}</CardTitle>
@@ -182,7 +182,7 @@ export function PenSidebarMainContent({
 									</MotionButton>
 								</TooltipTrigger>
 
-								<TooltipContent side="right">
+								<TooltipContent side={index % 2 === 0 ? "left" : "right"}>
 									<Card className="w-[350px]">
 										<CardHeader>
 											<CardTitle>
@@ -220,7 +220,9 @@ export function PenSidebarMainContent({
 								</MotionButton>
 							</TooltipTrigger>
 
-							<TooltipContent side="right">
+							<TooltipContent
+								side={modeTools.length % 2 === 0 ? "left" : "right"}
+							>
 								<Card className="w-[350px]">
 									<CardHeader>
 										<CardTitle>Customize</CardTitle>

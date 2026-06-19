@@ -8,9 +8,15 @@
 @custom-variant dark (&:is(.dark *));
 
 :host {
-	color-scheme: dark;
-
 	--radius: 0.75rem;
+	--tw-border-style: solid;
+
+	font-family: "Poppins", "Geist Variable", system-ui, sans-serif !important;
+}
+
+/* Default / dark Rally extension theme */
+:host([rally-for-onshape-theme="dark"]) {
+	color-scheme: dark;
 
 	--background: oklch(0.145 0 0);
 	--foreground: oklch(0.985 0 0);
@@ -21,8 +27,8 @@
 	--popover: oklch(0.205 0 0);
 	--popover-foreground: oklch(0.985 0 0);
 
-	--primary: oklch(0.922 0 0);
-	--primary-foreground: oklch(0.205 0 0);
+	--primary: oklch(0.68 0.17 255);
+	--primary-foreground: oklch(0.985 0 0);
 
 	--secondary: oklch(0.269 0 0);
 	--secondary-foreground: oklch(0.985 0 0);
@@ -37,31 +43,71 @@
 
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.556 0 0);
+	--ring: oklch(0.68 0.17 255);
 
 	--sidebar: oklch(0.205 0 0);
 	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.488 0.243 264.376);
+	--sidebar-primary: oklch(0.68 0.17 255);
 	--sidebar-primary-foreground: oklch(0.985 0 0);
 	--sidebar-accent: oklch(0.269 0 0);
 	--sidebar-accent-foreground: oklch(0.985 0 0);
 	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.556 0 0);
+	--sidebar-ring: oklch(0.68 0.17 255);
+}
 
-	--tw-border-style: solid;
+/* Light Rally extension theme */
+:host([rally-for-onshape-theme="light"]) {
+	color-scheme: light;
+
+	--background: oklch(0.985 0.006 247);
+	--foreground: oklch(0.21 0.034 264);
+
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.21 0.034 264);
+
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.21 0.034 264);
+
+	--primary: oklch(0.55 0.22 264);
+	--primary-foreground: oklch(0.985 0.006 247);
+
+	--secondary: oklch(0.94 0.015 250);
+	--secondary-foreground: oklch(0.28 0.04 260);
+
+	--muted: oklch(0.94 0.015 250);
+	--muted-foreground: oklch(0.48 0.035 260);
+
+	--accent: oklch(0.93 0.025 255);
+	--accent-foreground: oklch(0.24 0.045 265);
+
+	--destructive: oklch(0.62 0.22 25);
+
+	--border: oklch(0.86 0.025 250);
+	--input: oklch(0.89 0.025 250);
+	--ring: oklch(0.55 0.22 264);
+
+	--sidebar: oklch(0.975 0.006 247);
+	--sidebar-foreground: oklch(0.21 0.034 264);
+	--sidebar-primary: oklch(0.55 0.22 264);
+	--sidebar-primary-foreground: oklch(0.985 0.006 247);
+	--sidebar-accent: oklch(0.93 0.025 255);
+	--sidebar-accent-foreground: oklch(0.24 0.045 265);
+	--sidebar-border: oklch(0.86 0.025 250);
+	--sidebar-ring: oklch(0.55 0.22 264);
 }
 
 :host,
 :host *,
 #os-pen-shortcut-sidebar,
 #floating-numpad,
+#os-floating-cad-keyboard,
 #onshape-extension-root,
 #onshape-extension-portal-root {
 	font-family: "Poppins", "Geist Variable", system-ui, sans-serif !important;
 }
 
 button[data-slot="dialog-close"] {
-  z-index: 100000 !important;
+	z-index: 100000 !important;
 }
 
 @theme inline {
@@ -116,13 +162,18 @@ button[data-slot="dialog-close"] {
 #onshape-extension-portal-root {
 	background: transparent;
 	color: var(--foreground);
-	color-scheme: dark;
+	color-scheme: inherit;
 	font-family: "Poppins", "Geist Variable", system-ui, sans-serif;
 }
 
 #onshape-extension-root.dark,
 #onshape-extension-portal-root.dark {
 	color-scheme: dark;
+}
+
+#onshape-extension-root.light,
+#onshape-extension-portal-root.light {
+	color-scheme: light;
 }
 
 @layer base {

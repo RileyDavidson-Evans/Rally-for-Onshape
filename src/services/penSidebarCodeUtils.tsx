@@ -1,6 +1,5 @@
 import {
 	Check,
-	Focus,
 	MousePointerBan,
 	Redo,
 	ScanEye,
@@ -49,7 +48,7 @@ export const topUtilityActions: UtilityAction[] = [
 		id: "confirm",
 		label: "Confirm",
 		description: "Confirm the current command.",
-		className: "bg-emerald-800",
+		className: "bg-emerald-800 text-white",
 		icon: Check,
 		onClick: () => {
 			clickElement("#feature-dialog .ns-dialog-button-ok");
@@ -59,7 +58,7 @@ export const topUtilityActions: UtilityAction[] = [
 		id: "escape",
 		label: "Cancel",
 		description: "Cancel the current command.",
-		className: "bg-red-800",
+		className: "bg-red-800 text-white",
 		icon: X,
 		onClick: () => {
 			clickElement("#feature-dialog .ns-dialog-button-cancel");

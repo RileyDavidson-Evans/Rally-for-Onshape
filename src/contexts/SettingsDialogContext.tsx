@@ -7,6 +7,8 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { applyTheme } from "@/core/theme";
+import type { Theme } from "@/storage/extensionStorage";
 import { useExtensionSettings } from "./ExtensionSettingsContext";
 
 type SettingsDialogContextValue = {
@@ -35,6 +37,10 @@ export function SettingsDialogProvider({ children }: { children: ReactNode }) {
 			}, 1000);
 		}
 	}, []);
+
+	useEffect(() => {
+		applyTheme(settings.theme);
+	}, [settings.theme]);
 
 	const closeSettings = useCallback(() => {
 		setSettingsOpen(false);

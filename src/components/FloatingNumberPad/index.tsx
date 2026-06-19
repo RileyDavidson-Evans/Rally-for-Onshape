@@ -680,7 +680,7 @@ export function FloatingNumpad() {
 			id="os-floating-cad-keyboard"
 			tabIndex={-1}
 			className={[
-				"fixed z-[999999] w-[360px] select-none overflow-hidden rounded-md",
+				"fixed z-50 w-[230px] select-none overflow-hidden rounded-2xl",
 				"border border-white/10",
 				"os-plus-glass",
 				"p-2 backdrop-blur-xl",
