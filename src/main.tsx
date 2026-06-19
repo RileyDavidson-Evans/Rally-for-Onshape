@@ -8,13 +8,18 @@ import { ExtensionSettingsProvider } from "./contexts/ExtensionSettingsContext";
 import { OnshapeBridgeProvider } from "./contexts/OnshapeBridgeContext";
 import { SettingsDialogProvider } from "./contexts/SettingsDialogContext";
 import { applyTheme } from "./core/theme";
-import { copyOnshapeIconSpriteToShadowRoot } from "./core/utils";
+import { copyOnshapeIconSpriteToShadowRoot, delay } from "./core/utils";
 import { PortalContainerProvider } from "./extensions/PortalContainerContext";
 import { getStorageItem } from "./storage/extensionStorage";
 
-const applySelectedTheme = async () => {
+const applySelectedTheme = async (run = 1, maxRun = 20) => {
+	if (run > maxRun) return;
+	console.log("hello");
 	const t = await getStorageItem("theme");
 	applyTheme(t);
+	await delay(100);
+	const newRunCount = run + 1;
+	applySelectedTheme(newRunCount);
 };
 
 function injectOnshapeBridge(): void {
