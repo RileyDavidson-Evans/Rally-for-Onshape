@@ -92,6 +92,11 @@ export function FloatingNumpad() {
 					"transition-[width] duration-500",
 					"os-animate-in",
 				].join(" ")}
+				onPointerDown={(e) => {
+					e.preventDefault();
+					e.stopPropagation();
+					cancelPendingHide();
+				}}
 			>
 				<CardHeader className="os-cad-keyboard-drag-handle cursor-grab touch-none select-none active:cursor-grabbing">
 					<CardTitle />
