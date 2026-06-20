@@ -1,4 +1,10 @@
-import { Card } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useSettingsDialog } from "@/contexts/SettingsDialogContext";
 import { CadKeyboardHeader } from "./CadKeyboardHeader";
@@ -30,15 +36,10 @@ export function FloatingNumpad() {
 			id="os-floating-cad-keyboard"
 			tabIndex={-1}
 			className={[
-				"fixed! z-50 w-[230px] select-none overflow-hidden rounded-2xl",
+				"os-glass-bg-shadow",
+				"fixed! w-[300px] z-[1050]",
 				mode === "text" && "w-[350px]",
-				"transition-all duration-500 ease-in-out",
-				"border border-white/10",
-				"os-plus-glass",
-				"p-2 backdrop-blur-xl",
-				"before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]",
-				"before:bg-gradient-to-b before:from-white/5 before:via-white/[0.015] before:to-transparent",
-				"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:ring-1 after:ring-white/5",
+				"transition-all duration-500",
 			].join(" ")}
 			style={{
 				left: `${position.left}px`,
@@ -50,15 +51,16 @@ export function FloatingNumpad() {
 				cancelPendingHide();
 			}}
 		>
-			<div className="relative z-10">
+			<CardHeader>
+				<CardTitle></CardTitle>
 				<CadKeyboardHeader
 					onBeforeAction={cancelPendingHide}
 					onClose={hideKeyboard}
 					onOpenSettings={openSettings}
 				/>
+			</CardHeader>
 
-				<Separator className="mb-2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
+			<CardContent>
 				<CadKeyboardTabs
 					isShift={isShift}
 					mode={mode}
@@ -68,14 +70,13 @@ export function FloatingNumpad() {
 					onShiftChange={setIsShift}
 					textKeys={textKeys}
 				/>
-
-				<Separator className="my-2 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-
+			</CardContent>
+			<CardFooter>
 				<CommandKeyRow
 					onBeforeKeyPress={cancelPendingHide}
 					onKeyPress={sendCadKey}
 				/>
-			</div>
+			</CardFooter>
 		</Card>
 	);
 }

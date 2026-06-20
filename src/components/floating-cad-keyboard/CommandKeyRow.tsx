@@ -9,7 +9,7 @@ type CommandKeyRowProps = {
 
 export function CommandKeyRow({ onBeforeKeyPress, onKeyPress }: CommandKeyRowProps) {
 	return (
-		<div className="grid grid-cols-5 gap-1.5">
+		<div className="grid grid-cols-5 gap-1.5 w-full">
 			{COMMAND_KEYS.map((key) => (
 				<CadKeyboardKey
 					key={`${key.label}-${key.value ?? key.key}`}

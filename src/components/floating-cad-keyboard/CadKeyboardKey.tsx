@@ -17,10 +17,9 @@ export function CadKeyboardKey({
 }: CadKeyboardKeyProps) {
 	return (
 		<Button
-			className={[cadKeyClassName(keyConfig), className ?? ""].join(" ")}
-			variant="ghost"
+			className="rounded-md cursor-pointer transition-all duration-150 active:scale-95 py-5"
+			variant="secondary"
 			tabIndex={-1}
-			type="button"
 			onPointerDown={(e) => {
 				e.preventDefault();
 				e.stopPropagation();
