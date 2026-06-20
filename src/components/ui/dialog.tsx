@@ -50,7 +50,7 @@ function DialogOverlay({
 		<DialogPrimitive.Overlay
 			data-slot="dialog-overlay"
 			className={cn(
-				"fixed inset-0 isolate z-40 bg-black/45 duration-150 supports-backdrop-filter:backdrop-blur-sm",
+				"fixed inset-0 isolate z-[1031] bg-black/45 duration-150 supports-backdrop-filter:backdrop-blur-sm",
 				"data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
 				className,
 			)}
@@ -72,7 +72,7 @@ function DialogContent({
 	return (
 		<DialogPortal>
 			<DialogOverlay>
-				<div className="fixed inset-0 z-50 flex justify-center overflow-y-auto p-4">
+				<div className="fixed inset-0 z-[1032] flex justify-center overflow-y-auto p-4">
 					<DialogPrimitive.Content
 						data-slot="dialog-content"
 						className={cn(

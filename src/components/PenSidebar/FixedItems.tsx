@@ -54,7 +54,7 @@ export function FixedItems({
 					<Button
 						variant="secondary"
 						size="icon"
-						className="os-pen-drag-handle h-10 w-10 shrink-0 cursor-pointer active:cursor-grabbing"
+						className="os-pen-drag-handle h-10 w-10 shrink-0 cursor-grab active:cursor-grabbing"
 					>
 						<GripHorizontal />
 					</Button>

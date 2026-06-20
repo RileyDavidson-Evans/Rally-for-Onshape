@@ -1,5 +1,5 @@
 import { SettingsDialog } from "./components/dialogs/Settings";
-import { FloatingNumpad } from "./components/FloatingNumberPad";
+import { FloatingNumpad } from "./components/floating-cad-keyboard";
 import { PenSidebar } from "./components/PenSidebar";
 import { SmartFloatingActions } from "./components/SmartFloatingActions";
 import { useExtensionSettings } from "./contexts/ExtensionSettingsContext";
