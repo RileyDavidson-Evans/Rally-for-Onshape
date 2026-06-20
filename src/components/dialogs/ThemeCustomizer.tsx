@@ -40,7 +40,7 @@ export function ThemeCustomizer() {
 				<div className="text-sm font-medium text-card-foreground">Theme</div>
 
 				<div className="mt-0.5 text-xs leading-snug text-muted-foreground">
-					Choose to use a Rally for Onshape Theme or Onshapes.
+					Choose your Rally for Onshape theme.
 				</div>
 			</div>
 			<div className="flex-1 flex justify-end">
