@@ -293,6 +293,7 @@ export function useFloatingCadKeyboard() {
 				dispatchKeyboardKey(keyConfig);
 
 				if (keyConfig.key === "Enter" || keyConfig.key === "Escape") {
+					activeInputRef.current?.blur();
 					window.setTimeout(() => {
 						hideKeyboard();
 					}, ACTION_DELAY);
