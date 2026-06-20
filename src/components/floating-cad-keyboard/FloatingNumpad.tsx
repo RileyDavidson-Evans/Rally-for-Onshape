@@ -30,7 +30,7 @@ export function FloatingNumpad() {
 			id="os-floating-cad-keyboard"
 			tabIndex={-1}
 			className={[
-				"fixed z-50 w-[230px] select-none overflow-hidden rounded-2xl",
+				"fixed! z-50 w-[230px] select-none overflow-hidden rounded-2xl",
 				mode === "text" && "w-[350px]",
 				"transition-all duration-500 ease-in-out",
 				"border border-white/10",
@@ -39,9 +39,6 @@ export function FloatingNumpad() {
 				"before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit]",
 				"before:bg-gradient-to-b before:from-white/5 before:via-white/[0.015] before:to-transparent",
 				"after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:ring-1 after:ring-white/5",
-				isVisible
-					? "pointer-events-auto scale-100 opacity-100"
-					: "pointer-events-none scale-95 opacity-0",
 			].join(" ")}
 			style={{
 				left: `${position.left}px`,
