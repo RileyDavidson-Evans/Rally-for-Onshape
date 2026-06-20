@@ -63,15 +63,17 @@ if (!document.getElementById("onshape-extension-host")) {
 
 	const root = document.createElement("div");
 	root.id = "onshape-extension-root";
-	root.className = "dark font-sans";
+	root.className = "font-sans";
 
 	const portalRoot = document.createElement("div");
 	portalRoot.id = "onshape-extension-portal-root";
-	portalRoot.className = "dark font-sans";
+	portalRoot.className = "font-sans";
 
 	shadow.appendChild(style);
 	shadow.appendChild(root);
 	shadow.appendChild(portalRoot);
+
+	applySelectedTheme();
 
 	createRoot(root).render(
 		<React.StrictMode>

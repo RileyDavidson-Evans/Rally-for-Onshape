@@ -76,34 +76,32 @@ export function cadKeyClassName(key: CadKey) {
 	const isFunction = key.type === "function";
 
 	return [
-		"!h-10 w-full cursor-pointer rounded-md border px-2",
-		"text-sm font-semibold",
-		"shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
-		"transition-all duration-150 active:scale-95",
+		"transition-colors",
 		key.className ?? "",
 
+		// Enter / Confirm
 		isPrimary
-			? "border-blue-500/30 bg-blue-500/12 text-blue-700 hover:bg-blue-500/20 hover:text-blue-800 dark:border-blue-400/30 dark:bg-blue-500/20 dark:text-blue-100 dark:hover:bg-blue-500/30 dark:hover:text-white"
+			? "bg-green-200 text-green-700 hover:bg-green-200 dark:bg-green-700 dark:hover:bg-green-800 dark:text-green-200"
 			: "",
 
+		// Navigation / Esc / Clear
 		isAction
-			? "border-slate-300/80 bg-slate-100/80 text-slate-700 hover:bg-slate-200 hover:text-slate-950 dark:border-white/10 dark:bg-white/[0.075] dark:text-slate-200 dark:hover:bg-white/12 dark:hover:text-white"
+			? "bg-slate-200 text-slate-900 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600"
 			: "",
 
+		// Math operators
 		isOperator
-			? "border-cyan-500/25 bg-cyan-500/10 text-cyan-700 hover:bg-cyan-500/18 hover:text-cyan-800 dark:border-cyan-400/20 dark:bg-cyan-500/10 dark:text-cyan-100 dark:hover:bg-cyan-500/20 dark:hover:text-white"
+			? "bg-cyan-100 text-cyan-900 hover:bg-cyan-200 dark:bg-cyan-950 dark:text-cyan-200 dark:hover:bg-cyan-900"
 			: "",
 
+		// Units
 		isUnit
-			? "border-emerald-500/25 bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/18 hover:text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-500/10 dark:text-emerald-100 dark:hover:bg-emerald-500/20 dark:hover:text-white"
+			? "bg-emerald-100 text-emerald-900 hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-200 dark:hover:bg-emerald-900"
 			: "",
 
+		// Functions
 		isFunction
-			? "border-purple-500/25 bg-purple-500/10 text-purple-700 hover:bg-purple-500/18 hover:text-purple-800 dark:border-purple-400/20 dark:bg-purple-500/10 dark:text-purple-100 dark:hover:bg-purple-500/20 dark:hover:text-white"
-			: "",
-
-		!isPrimary && !isAction && !isOperator && !isUnit && !isFunction
-			? "border-slate-300/80 bg-white text-slate-800 hover:bg-slate-100 hover:text-slate-950 dark:border-white/10 dark:bg-white/[0.045] dark:text-slate-100 dark:hover:bg-white/10 dark:hover:text-white"
+			? "bg-violet-100 text-violet-900 hover:bg-violet-200 dark:bg-violet-950 dark:text-violet-200 dark:hover:bg-violet-900"
 			: "",
 	].join(" ");
 }

@@ -17,7 +17,7 @@ export function CadKeyboardKey({
 }: CadKeyboardKeyProps) {
 	return (
 		<Button
-			className="rounded-md cursor-pointer transition-all duration-150 active:scale-95 py-5"
+			className={`rounded-md cursor-pointer transition-all duration-150 active:scale-95 py-5 ${cadKeyClassName(keyConfig)}`}
 			variant="secondary"
 			tabIndex={-1}
 			onPointerDown={(e) => {
