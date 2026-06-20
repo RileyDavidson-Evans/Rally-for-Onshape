@@ -43,9 +43,10 @@ export function CadKeyboardTabs({
 			value={mode}
 			onValueChange={(value) => onModeChange(value as KeyboardMode)}
 		>
-			<TabsList className="w-full cursor-pointer">
+			<TabsList className="w-full">
 				<TabsTrigger
 					value="numbers"
+					className="cursor-pointer"
 					onPointerDown={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
@@ -56,6 +57,7 @@ export function CadKeyboardTabs({
 				</TabsTrigger>
 				<TabsTrigger
 					value="text"
+					className="cursor-pointer"
 					onPointerDown={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
@@ -66,6 +68,7 @@ export function CadKeyboardTabs({
 				</TabsTrigger>
 				<TabsTrigger
 					value="symbols"
+					className="cursor-pointer"
 					onPointerDown={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
