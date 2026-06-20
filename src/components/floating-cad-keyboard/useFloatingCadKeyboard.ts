@@ -147,8 +147,9 @@ export function useFloatingCadKeyboard() {
 			code: keyConfig.code ?? "",
 			keyCode: keyConfig.keyCode ?? 0,
 			which: keyConfig.keyCode ?? 0,
-			bubbles: true,
+			bubbles: false,
 			cancelable: true,
+			composed: false,
 			shiftKey: keyConfig.modifiers?.shift ?? false,
 			ctrlKey: keyConfig.modifiers?.ctrl ?? false,
 			altKey: keyConfig.modifiers?.alt ?? false,
@@ -157,18 +158,6 @@ export function useFloatingCadKeyboard() {
 
 		el.dispatchEvent(new KeyboardEvent("keydown", eventInit));
 		el.dispatchEvent(new KeyboardEvent("keyup", eventInit));
-
-		window.setTimeout(() => {
-			pressKey(keyConfig.key!, {
-				code: eventInit.code,
-				keyCode: eventInit.keyCode,
-				which: eventInit.which,
-				shiftKey: eventInit.shiftKey,
-				ctrlKey: eventInit.ctrlKey,
-				altKey: eventInit.altKey,
-				metaKey: eventInit.metaKey,
-			});
-		}, 30);
 	}, []);
 
 	const insertText = useCallback((text: string) => {
