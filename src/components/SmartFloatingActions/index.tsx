@@ -4,6 +4,7 @@ import { OnshapeIcon } from "@/components/shared/OnShapeIcon";
 import { RadialContextMenu } from "@/components/shared/RadialContextMenu";
 import { FORWARDED_ONSHAPE_EVENTS } from "@/constants/onshapeEvents";
 import { useExtensionSettings } from "@/contexts/ExtensionSettingsContext";
+import type { RadialContextMenuItem } from '@/components/shared/RadialContextMenu'
 import {
 	useOnshapeBridge,
 	useOnshapeBridgeSubscription,
@@ -342,7 +343,7 @@ export function SmartFloatingActions() {
 		),
 	);
 
-	const items = useMemo(() => {
+	const items: RadialContextMenuItem[] = useMemo(() => {
 		if (!modeTools) return [];
 
 		const selectedKind = getSelectionKind(selections);
@@ -360,7 +361,7 @@ export function SmartFloatingActions() {
 
 					return {
 						id: tool.id,
-						label: tool.name?.replace("server:::", ""),
+						label: tool.name?.replace("server:::", "") || '',
 						tooltipContent:
 							tool.expandedTooltipKey?.replace("tooltips:::", "") ??
 							tool.command,
