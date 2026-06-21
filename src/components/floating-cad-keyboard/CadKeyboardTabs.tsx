@@ -14,7 +14,6 @@ type CadKeyboardTabsProps = {
 	isShift: boolean;
 	mode: KeyboardMode;
 	textKeys: CadKey[][];
-	onBeforeKeyPress: () => void;
 	onKeyPress: (key: CadKey) => void;
 	onModeChange: (mode: KeyboardMode) => void;
 	onShiftChange: (updater: (value: boolean) => boolean) => void;
@@ -23,7 +22,6 @@ type CadKeyboardTabsProps = {
 export function CadKeyboardTabs({
 	isShift,
 	mode,
-	onBeforeKeyPress,
 	onKeyPress,
 	onModeChange,
 	onShiftChange,
@@ -33,7 +31,6 @@ export function CadKeyboardTabs({
 		<CadKeyboardKey
 			key={`${key.label}-${key.value ?? key.key}`}
 			keyConfig={key}
-			onBeforePress={onBeforeKeyPress}
 			onPress={onKeyPress}
 		/>
 	);

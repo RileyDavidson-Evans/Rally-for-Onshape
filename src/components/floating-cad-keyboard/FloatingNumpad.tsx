@@ -23,7 +23,6 @@ export function FloatingNumpad() {
 	const { openSettings } = useSettingsDialog();
 
 	const {
-		cancelPendingHide,
 		hideKeyboard,
 		isShift,
 		isVisible,
@@ -58,11 +57,7 @@ export function FloatingNumpad() {
 			handle=".os-cad-keyboard-drag-handle"
 			cancel="button,[role='tab'],[role='tabpanel'],input,textarea"
 			position={dragPosition}
-			onStart={() => {
-				cancelPendingHide();
-			}}
 			onDrag={(_, data) => {
-				cancelPendingHide();
 
 				setDragPosition({
 					x: data.x,
@@ -70,7 +65,6 @@ export function FloatingNumpad() {
 				});
 			}}
 			onStop={(_, data) => {
-				cancelPendingHide();
 
 				setDragPosition({
 					x: data.x,
@@ -95,13 +89,11 @@ export function FloatingNumpad() {
 				onPointerDown={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
-					cancelPendingHide();
 				}}
 			>
 				<CardHeader className="os-cad-keyboard-drag-handle cursor-grab touch-none select-none active:cursor-grabbing">
 					<CardTitle />
 					<CadKeyboardHeader
-						onBeforeAction={cancelPendingHide}
 						onClose={hideKeyboard}
 						onOpenSettings={openSettings}
 					/>
@@ -111,7 +103,6 @@ export function FloatingNumpad() {
 					<CadKeyboardTabs
 						isShift={isShift}
 						mode={mode}
-						onBeforeKeyPress={cancelPendingHide}
 						onKeyPress={sendCadKey}
 						onModeChange={setMode}
 						onShiftChange={setIsShift}
@@ -121,7 +112,6 @@ export function FloatingNumpad() {
 
 				<CardFooter>
 					<CommandKeyRow
-						onBeforeKeyPress={cancelPendingHide}
 						onKeyPress={sendCadKey}
 					/>
 				</CardFooter>

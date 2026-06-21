@@ -5,13 +5,11 @@ import { cadKeyClassName } from "./keyboardUtils";
 type CadKeyboardKeyProps = {
 	keyConfig: CadKey;
 	onPress: (key: CadKey) => void;
-	onBeforePress: () => void;
 	className?: string;
 };
 
 export function CadKeyboardKey({
 	keyConfig,
-	onBeforePress,
 	onPress,
 	className,
 }: CadKeyboardKeyProps) {
@@ -23,11 +21,13 @@ export function CadKeyboardKey({
 			onPointerDown={(e) => {
 				e.preventDefault();
 				e.stopPropagation();
-				onBeforePress();
+				// onBeforePress();
 
-				window.setTimeout(() => {
-					onPress(keyConfig);
-				}, ACTION_DELAY);
+				onPress(keyConfig);
+			}}
+			onPointerUp={(e) => {
+				e.preventDefault();
+				e.stopPropagation();
 			}}
 		>
 			{keyConfig.label}

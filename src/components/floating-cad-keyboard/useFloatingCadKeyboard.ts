@@ -23,7 +23,6 @@ import {
 export function useFloatingCadKeyboard() {
 	const keyboardRef = useRef<HTMLDivElement | null>(null);
 	const activeInputRef = useRef<HTMLElement | null>(null);
-	const hideTimerRef = useRef<number | null>(null);
 
 	const [isVisible, setIsVisible] = useState(false);
 	const [position, setPosition] = useState<Position>({ left: 0, top: 0 });
@@ -47,39 +46,12 @@ export function useFloatingCadKeyboard() {
 		);
 	}, [isShift]);
 
-	const cancelPendingHide = useCallback(() => {
-		if (hideTimerRef.current === null) return;
-		window.clearTimeout(hideTimerRef.current);
-		hideTimerRef.current = null;
-	}, []);
-
 	const hideKeyboard = useCallback(() => {
 		setIsVisible(false);
 		activeInputRef.current = null;
-		hideTimerRef.current = null;
 		setMode("numbers");
 		setIsShift(false);
 	}, []);
-
-	const scheduleAutoHide = useCallback(() => {
-		cancelPendingHide();
-
-		hideTimerRef.current = window.setTimeout(() => {
-			const focused = document.activeElement;
-			const activeInput = activeInputRef.current;
-			const keyboard = keyboardRef.current;
-
-			if (
-				activeInput &&
-				focused !== activeInput &&
-				focused !== document.body &&
-				focused !== document.documentElement &&
-				!keyboard?.contains(focused)
-			) {
-				hideKeyboard();
-			}
-		}, AUTO_HIDE_DELAY);
-	}, [cancelPendingHide, hideKeyboard]);
 
 	const handleFocusIn = useCallback(
 		(e: FocusEvent) => {
@@ -89,54 +61,31 @@ export function useFloatingCadKeyboard() {
 			if (!isTypingTarget(target)) return;
 			if (keyboard?.contains(target)) return;
 
-			cancelPendingHide();
 			activeInputRef.current = target;
+
+      target.addEventListener("focusout", () => {
+        setIsVisible(false)
+      })
 
 			requestAnimationFrame(() => {
 				setPosition(getKeyboardPosition(target, keyboardRef.current));
 				setIsVisible(true);
 			});
 		},
-		[cancelPendingHide],
-	);
-
-	const handleFocusOut = useCallback(
-		(e: FocusEvent) => {
-			const activeInput = activeInputRef.current;
-			const keyboard = keyboardRef.current;
-
-			if (!activeInput) return;
-
-			if (
-				e.relatedTarget instanceof Node &&
-				keyboard?.contains(e.relatedTarget)
-			) {
-				return;
-			}
-
-			scheduleAutoHide();
-		},
-		[scheduleAutoHide],
+		[],
 	);
 
 	useEffect(() => {
 		const cleanupKeyboardSuppression = suppressVirtualKeyboard();
 
 		window.addEventListener("focusin", handleFocusIn, true);
-		window.addEventListener("focusout", handleFocusOut, true);
 
 		return () => {
 			cleanupKeyboardSuppression();
 
 			window.removeEventListener("focusin", handleFocusIn, true);
-			window.removeEventListener("focusout", handleFocusOut, true);
-
-			if (hideTimerRef.current !== null) {
-				window.clearTimeout(hideTimerRef.current);
-				hideTimerRef.current = null;
-			}
 		};
-	}, [handleFocusIn, handleFocusOut]);
+	}, [handleFocusIn]);
 
 	const dispatchKeyboardKey = useCallback((keyConfig: CadKey) => {
 		const el = activeInputRef.current;
@@ -157,7 +106,6 @@ export function useFloatingCadKeyboard() {
 		};
 
 		el.dispatchEvent(new KeyboardEvent("keydown", eventInit));
-		el.dispatchEvent(new KeyboardEvent("keyup", eventInit));
 	}, []);
 
 	const insertText = useCallback((text: string) => {
@@ -262,7 +210,6 @@ export function useFloatingCadKeyboard() {
 			const el = activeInputRef.current;
 			if (!el) return;
 
-			cancelPendingHide();
 			el.focus();
 
 			if (keyConfig.key === "Backspace") {
@@ -329,7 +276,6 @@ export function useFloatingCadKeyboard() {
 			dispatchKeyboardKey(keyConfig);
 		},
 		[
-			cancelPendingHide,
 			clearInput,
 			deleteBackward,
 			dispatchKeyboardKey,
@@ -343,7 +289,6 @@ export function useFloatingCadKeyboard() {
 
 	return {
 		activeInputRef,
-		cancelPendingHide,
 		hideKeyboard,
 		isShift,
 		isVisible,

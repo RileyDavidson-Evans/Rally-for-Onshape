@@ -9,7 +9,6 @@ type CadKeyboardHeaderProps = {
 };
 
 export function CadKeyboardHeader({
-	onBeforeAction,
 	onClose,
 	onOpenSettings,
 }: CadKeyboardHeaderProps) {
@@ -48,11 +47,8 @@ export function CadKeyboardHeader({
 					onPointerDown={(e) => {
 						e.preventDefault();
 						e.stopPropagation();
-						onBeforeAction();
 
-						window.setTimeout(() => {
-							onClose();
-						}, ACTION_DELAY);
+						onClose();
 					}}
 				>
 					<X className="h-4 w-4" />
