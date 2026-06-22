@@ -32,7 +32,7 @@ export function getKeyboardPosition(
 	keyboard: HTMLDivElement | null,
 ): Position {
 	const rect = input.getBoundingClientRect();
-	const margin = 18;
+	const margin = 80;
 
 	const padWidth = keyboard?.offsetWidth || 360;
 	const padHeight = keyboard?.offsetHeight || 450;
