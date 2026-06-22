@@ -23,7 +23,6 @@ export function FloatingNumpad() {
 	const { openSettings } = useSettingsDialog();
 
 	const {
-		cancelPendingHide,
 		hideKeyboard,
 		isShift,
 		isVisible,
@@ -36,96 +35,50 @@ export function FloatingNumpad() {
 		textKeys,
 	} = useFloatingCadKeyboard();
 
-	const [dragPosition, setDragPosition] = useState<DragPosition>({
-		x: position.left,
-		y: position.top,
-	});
-
-	useEffect(() => {
-		if (!isVisible) return;
-
-		setDragPosition({
-			x: position.left,
-			y: position.top,
-		});
-	}, [isVisible]);
-
 	if (!isVisible) return null;
 
 	return (
-		<Draggable
-			nodeRef={nodeRef}
-			handle=".os-cad-keyboard-drag-handle"
-			cancel="button,[role='tab'],[role='tabpanel'],input,textarea"
-			position={dragPosition}
-			onStart={() => {
-				cancelPendingHide();
+		<Card
+			ref={(node) => {
+				nodeRef.current = node;
+				keyboardRef.current = node;
 			}}
-			onDrag={(_, data) => {
-				cancelPendingHide();
-
-				setDragPosition({
-					x: data.x,
-					y: data.y,
-				});
-			}}
-			onStop={(_, data) => {
-				cancelPendingHide();
-
-				setDragPosition({
-					x: data.x,
-					y: data.y,
-				});
+			id="os-floating-cad-keyboard"
+			tabIndex={-1}
+			className={[
+				"os-glass-bg-shadow",
+				"fixed! left-0 top-0 z-[1050] w-[300px]",
+				mode === "text" && "w-[350px]",
+				"transition-[width] duration-500",
+				"os-animate-in",
+			].join(" ")}
+			style={{
+				top: position.top,
+				left: position.left,
 			}}
 		>
-			<Card
-				ref={(node) => {
-					nodeRef.current = node;
-					keyboardRef.current = node;
-				}}
-				id="os-floating-cad-keyboard"
-				tabIndex={-1}
-				className={[
-					"os-glass-bg-shadow",
-					"fixed! left-0 top-0 z-[1050] w-[300px]",
-					mode === "text" && "w-[350px]",
-					"transition-[width] duration-500",
-					"os-animate-in",
-				].join(" ")}
-				onPointerDown={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					cancelPendingHide();
-				}}
-			>
-				<CardHeader className="os-cad-keyboard-drag-handle cursor-grab touch-none select-none active:cursor-grabbing">
-					<CardTitle />
-					<CadKeyboardHeader
-						onBeforeAction={cancelPendingHide}
-						onClose={hideKeyboard}
-						onOpenSettings={openSettings}
-					/>
-				</CardHeader>
+			<CardHeader className="os-cad-keyboard-drag-handle cursor-grab touch-none select-none active:cursor-grabbing">
+				<CardTitle />
+				<CadKeyboardHeader
+					onClose={hideKeyboard}
+					onOpenSettings={openSettings}
+				/>
+			</CardHeader>
 
-				<CardContent>
-					<CadKeyboardTabs
-						isShift={isShift}
-						mode={mode}
-						onBeforeKeyPress={cancelPendingHide}
-						onKeyPress={sendCadKey}
-						onModeChange={setMode}
-						onShiftChange={setIsShift}
-						textKeys={textKeys}
-					/>
-				</CardContent>
+			<CardContent>
+				<CadKeyboardTabs
+					isShift={isShift}
+					mode={mode}
+					onKeyPress={sendCadKey}
+					onModeChange={setMode}
+					onShiftChange={setIsShift}
+					textKeys={textKeys}
+				/>
+			</CardContent>
 
-				<CardFooter>
-					<CommandKeyRow
-						onBeforeKeyPress={cancelPendingHide}
-						onKeyPress={sendCadKey}
-					/>
-				</CardFooter>
-			</Card>
-		</Draggable>
+			<CardFooter>
+				<CommandKeyRow onKeyPress={sendCadKey} />
+			</CardFooter>
+		</Card>
 	);
 }

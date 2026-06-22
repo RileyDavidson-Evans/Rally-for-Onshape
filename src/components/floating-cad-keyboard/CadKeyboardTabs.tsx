@@ -14,7 +14,6 @@ type CadKeyboardTabsProps = {
 	isShift: boolean;
 	mode: KeyboardMode;
 	textKeys: CadKey[][];
-	onBeforeKeyPress: () => void;
 	onKeyPress: (key: CadKey) => void;
 	onModeChange: (mode: KeyboardMode) => void;
 	onShiftChange: (updater: (value: boolean) => boolean) => void;
@@ -23,7 +22,6 @@ type CadKeyboardTabsProps = {
 export function CadKeyboardTabs({
 	isShift,
 	mode,
-	onBeforeKeyPress,
 	onKeyPress,
 	onModeChange,
 	onShiftChange,
@@ -33,7 +31,6 @@ export function CadKeyboardTabs({
 		<CadKeyboardKey
 			key={`${key.label}-${key.value ?? key.key}`}
 			keyConfig={key}
-			onBeforePress={onBeforeKeyPress}
 			onPress={onKeyPress}
 		/>
 	);
@@ -111,11 +108,8 @@ export function CadKeyboardTabs({
 						<Button
 							className={[
 								"!h-10 cursor-pointer rounded-md border text-sm font-semibold",
-								isShift
-									? "border-blue-400/30 bg-blue-500/20 text-blue-100"
-									: "border-white/10 bg-white/[0.075] text-slate-200",
 							].join(" ")}
-							variant="ghost"
+							variant="secondary"
 							tabIndex={-1}
 							type="button"
 							onPointerDown={(e) => {
