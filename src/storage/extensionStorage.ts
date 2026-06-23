@@ -69,10 +69,36 @@ export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 	// migration will populate from the user's
 	// existing Onshape S shortcut configuration
 	toolbarQuickActions: {
-		Sketch: [],
-		"Part Studio": [],
+		Sketch: [
+			"DIMENSION",
+			"LINESEGMENT",
+			"RECTANGLE_TWO_CORNERS",
+			"CIRCLE_CENTER_RADIUS",
+			"ARC_START_END_RADIUS",
+			"TRIM",
+			"OFFSET",
+			"TOGGLE_CONSTRUCTION",
+		],
+
+		"Part Studio": [
+			"newSketch",
+			"extrude",
+			"fillet",
+			"hole",
+			"linearPattern",
+			"mirror",
+		],
+
 		Assembly: [],
-		Drawing: [],
+
+		Drawing: [
+			"drawing-insert-view",
+			"drawing-projected-view",
+			"drawing-smart-dim",
+			"drawing-note",
+			"drawing-centermark",
+			"drawing-section-view",
+		],
 	},
 
 	migrations: {
