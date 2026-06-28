@@ -23,6 +23,22 @@ export type Migrations = {
 	initialToolbarActionsMigrated: boolean;
 };
 
+export type CanvasBackgroundPreset =
+	| "none"
+	| "space"
+	| "mountains"
+	| "lake"
+	| "forest"
+	| "aurora"
+	| "custom";
+
+export type CanvasBackground = {
+	preset: CanvasBackgroundPreset;
+	customUrl: string;
+	opacity: number;
+	blur: number;
+};
+
 export type OnshapePlusStorageSchema = {
 	settingsVersion: number;
 	smartActionsEnabled: boolean;
@@ -33,6 +49,7 @@ export type OnshapePlusStorageSchema = {
 	toolbarPosition: ToolbarPosition;
 	toolbarQuickActions: ToolbarQuickActionsConfig;
 	migrations: Migrations;
+	canvasBackground: CanvasBackground;
 };
 
 export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
@@ -99,6 +116,13 @@ export const DEFAULT_STORAGE_VALUES: OnshapePlusStorageSchema = {
 			"drawing-centermark",
 			"drawing-section-view",
 		],
+	},
+
+	canvasBackground: {
+		preset: "none",
+		customUrl: "",
+		opacity: 0.2,
+		blur: 0,
 	},
 
 	migrations: {

@@ -11,6 +11,7 @@ import {
 	ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE,
 	FORWARDED_ONSHAPE_EVENTS,
 } from "@/constants/onshapeEvents";
+import { initCanvasBackground } from "@/lib/canvasBackground";
 import type { OnshapeShortcutCommand, OnshapeToolbarMode } from "@/types";
 
 type OnshapeBridgeEvent = {
@@ -90,6 +91,7 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 			if (event.name === FORWARDED_ONSHAPE_EVENTS.ELEMENT_LOAD_DONE) {
 				setIsDocumentLoaded(true);
 				requestAllCommands();
+				initCanvasBackground();
 			}
 
 			if (event.name === FORWARDED_ONSHAPE_EVENTS.DOCUMENT_UNLOADED) {

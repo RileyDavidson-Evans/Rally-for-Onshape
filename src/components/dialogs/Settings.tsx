@@ -1,10 +1,12 @@
 import { Calculator, Code, Coffee, MessageCircle } from "lucide-react";
 import type { ReactNode } from "react";
+import browser from "webextension-polyfill";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
@@ -23,9 +25,14 @@ import { OnshapeIcon } from "../shared/OnShapeIcon";
 import { ButtonGroup } from "../ui/button-group";
 import { Card, CardContent } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { CanvasBackgroundCustomizer } from "./CanvasBackgroundCustomizer";
 import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
 import { ThemeCustomizer } from "./ThemeCustomizer";
 import { ToolbarQuickActionsConfig } from "./ToolbarQuickActionsConfig";
+
+export function getExtensionVersion() {
+	return browser.runtime.getManifest().version;
+}
 
 const links = [
 	{
@@ -204,6 +211,8 @@ export function SettingsDialog() {
 
 							<ThemeCustomizer />
 
+							<CanvasBackgroundCustomizer />
+
 							{links.map((item) => {
 								const Icon = item.icon;
 
@@ -252,6 +261,9 @@ export function SettingsDialog() {
 					</div>
 				</div>
 			</DialogContent>
+			<DialogFooter>
+				<span>{getExtensionVersion()} ss</span>
+			</DialogFooter>
 		</Dialog>
 	);
 }
