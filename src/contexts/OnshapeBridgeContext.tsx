@@ -12,6 +12,7 @@ import {
 	FORWARDED_ONSHAPE_EVENTS,
 } from "@/constants/onshapeEvents";
 import type { OnshapeShortcutCommand, OnshapeToolbarMode } from "@/types";
+import { ALL_TOOLS_BY_TYPE } from '@/constants/onshape-available-tools'
 
 type OnshapeBridgeEvent = {
 	type: typeof ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE;
@@ -22,7 +23,7 @@ type OnshapeBridgeEvent = {
 
 type OnshapeBridgeHandler = (event: OnshapeBridgeEvent) => void;
 
-type AllTools = {
+export type AllTools = {
 	tabType: OnshapeToolbarMode;
 	commands: OnshapeShortcutCommand[];
 }[];
@@ -57,7 +58,8 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 		useState<OnshapeToolbarMode>("Part Studio");
 	const [currentTool, setCurrentTool] = useState<string | null>(null);
 	const [undoEnabled, setUndoEnabled] = useState(false);
-	const [allAvailableTools, setAllAvailableTools] = useState<AllTools>([]);
+	const [allAvailableTools, setAllAvailableTools] =
+		useState<AllTools>(ALL_TOOLS_BY_TYPE);
 	const [redoEnabled, setRedoEnabled] = useState(false);
 	const [subscribers] = useState(() => new Set<OnshapeBridgeHandler>());
 
@@ -99,12 +101,14 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 				setRedoEnabled(false);
 			}
 
-			if (
-				event.name ===
-				FORWARDED_ONSHAPE_EVENTS.OS_GET_ALL_AVAILABLE_COMMANDS_RESULT
-			) {
-				setAllAvailableTools(event.data as AllTools);
-			}
+			// if (
+			// 	event.name ===
+			// 	FORWARDED_ONSHAPE_EVENTS.OS_GET_ALL_AVAILABLE_COMMANDS_RESULT
+			// ) {
+			// 	console.log(event.data);
+      //   if (event.data?.length)
+			// 	setAllAvailableTools(event.data as AllTools);
+			// }
 
 			if (event.name === FORWARDED_ONSHAPE_EVENTS.CHANGE_ELEMENT_TOOLBAR) {
 				const nextToolbarType = event.args?.[0]?.toolbarName;
