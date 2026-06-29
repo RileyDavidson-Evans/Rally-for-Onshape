@@ -117,7 +117,7 @@ th {
 }
 
 #canvas {
-	/* background: var(--rally-canvas-background) !important; */
+	background: var(--rally-canvas-background) !important;
 }
 
 body.onshape-plus-fullscreen-mode nav.fixed-top.navbar {

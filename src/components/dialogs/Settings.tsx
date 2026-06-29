@@ -260,10 +260,10 @@ export function SettingsDialog() {
 						</div>
 					</div>
 				</div>
+				<DialogFooter>
+					<span>{getExtensionVersion()} ss</span>
+				</DialogFooter>
 			</DialogContent>
-			<DialogFooter>
-				<span>{getExtensionVersion()} ss</span>
-			</DialogFooter>
 		</Dialog>
 	);
 }
