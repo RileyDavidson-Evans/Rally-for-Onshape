@@ -80,21 +80,21 @@ export function handleMessage(event: MessageEvent<unknown>): void {
 	const data = event.data;
 
 	switch (data.type) {
-		case "OS_GET_USER_SHORTCUT_COMMANDS": {
-			if (typeof data.requestId !== "string") return;
-			handleGetUserShortcutCommands(data);
-			return;
-		}
+		// case "OS_GET_USER_SHORTCUT_COMMANDS": {
+		// 	if (typeof data.requestId !== "string") return;
+		// 	handleGetUserShortcutCommands(data);
+		// 	return;
+		// }
 
 		case "GET_CURRENT_USER_SELECTIONS": {
 			handleCurrentUserSelectionsCommands();
 			return;
 		}
 
-		case "OS_GET_ALL_AVAILABLE_COMMANDS": {
-			handleGetAllCommandsCommands();
-			return;
-		}
+		// case "OS_GET_ALL_AVAILABLE_COMMANDS": {
+		// 	handleGetAllCommandsCommands();
+		// 	return;
+		// }
 
 		case "OS_EXECUTE_BROADCAST_EVENT": {
 			if (typeof data.name !== "string") return;

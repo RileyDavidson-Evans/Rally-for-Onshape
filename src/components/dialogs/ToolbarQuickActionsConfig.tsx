@@ -43,7 +43,7 @@ export function ToolbarQuickActionsConfig({
 	};
 
 	return (
-		<div className="rounded-xl border border-border bg-muted/35 overflow-hidden">
+		<div className="rounded-xl border border-border bg-muted/35">
 			<button
 				type="button"
 				className="

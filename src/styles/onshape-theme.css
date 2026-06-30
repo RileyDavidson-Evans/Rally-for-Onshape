@@ -120,6 +120,10 @@ th {
 	background: var(--rally-canvas-background) !important;
 }
 
+#viewerdiv.canvas-bg-enabled canvas#canvas {
+	background: transparent !important;
+}
+
 body.onshape-plus-fullscreen-mode nav.fixed-top.navbar {
 	display: none;
 }

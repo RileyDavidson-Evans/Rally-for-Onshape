@@ -1,10 +1,12 @@
 import { Calculator, Code, Coffee, MessageCircle } from "lucide-react";
 import type { ReactNode } from "react";
+import browser from "webextension-polyfill";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
@@ -23,9 +25,14 @@ import { OnshapeIcon } from "../shared/OnShapeIcon";
 import { ButtonGroup } from "../ui/button-group";
 import { Card, CardContent } from "../ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { CanvasBackgroundCustomizer } from "./CanvasBackgroundCustomizer";
 import { SmartActionsCustomizer } from "./SmartFloatingActionsConfiguration";
 import { ThemeCustomizer } from "./ThemeCustomizer";
 import { ToolbarQuickActionsConfig } from "./ToolbarQuickActionsConfig";
+
+export function getExtensionVersion() {
+	return browser.runtime.getManifest().version;
+}
 
 const links = [
 	{
@@ -115,108 +122,106 @@ export function SettingsDialog() {
 					backdrop-blur-xl
 				"
 			>
-				<div className="relative">
-					<div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-gradient-to-b from-foreground/[0.06] via-foreground/[0.015] to-transparent" />
+				<div className="relative z-10 p-5">
+					<DialogHeader className="mb-5">
+						<DialogTitle className="text-lg font-semibold text-card-foreground">
+							Welcome to Rally for Onshape
+						</DialogTitle>
 
-					<div className="relative z-10 p-5">
-						<DialogHeader className="mb-5">
-							<DialogTitle className="text-lg font-semibold text-card-foreground">
-								Welcome to Rally for Onshape
-							</DialogTitle>
+						<DialogDescription className="text-sm text-muted-foreground">
+							Customize your workflow, join the community, report bugs, or
+							support development.
+						</DialogDescription>
+					</DialogHeader>
 
-							<DialogDescription className="text-sm text-muted-foreground">
-								Customize your workflow, join the community, report bugs, or
-								support development.
-							</DialogDescription>
-						</DialogHeader>
-
-						<div className="flex flex-col gap-2">
-							<div className="flex items-center justify-between rounded-xl border border-border bg-muted/35 p-3">
-								<div className="flex items-center gap-3">
-									<div
-										className="
+					<div className="flex flex-col gap-2">
+						<div className="flex items-center justify-between rounded-xl border border-border bg-muted/35 p-3">
+							<div className="flex items-center gap-3">
+								<div
+									className="
 											flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
 											border border-border bg-background/60 text-primary
 										"
-									>
-										<Calculator className="h-5 w-5" />
-									</div>
-
-									<div>
-										<div className="text-sm font-medium text-card-foreground">
-											Floating Numpad
-										</div>
-
-										<div className="mt-1 text-xs leading-snug text-muted-foreground">
-											Choose when the floating numeric keypad should appear.
-										</div>
-									</div>
+								>
+									<Calculator className="h-5 w-5" />
 								</div>
 
-								<ButtonGroup>
-									{floatingNumpadModes.map((mode) => {
-										const isSelected =
-											settings.floatingNumpadMode === mode.value;
+								<div>
+									<div className="text-sm font-medium text-card-foreground">
+										Floating Numpad
+									</div>
 
-										return (
-											<Tooltip key={mode.value}>
-												<TooltipTrigger asChild>
-													<Button
-														type="button"
-														variant="ghost"
-														className={[
-															"h-9 cursor-pointer rounded-lg border text-xs font-medium",
-															isSelected
-																? "border-primary/35 bg-primary/15 text-primary hover:bg-primary/20"
-																: "border-border bg-background/40 text-muted-foreground hover:bg-accent hover:text-accent-foreground",
-														].join(" ")}
-														onClick={() =>
-															setSetting("floatingNumpadMode", mode.value)
-														}
-													>
-														{mode.label}
-													</Button>
-												</TooltipTrigger>
-
-												<TooltipContent>
-													<Card className="w-[350px]">
-														<CardContent>{mode.description}</CardContent>
-													</Card>
-												</TooltipContent>
-											</Tooltip>
-										);
-									})}
-								</ButtonGroup>
+									<div className="mt-1 text-xs leading-snug text-muted-foreground">
+										Choose when the floating numeric keypad should appear.
+									</div>
+								</div>
 							</div>
 
-							<SmartActionsCustomizer
-								availableTools={partsStudioTools.map((t) => ({
-									id: t.command,
-									label: t.name?.replace("server:::", "") || "",
-									description: t.expandedTooltipKey?.replace("tooltips:::", ""),
-									iconComponent: t.icon ? <OnshapeIcon icon={t.icon} /> : null,
-								}))}
-							/>
+							<ButtonGroup>
+								{floatingNumpadModes.map((mode) => {
+									const isSelected = settings.floatingNumpadMode === mode.value;
 
-							<ToolbarQuickActionsConfig
-								availableToolsByMode={availableToolsByMode}
-							/>
+									return (
+										<Tooltip key={mode.value}>
+											<TooltipTrigger asChild>
+												<Button
+													type="button"
+													variant="ghost"
+													className={[
+														"h-9 cursor-pointer rounded-lg border text-xs font-medium",
+														isSelected
+															? "border-primary/35 bg-primary/15 text-primary hover:bg-primary/20"
+															: "border-border bg-background/40 text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+													].join(" ")}
+													onClick={() =>
+														setSetting("floatingNumpadMode", mode.value)
+													}
+												>
+													{mode.label}
+												</Button>
+											</TooltipTrigger>
 
-							<ThemeCustomizer />
+											<TooltipContent>
+												<Card className="w-[350px]">
+													<CardContent>{mode.description}</CardContent>
+												</Card>
+											</TooltipContent>
+										</Tooltip>
+									);
+								})}
+							</ButtonGroup>
+						</div>
 
-							{links.map((item) => {
-								const Icon = item.icon;
+						<SmartActionsCustomizer
+							availableTools={partsStudioTools.map((t) => ({
+								id: t.command,
+								label: t.name?.replace("server:::", "") || "",
+								description: t.expandedTooltipKey?.replace("tooltips:::", ""),
+								iconComponent: t.icon ? <OnshapeIcon icon={t.icon} /> : null,
+							}))}
+						/>
 
-								return (
-									<a
-										key={item.label}
-										href={item.href}
-										target={item.target}
-										rel="noreferrer"
-									>
-										<button
-											type="button"
-											className="
+						<ToolbarQuickActionsConfig
+							availableToolsByMode={availableToolsByMode}
+						/>
+
+						<CanvasBackgroundCustomizer />
+
+						<ThemeCustomizer />
+
+						{links.map((item) => {
+							const Icon = item.icon;
+
+							return (
+								<a
+									key={item.label}
+									href={item.href}
+									target={item.target}
+									rel="noreferrer"
+								>
+									<button
+										type="button"
+										className="
 												group flex w-full cursor-pointer items-center gap-3 rounded-xl
 												border border-border bg-muted/35 p-3 text-left
 												shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]
@@ -224,31 +229,30 @@ export function SettingsDialog() {
 												hover:border-primary/25 hover:bg-accent
 												active:scale-[0.985]
 											"
-										>
-											<div
-												className="
+									>
+										<div
+											className="
 													flex h-10 w-10 shrink-0 items-center justify-center rounded-xl
 													border border-border bg-background/60 text-primary
 													group-hover:bg-primary/15 group-hover:text-primary
 												"
-											>
-												<Icon className="h-5 w-5" />
+										>
+											<Icon className="h-5 w-5" />
+										</div>
+
+										<div className="min-w-0">
+											<div className="text-sm font-medium text-card-foreground">
+												{item.label}
 											</div>
 
-											<div className="min-w-0">
-												<div className="text-sm font-medium text-card-foreground">
-													{item.label}
-												</div>
-
-												<div className="mt-0.5 text-xs leading-snug text-muted-foreground">
-													{item.description}
-												</div>
+											<div className="mt-0.5 text-xs leading-snug text-muted-foreground">
+												{item.description}
 											</div>
-										</button>
-									</a>
-								);
-							})}
-						</div>
+										</div>
+									</button>
+								</a>
+							);
+						})}
 					</div>
 				</div>
 			</DialogContent>
