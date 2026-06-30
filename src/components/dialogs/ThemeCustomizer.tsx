@@ -19,7 +19,7 @@ export function ThemeCustomizer() {
 	return (
 		<div
 			className="
-												group flex w-full cursor-pointer items-center gap-3 rounded-xl
+												group flex w-full items-center gap-3 rounded-xl
 												border border-border bg-muted/35 p-3 text-left
 												shadow-[inset_0_1px_0_rgb(255_255_255/0.05)]
 												transition-all duration-150

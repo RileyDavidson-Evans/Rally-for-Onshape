@@ -205,9 +205,9 @@ export function SettingsDialog() {
 							availableToolsByMode={availableToolsByMode}
 						/>
 
-						<ThemeCustomizer />
-
 						<CanvasBackgroundCustomizer />
+
+						<ThemeCustomizer />
 
 						{links.map((item) => {
 							const Icon = item.icon;
