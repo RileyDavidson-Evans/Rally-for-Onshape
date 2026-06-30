@@ -7,6 +7,7 @@ import {
 	CANVAS_BACKGROUND_PRESETS,
 } from "@/constants/canvasBackground";
 import { useExtensionSettings } from "@/contexts/ExtensionSettingsContext";
+import { applyCanvasBackground } from "@/lib/canvasBackground";
 import type {
 	CanvasBackground,
 	CanvasBackgroundPreset,
@@ -54,10 +55,12 @@ export function CanvasBackgroundDialog({
 	const canvasBackground = settings.canvasBackground;
 
 	const updateCanvasBackground = (patch: Partial<CanvasBackground>) => {
-		setSetting("canvasBackground", {
+		const newSettingConfig = {
 			...canvasBackground,
 			...patch,
-		});
+		};
+		setSetting("canvasBackground", newSettingConfig);
+		applyCanvasBackground(newSettingConfig);
 	};
 
 	const selectedPreset =

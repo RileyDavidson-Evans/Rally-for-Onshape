@@ -11,8 +11,9 @@ import {
 	ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE,
 	FORWARDED_ONSHAPE_EVENTS,
 } from "@/constants/onshapeEvents";
-import { initCanvasBackground } from "@/lib/canvasBackground";
 import type { OnshapeShortcutCommand, OnshapeToolbarMode } from "@/types";
+import { applyCanvasBackground } from "@/lib/canvasBackground";
+import { getStorageItem } from "@/storage/extensionStorage";
 
 type OnshapeBridgeEvent = {
 	type: typeof ACCEPTED_ONSHAPE_TO_EXTENSION_EVENT_TYPE;
@@ -83,7 +84,7 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 	};
 
 	useEffect(() => {
-		function onMessage(messageEvent: MessageEvent) {
+		async function onMessage(messageEvent: MessageEvent) {
 			if (messageEvent.source !== window) return;
 			if (!isOnshapeBridgeEvent(messageEvent.data)) return;
 			const event = messageEvent.data;
@@ -91,7 +92,8 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 			if (event.name === FORWARDED_ONSHAPE_EVENTS.ELEMENT_LOAD_DONE) {
 				setIsDocumentLoaded(true);
 				requestAllCommands();
-				initCanvasBackground();
+        const activeBGSetting = await getStorageItem('canvasBackground')
+				applyCanvasBackground(activeBGSetting);
 			}
 
 			if (event.name === FORWARDED_ONSHAPE_EVENTS.DOCUMENT_UNLOADED) {

@@ -8,7 +8,6 @@ import {
 	useState,
 } from "react";
 import { applyTheme } from "@/core/theme";
-import type { Theme } from "@/storage/extensionStorage";
 import { useExtensionSettings } from "./ExtensionSettingsContext";
 
 type SettingsDialogContextValue = {

@@ -18,7 +18,7 @@ export function getCanvasBackgroundUrl(
 }
 
 let currentCanvasBackground: CanvasBackground | null = null;
-let observer: MutationObserver | null = null;
+const observer: MutationObserver | null = null;
 
 function getOrCreateBackgroundLayer(canvas: HTMLCanvasElement) {
 	const parent = canvas.parentElement;
@@ -51,7 +51,7 @@ function getOrCreateBackgroundLayer(canvas: HTMLCanvasElement) {
 	return layer;
 }
 
-function applyCanvasBackground(background: CanvasBackground) {
+export function applyCanvasBackground(background: CanvasBackground) {
 	currentCanvasBackground = background;
 
 	const url = getCanvasBackgroundUrl(background.preset, background.customUrl);
@@ -62,13 +62,13 @@ function applyCanvasBackground(background: CanvasBackground) {
 		if (!layer) continue;
 
 		if (!url) {
+			document
+				.querySelector("#viewerdiv")
+				?.classList.remove("canvas-bg-enabled");
 			layer.remove();
 			continue;
 		}
-		document.documentElement.style.setProperty(
-			"--rally-canvas-background",
-			"transparent",
-		);
+		document.querySelector("#viewerdiv")?.classList.add("canvas-bg-enabled");
 
 		layer.style.backgroundImage = `url("${url}")`;
 		layer.style.backgroundSize = "cover";
@@ -78,35 +78,4 @@ function applyCanvasBackground(background: CanvasBackground) {
 		layer.style.filter =
 			background.blur > 0 ? `blur(${background.blur}px)` : "";
 	}
-}
-
-export async function initCanvasBackground() {
-	const initialBackground = await getStorageItem("canvasBackground");
-
-	applyCanvasBackground(initialBackground);
-
-	const unwatch = watchStorageItem("canvasBackground", (newBackground) => {
-		applyCanvasBackground(newBackground);
-	});
-
-	observer = new MutationObserver(() => {
-		if (currentCanvasBackground) {
-			applyCanvasBackground(currentCanvasBackground);
-		}
-	});
-
-	observer.observe(document.body, {
-		childList: true,
-		subtree: true,
-	});
-
-	return () => {
-		unwatch();
-		observer?.disconnect();
-		observer = null;
-
-		document
-			.querySelectorAll(`.${BACKGROUND_LAYER_CLASS}`)
-			.forEach((layer) => layer.remove());
-	};
 }
