@@ -105,7 +105,7 @@ export function CanvasBackgroundDialog({
 											updateCanvasBackground({ preset: preset.id })
 										}
 										className={`
-											group relative overflow-hidden rounded-xl border bg-card text-left
+											group relative cursor-pointer overflow-hidden rounded-xl border bg-card text-left
 											transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-sm
 											${
 												isSelected
