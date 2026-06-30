@@ -255,9 +255,6 @@ export function SettingsDialog() {
 						})}
 					</div>
 				</div>
-				<DialogFooter className="p-3">
-					<span>{getExtensionVersion()}</span>
-				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);
