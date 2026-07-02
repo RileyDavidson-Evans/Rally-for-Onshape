@@ -192,3 +192,7 @@ body.onshape-plus-fullscreen-mode os-vue-panel-selector-component {
 .os-mini-toolbar-panel {
 	display: var(--mini-toolbar-display) !important;
 }
+
+.dimension-dialog {
+	z-index: 1000000 !important;
+}
