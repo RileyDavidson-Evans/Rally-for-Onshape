@@ -120,6 +120,10 @@ th {
 	background: var(--rally-canvas-background) !important;
 }
 
+.os-graphics-dropdown {
+	z-index: 10;
+}
+
 #viewerdiv.canvas-bg-enabled canvas#canvas {
 	background: transparent !important;
 }
