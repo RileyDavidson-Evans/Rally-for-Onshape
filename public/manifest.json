@@ -19,7 +19,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches": ["https://cad.onshape.com/*"],
+			"matches": ["https://*.onshape.com/*"],
 			"js": ["assets/main.js"],
 			"run_at": "document_idle"
 		}
@@ -36,7 +36,7 @@
 	"web_accessible_resources": [
 		{
 			"resources": ["onshape-page-bridge.js"],
-			"matches": ["https://cad.onshape.com/*"]
+			"matches": ["https://*.onshape.com/*"]
 		}
 	],
 	"permissions": ["storage"],
