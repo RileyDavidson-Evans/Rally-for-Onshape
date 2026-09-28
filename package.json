@@ -19,7 +19,7 @@
 		"@types/react": "^19.2.15",
 		"@types/react-dom": "^19.2.3",
 		"@types/webextension-polyfill": "^0.12.5",
-		"@vitejs/plugin-react": "^6.0.2",
+		"@vitejs/plugin-react": "^6.1.1",
 		"typescript": "^6.0.3",
 		"vite": "^8.0.14",
 		"web-ext": "^10.4.0"
