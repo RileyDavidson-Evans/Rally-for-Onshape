@@ -91,7 +91,10 @@ export function OnshapeBridgeProvider({ children }: { children: ReactNode }) {
 			if (!isOnshapeBridgeEvent(messageEvent.data)) return;
 			const event = messageEvent.data;
 
-			if (event.name === FORWARDED_ONSHAPE_EVENTS.ELEMENT_LOAD_DONE) {
+			if (
+				event.name === FORWARDED_ONSHAPE_EVENTS.ENABLE_TOOLBAR &&
+				!isDocumentLoaded
+			) {
 				setIsDocumentLoaded(true);
 				requestAllCommands();
 				const activeBGSetting = await getStorageItem("canvasBackground");
